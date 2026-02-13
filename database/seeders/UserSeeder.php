@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
                 // PERHATIAN:
                 // Jika User dengan ID 5 belum ada di database, baris di bawah ini akan error.
                 // Jika error, ganti '5' menjadi null dulu.
-                'id_atasan' => 5,
+                'id_atasan' => null,
             ]
         );
     }
