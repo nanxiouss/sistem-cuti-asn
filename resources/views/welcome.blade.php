@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-CUTI | Dinas ESDM Provinsi Sumatera Selatan</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
+        body {
+            font-family: 'Inter', sans-serif;
             /* scroll-behavior: smooth; <-- DIHAPUS agar JS yang handle */
         }
-        
+
         :root {
             --esdm-green: #97C93E;
             --esdm-yellow: #F1B320;
@@ -41,8 +41,7 @@
             text-decoration: none;
         }
 
-        .nav-link-btn:hover,
-        .nav-link-btn.active { /* State Aktif */
+        .nav-link-btn:hover {
             color: var(--esdm-green);
             background-color: rgba(151, 201, 62, 0.1);
             transform: translateY(-1px);
@@ -50,7 +49,7 @@
 
         /* Hero Text Shadow */
         .hero-text {
-            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         /* --- BUTTONS --- */
@@ -122,10 +121,12 @@
             opacity: 0;
             transition-property: transform, opacity;
         }
+
         [data-aos="fade-up-subtle"].aos-animate {
             transform: translateY(0);
             opacity: 1;
         }
+
     </style>
 </head>
 <body class="bg-white text-slate-900">
@@ -140,12 +141,12 @@
                         <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">Dinas ESDM Sumsel</p>
                     </div>
                 </div>
-                
+
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="#beranda" class="text-xs font-bold uppercase tracking-widest nav-link-btn active">Beranda</a>
                     <a href="#layanan" class="text-xs font-bold uppercase tracking-widest nav-link-btn">Layanan</a>
                     <a href="#kontak" class="text-xs font-bold uppercase tracking-widest nav-link-btn">Kontak</a>
-                    
+
                     <a href="/login" class="ml-6 btn-glow-yellow px-8 py-2.5 rounded-lg text-xs font-black tracking-widest uppercase">LOGIN</a>
                 </div>
             </div>
@@ -158,28 +159,24 @@
             <div class="absolute inset-0 bg-slate-900/75"></div>
             <div class="hero-gradient-bottom"></div>
         </div>
-        
+
         <div class="container mx-auto px-6 relative z-10 flex flex-col items-center">
             <div class="max-w-4xl">
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20"
-                     data-aos="fade-up-subtle" data-aos-duration="1000">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20" data-aos="fade-up-subtle" data-aos-duration="1000">
                     <span class="flex h-2 w-2 rounded-full bg-esdm-green"></span>
                     <span class="text-white text-[10px] font-bold tracking-[0.3em] uppercase">Official Internal Portal</span>
                 </div>
-                
-                <h1 class="text-5xl md:text-8xl font-black text-white leading-[1.1] hero-text mb-8 tracking-tighter"
-                    data-aos="fade-up-subtle" data-aos-duration="1000" data-aos-delay="200">
-                    Sistem Manajemen <br> 
-                    <span class="text-[#97C93E]">Cuti ASN Digital</span>
+
+                <h1 class="text-5xl md:text-8xl font-black text-white leading-[1.1] hero-text mb-8 tracking-tighter" data-aos="fade-up-subtle" data-aos-duration="1000" data-aos-delay="200">
+                    Sistem Informasi <br>
+                    <span class="text-[#97C93E]">Cuti Pegawai</span>
                 </h1>
-                
-                <p class="text-lg md:text-xl text-slate-200 mb-12 leading-relaxed max-w-2xl mx-auto font-light"
-                   data-aos="fade-up-subtle" data-aos-duration="1000" data-aos-delay="400">
+
+                <p class="text-lg md:text-xl text-slate-200 mb-12 leading-relaxed max-w-2xl mx-auto font-light" data-aos="fade-up-subtle" data-aos-duration="1000" data-aos-delay="400">
                     Transformasi birokrasi digital untuk kemudahan pengelolaan administrasi cuti di lingkungan Dinas ESDM Provinsi Sumatera Selatan.
                 </p>
-                
-                <div class="flex flex-col sm:flex-row gap-5 justify-center" 
-                     data-aos="fade-up-subtle" data-aos-duration="1000" data-aos-delay="600">
+
+                <div class="flex flex-col sm:flex-row gap-5 justify-center" data-aos="fade-up-subtle" data-aos-duration="1000" data-aos-delay="600">
                     <a href="#layanan" class="btn-glow-yellow px-10 py-4 rounded-xl text-white font-bold text-sm tracking-widest uppercase">
                         Mulai Sekarang
                     </a>
@@ -193,7 +190,7 @@
 
     <section id="layanan" class="relative py-32 bg-white">
         <div class="section-gradient-top"></div>
-        
+
         <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="text-center mb-20" data-aos="fade-up">
                 <h2 class="text-xs font-black text-esdm-green uppercase tracking-[0.4em] mb-4">Core Excellence</h2>
@@ -227,8 +224,10 @@
             </div>
         </div>
     </section>
-
-    <footer id="kontak" class="bg-[#1A1A1A] text-white pt-24 pb-12">
+    <div class="w-full bg-white">
+        <div class="h-32 bg-gradient-to-b from-white to-[#84a846]"></div>
+    </div>
+    <footer id="kontak" class="bg-[#84a846] text-white pt-24 pb-12">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-16 mb-20">
                 <div class="col-span-1 lg:col-span-1">
@@ -246,11 +245,15 @@
                     <ul class="space-y-4 text-sm text-slate-400 font-medium">
                         <li class="flex items-start gap-3">
                             <i class="fas fa-map-marker-alt mt-1 text-esdm-yellow"></i>
-                            <span>Jl. Demang Lebar Daun No.225, Palembang, Sumsel</span>
+                            <span>Jl. Angkatan 45 No.2440, Demang Lebar Daun, Kec. Ilir Bar. I, Kota Palembang, Sumatera Selatan 30137</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fas fa-envelope text-esdm-yellow"></i>
                             <span>desdm@sumselprov.go.id</span>
+                        </li>
+                        <li class="flex items-end gap-3">
+                            <i class="fas fa-phone text-esdm-yellow"></i>
+                            <span>(0711) 379040</span>
                         </li>
                     </ul>
                 </div>
@@ -267,9 +270,7 @@
                 <div>
                     <h5 class="text-sm font-black uppercase tracking-[0.2em] mb-8 text-esdm-green">Lokasi Kantor</h5>
                     <div class="rounded-2xl overflow-hidden grayscale contrast-125 opacity-60 hover:opacity-100 transition-all duration-700">
-                        <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.456382173614!2d104.73352731475685!3d-2.9710329978366477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75df69167331%3A0xc3f98018e697394!2sDinas%20ESDM%20Provinsi%20Sumatera%20Selatan!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
-                            width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1357.8803449734191!2d104.74257601074501!3d-2.9747395036781397!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75dd77fa7bad%3A0x7c3787e83297c183!2sDinas%20Energi%20Dan%20Sumber%20Daya%20Mineral!5e0!3m2!1sid!2sid!4v1770950657533!5m2!1sid!2sid" width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
@@ -287,20 +288,20 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // Init AOS
-        AOS.init({ 
-            once: true, 
-            duration: 1000,
-            easing: 'ease-out'
+        AOS.init({
+            once: true
+            , duration: 1000
+            , easing: 'ease-out'
         });
 
         // --- SCRIPT CUSTOM SMOOTH SCROLL & ACTIVE STATE ---
         document.addEventListener('DOMContentLoaded', () => {
             const navLinks = document.querySelectorAll('.nav-link-btn, a[href^="#"]');
-            
+
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     const href = this.getAttribute('href');
-                    
+
                     // Hanya jalankan jika link adalah internal anchor (#)
                     if (href.startsWith('#') && href.length > 1) {
                         e.preventDefault();
@@ -313,7 +314,7 @@
                             const elementPosition = targetElement.getBoundingClientRect().top;
                             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-                            smoothScrollTo(offsetPosition, 1000); // Durasi 1200ms (1.2 detik)
+                            smoothScrollTo(offsetPosition, 1000); // Durasi 1000ms (1.0 detik)
                         }
                     }
                 });
@@ -328,10 +329,10 @@
                 function animation(currentTime) {
                     if (startTime === null) startTime = currentTime;
                     const timeElapsed = currentTime - startTime;
-                    
+
                     // Easing function: easeInOutCubic
                     const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
-                    
+
                     window.scrollTo(0, run);
 
                     if (timeElapsed < duration) requestAnimationFrame(animation);
@@ -354,7 +355,7 @@
 
             window.addEventListener('scroll', () => {
                 let current = '';
-                
+
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     const sectionHeight = section.clientHeight;
@@ -372,6 +373,7 @@
                 });
             });
         });
+
     </script>
 </body>
 </html>
