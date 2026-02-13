@@ -289,10 +289,11 @@
                 <div>
                     <h5 class="text-sm font-black uppercase tracking-[0.2em] mb-8 text-esdm-green">Lokasi Kantor</h5>
                     <div
-                        class="rounded-2xl overflow-hidden grayscale contrast-125 opacity-60 hover:opacity-100 transition-all duration-700">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.456382173614!2d104.73352731475685!3d-2.9710329978366477!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75df69167331%3A0xc3f98018e697394!2sDinas%20ESDM%20Provinsi%20Sumatera%20Selatan!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"
-                            width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        class="rounded-2xl overflow-hidden grayscale contrast-125 opacity-60 hover:opacity-100 transition duration-500 h-40 bg-gray-800">
+                        <iframe width="100%" height="100%" id="gmap_canvas"
+                            src="https://maps.google.com/maps?q=Dinas+ESDM+Provinsi+Sumatera+Selatan&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                            frameborder="0" scrolling="no" marginheight="0" marginwidth="0">
+                        </iframe>
                     </div>
                 </div>
             </div>
