@@ -196,8 +196,8 @@
         <div class="section-gradient-top"></div>
 
         <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-20" data-aos="fade-up">
-                <h2 class="text-xs font-black text-esdm-green uppercase tracking-[0.4em] mb-4">Core Excellence</h2>
+            <div class="text-center mb-20 -mt-10" data-aos="fade-up">
+                <h2 class="text-xs font-black text-esdm-green uppercase tracking-[0.4em] mb-4">KEUNGGULAN</h2>
                 <h3 class="text-4xl font-extrabold text-slate-800 tracking-tight">Layanan Digital Terpadu</h3>
             </div>
 
@@ -224,7 +224,7 @@
                     <div class="w-16 h-16 bg-slate-800/10 flex items-center justify-center rounded-2xl mb-8 transition-colors duration-300 group-hover:bg-slate-800/20">
                         <i class="fas fa-qrcode text-3xl text-slate-800 transition-transform duration-300"></i>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4 text-slate-800">E-Certificate</h4>
+                    <h4 class="text-2xl font-bold mb-4 text-slate-800">Dokumen Sah</h4>
                     <p class="text-slate-500 leading-relaxed font-medium">Surat Izin Cuti diterbitkan otomatis lengkap
                         dengan verifikasi digital yang sah dan siap cetak.</p>
                 </div>
@@ -232,9 +232,9 @@
         </div>
     </section>
     <div class="w-full bg-white">
-        <div class="h-32 bg-gradient-to-b from-white to-[#adb1a5]"></div>
+        <div class="h-32 bg-gradient-to-b from-white to-[#bcc0c0]"></div>
     </div>
-    <footer id="kontak" class="bg-[#adb1a5] text-white pt-24 pb-12">
+    <footer id="kontak" class="bg-[#bcc0c0] text-white pt-24 pb-12">
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-16 mb-20">
                 <div class="col-span-1 lg:col-span-1">
@@ -249,7 +249,7 @@
                 </div>
 
                 <div>
-                    <h5 class="text-sm font-black uppercase tracking-[0.2em] mb-8 text-esdm-green">Hubungi Kami</h5>
+                    <h5 class="text-sm font-black uppercase tracking-[0.2em] mb-8 text-esdm-green text-slate-600">Hubungi Kami</h5>
                     <ul class="space-y-4 text-sm text-slate-100 font-medium">
                         <li class="flex items-start gap-3">
                             <i class="fas fa-map-marker-alt mt-1 text-esdm-yellow"></i>
@@ -268,7 +268,7 @@
                 </div>
 
                 <div>
-                    <h5 class="text-sm font-black uppercase tracking-[0.2em] mb-8 text-esdm-green">Tautan Cepat</h5>
+                    <h5 class="text-sm font-black uppercase tracking-[0.2em] mb-8 text-esdm-green text-slate-600">Tautan Cepat</h5>
                     <ul class="space-y-4 text-sm text-slate-100 font-medium">
                         <li><a href="#" class="scroll-link hover:text-white transition-colors duration-300">Beranda</a>
                         </li>
@@ -278,7 +278,7 @@
                 </div>
 
                 <div>
-                    <h5 class="text-sm font-black uppercase tracking-[0.2em] mb-8 text-esdm-green">Lokasi Kantor</h5>
+                    <h5 class="text-sm font-black uppercase tracking-[0.2em] mb-8 text-esdm-green text-slate-600">Lokasi Kantor</h5>
                     <div class="rounded-2xl overflow-hidden grayscale contrast-125 opacity-60 hover:opacity-100 transition-all duration-700">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1357.8803449734191!2d104.74257601074501!3d-2.9747395036781397!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75dd77fa7bad%3A0x7c3787e83297c183!2sDinas%20Energi%20Dan%20Sumber%20Daya%20Mineral!5e0!3m2!1sid!2sid!4v1770950657533!5m2!1sid!2sid" width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
