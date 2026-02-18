@@ -148,9 +148,24 @@
                     <a href="#beranda" class="text-xs font-bold uppercase tracking-widest nav-link-btn active">Beranda</a>
                     <a href="#layanan" class="text-xs font-bold uppercase tracking-widest nav-link-btn">Layanan</a>
                     <a href="#kontak" class="text-xs font-bold uppercase tracking-widest nav-link-btn">Kontak</a>
-
                     <a href="/login" class="ml-6 btn-glow-yellow px-8 py-2.5 rounded-lg text-xs font-black tracking-widest uppercase">LOGIN</a>
                 </div>
+
+                <button id="mobile-menu-btn" class="md:hidden text-slate-700 hover:text-esdm-green focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="icon-bars" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        <path id="icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-xl absolute w-full">
+            <div class="px-6 pt-4 pb-6 space-y-4 flex flex-col">
+                <a href="#beranda" class="mobile-link text-sm font-bold uppercase tracking-widest text-slate-700 hover:text-esdm-green">Beranda</a>
+                <a href="#layanan" class="mobile-link text-sm font-bold uppercase tracking-widest text-slate-700 hover:text-esdm-green">Layanan</a>
+                <a href="#kontak" class="mobile-link text-sm font-bold uppercase tracking-widest text-slate-700 hover:text-esdm-green">Kontak</a>
+                <a href="/login" class="btn-glow-yellow text-center px-8 py-3 rounded-lg text-sm font-black tracking-widest uppercase mt-4 block">LOGIN</a>
             </div>
         </div>
     </nav>
@@ -381,6 +396,29 @@
                         li.classList.add('active');
                     }
                 });
+            });
+        });
+
+        // --- SCRIPT UNTUK MOBILE MENU ---
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const iconBars = document.getElementById('icon-bars');
+        const iconClose = document.getElementById('icon-close');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        // Fungsi buka/tutup menu
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            iconBars.classList.toggle('hidden');
+            iconClose.classList.toggle('hidden');
+        });
+
+        // Otomatis tutup menu HP kalau salah satu link diklik
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+                iconBars.classList.remove('hidden');
+                iconClose.classList.add('hidden');
             });
         });
 
