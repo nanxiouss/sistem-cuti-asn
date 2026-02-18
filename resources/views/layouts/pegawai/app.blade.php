@@ -17,8 +17,14 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
+        [x-cloak] {
+            display: none !important;
+        }
+
+        /* Smooth Fade In */
         .fade-in {
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeIn 0.4s ease-out forwards;
+            opacity: 0;
         }
 
         @keyframes fadeIn {
@@ -35,41 +41,40 @@
 
         /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
+            width: 6px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.5);
+            background: #f1f5f9;
+            border-radius: 4px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(236, 72, 153, 0.3);
-            border-radius: 10px;
+            background: #cbd5e1;
+            border-radius: 4px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(236, 72, 153, 0.5);
+            background: #94a3b8;
         }
     </style>
 </head>
 
-<body class="bg-slate-50 text-slate-800 antialiased">
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
 
     @include('layouts.pegawai.navigation')
 
-    <main class="fade-in min-h-screen">
-        @yield('content')
+    <main class="flex-grow py-8 fade-in">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            @yield('content')
+        </div>
     </main>
 
-    <footer class="bg-white border-t border-slate-200 mt-10">
+    <footer class="bg-white border-t border-slate-200 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="text-center md:text-left">
-                    <p class="text-xs text-slate-400">&copy; {{ date('Y') }} Dinas ESDM. All rights reserved</p>
-                </div>
-                <div class="flex gap-4 text-sm text-slate-500">
-                    <span class="text-slate-400 text-xs">Sistem Informasi Kepegawaian v1.0</span>
-                </div>
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
+                <p>&copy; {{ date('Y') }} Dinas ESDM. All rights reserved.</p>
+                <span>Sistem Informasi Kepegawaian Beta</span>
             </div>
         </div>
     </footer>
