@@ -49,10 +49,13 @@
                     Dashboard
                 </a>
                 <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Ajukan Cuti</a>
-                <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Kalender</a>
+                <a href="{{ route('pegawai.kalender.index') }}"
+                    class="{{ $navClass }} {{ request()->routeIs('pegawai.kalender*') ? $activeClass : $inactiveClass }}">
+                    Kalender
+                </a>
                 <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Riwayat</a>
                 <a href="{{ route('pegawai.regulasi.index') }}"
-                    class="{{ $navClass }} {{ request()->routeIs('regulasi.*') ? $activeClass : $inactiveClass }}">
+                    class="{{ $navClass }} {{ request()->routeIs('pegawai.regulasi.*') ? $activeClass : $inactiveClass }}">
                     Regulasi
                 </a>
             </div>
