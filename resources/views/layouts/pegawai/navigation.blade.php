@@ -51,7 +51,10 @@
                 <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Ajukan Cuti</a>
                 <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Kalender</a>
                 <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Riwayat</a>
-                <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Regulasi</a>
+                <a href="{{ route('pegawai.regulasi.index') }}"
+                    class="{{ $navClass }} {{ request()->routeIs('regulasi.*') ? $activeClass : $inactiveClass }}">
+                    Regulasi
+                </a>
             </div>
 
 

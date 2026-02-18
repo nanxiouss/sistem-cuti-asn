@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
+use App\Http\Controllers\Pegawai\RegulasiController;
 
 // 1. Halaman Depan
 Route::get('/', function () {
@@ -32,9 +33,7 @@ Route::middleware(['auth', 'verified', 'role:pelaksana'])->group(function () { /
 
         // Dashboard Pegawai
         Route::get('/dashboard', [PegawaiDashboardController::class, 'index'])->name('dashboard');
-
-        // Nanti tambah route cuti disini
-        // Route::get('/pengajuan', ...);
+        Route::get('/regulasi', [RegulasiController::class, 'index'])->name('regulasi.index');
     });
 });
 
