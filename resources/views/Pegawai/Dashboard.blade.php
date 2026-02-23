@@ -3,9 +3,9 @@
 @section('content')
 <div class="pt-24 pb-12 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-    <div class="relative rounded-[2.5rem] overflow-hidden bg-slate-900 shadow-2xl shadow-slate-200 mb-10">
+    <div class="relative rounded-[2.5rem] overflow-hidden bg-slate-900 shadow-2xl shadow-slate-200 mb-10 -mt-12">
         <div class="absolute inset-0">
-            <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 mix-blend-overlay"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-lime-500/20 to-amber-500/20 mix-blend-overlay"></div>
             <img src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1600&q=80"
                 class="w-full h-full object-cover opacity-20 mix-blend-luminosity" alt="Office bg">
             <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-transparent"></div>
@@ -14,43 +14,45 @@
         <div class="relative z-10 p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div class="lg:col-span-7 space-y-6">
                 <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-medium backdrop-blur-md">
-                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lime-500/20 border border-lime-400/30 text-lime-200 text-xs font-medium backdrop-blur-md">
+                    <span class="w-2 h-2 rounded-full bg-lime-400 animate-pulse"></span>
                     {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
                 </div>
 
                 <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
                     {{ $sapaan }}, <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-indigo-200">{{
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-amber-300">{{
                         $user->nama }}</span>
                 </h1>
 
                 <p class="text-slate-400 text-lg max-w-lg leading-relaxed">
                     Pantau kinerja dan cuti Anda dalam satu dashboard terintegrasi. Hari ini status Anda tercatat <span
-                        class="text-emerald-400 font-bold">Hadir</span>.
+                        class="text-lime-400 font-bold">Hadir</span>.
                 </p>
 
                 <div class="flex flex-wrap gap-4 pt-2">
                     <button
-                        class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold shadow-lg shadow-blue-600/30 transition-all transform hover:-translate-y-1">
+                        class="px-6 py-3 bg-lime-500 hover:bg-lime-400 text-white rounded-xl font-bold shadow-lg shadow-lime-500/30 transition-all duration-300 ease-out transform hover:-translate-y-1">
                         Ajukan Cuti Baru
                     </button>
                     <button
-                        class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-medium backdrop-blur-md transition-all">
+                        class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 ease-out transform hover:-translate-y-1">
                         Lihat Kalender
                     </button>
                 </div>
             </div>
 
             <div class="lg:col-span-5 relative">
-                <div class="absolute -inset-1 bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl blur opacity-30">
+                <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl blur opacity-30">
                 </div>
                 <div
                     class="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 p-6 rounded-2xl text-white">
                     <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-4">
                         <h3 class="font-bold text-lg">⚠️ Aturan Cuti</h3>
                         <span
-                            class="text-[10px] bg-pink-500/20 text-pink-300 px-2 py-1 rounded uppercase tracking-wider font-bold">Penting</span>
+                            class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-1 rounded uppercase tracking-wider font-bold">Penting!
+                            
+                            </span>
                     </div>
                     <ul class="space-y-4">
                         <li class="flex gap-3">
@@ -58,7 +60,7 @@
                                 class="mt-1 w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold shrink-0">
                                 1</div>
                             <div>
-                                <span class="block text-sm font-semibold text-pink-300">Cuti Tahunan Hangus</span>
+                                <span class="block text-sm font-semibold text-amber-400">Cuti Tahunan Hangus</span>
                                 <p class="text-xs text-slate-400 leading-relaxed mt-0.5">Sisa cuti N-2 (2 tahun lalu)
                                     otomatis hangus jika tidak dipakai.</p>
                             </div>
@@ -68,7 +70,7 @@
                                 class="mt-1 w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold shrink-0">
                                 2</div>
                             <div>
-                                <span class="block text-sm font-semibold text-pink-300">Cuti Besar</span>
+                                <span class="block text-sm font-semibold text-amber-400">Cuti Besar</span>
                                 <p class="text-xs text-slate-400 leading-relaxed mt-0.5">Min 5 tahun kerja. Mengambil
                                     ini menghapus jatah tahunan.</p>
                             </div>
@@ -83,7 +85,7 @@
         <div
             class="group bg-white rounded-[2rem] p-1 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-2xl transition-all duration-300">
             <div
-                class="bg-gradient-to-br from-blue-50 to-white rounded-[1.8rem] p-6 h-full border border-blue-100 relative overflow-hidden">
+                class="bg-gradient-to-br from-lime-50 to-white rounded-[1.8rem] p-6 h-full border border-lime-100 relative overflow-hidden">
                 <div class="flex justify-between items-start mb-6">
                     <div>
                         <p class="text-sm font-bold text-slate-500 uppercase tracking-wider">Total Sisa Cuti</p>
@@ -91,7 +93,7 @@
                                 class="text-lg text-slate-400 font-medium ml-1">Hari</span></h2>
                     </div>
                     <div
-                        class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-600/30 group-hover:scale-110 transition-transform">
+                        class="w-12 h-12 bg-lime-500 rounded-2xl flex items-center justify-center text-slate-900 shadow-lg shadow-lime-500/30 group-hover:scale-110 transition-transform">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -105,7 +107,7 @@
                         <span>{{ round($persentase_sisa) }}% Tersedia</span>
                     </div>
                     <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-1000"
+                        <div class="bg-lime-500 h-2 rounded-full transition-all duration-1000"
                             style="width: {{ $persentase_sisa }}%"></div>
                     </div>
                 </div>
@@ -119,12 +121,12 @@
                     <div class="w-px h-6 bg-slate-100"></div>
                     <div class="text-center px-2">
                         <div class="text-[10px] text-slate-400">N-1</div>
-                        <div class="font-bold text-blue-600">{{ $sisa_n1 }}</div>
+                        <div class="font-bold text-lime-600">{{ $sisa_n1 }}</div>
                     </div>
                     <div class="w-px h-6 bg-slate-100"></div>
                     <div class="text-center px-2">
                         <div class="text-[10px] text-slate-400">Tahun Ini</div>
-                        <div class="font-bold text-blue-600">{{ $sisa_n }}</div>
+                        <div class="font-bold text-lime-600">{{ $sisa_n }}</div>
                     </div>
                 </div>
             </div>
@@ -158,14 +160,14 @@
             <div class="flex flex-col h-full justify-between">
                 <div>
                     <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-emerald-50 rounded-2xl text-emerald-500">
+                        <div class="p-3 bg-lime-50 rounded-2xl text-lime-600">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 13l4 4L19 7"></path>
                             </svg>
                         </div>
                         <span
-                            class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full">Used</span>
+                            class="px-3 py-1 bg-lime-100 text-lime-700 text-xs font-bold rounded-full">Used</span>
                     </div>
                     <h3 class="text-4xl font-bold text-slate-900 mb-1">{{ $terpakai }}</h3>
                     <p class="text-slate-500 font-medium">Hari Terpakai</p>
@@ -185,7 +187,7 @@
                 <h2 class="text-xl font-bold text-slate-900">Riwayat Pengajuan</h2>
                 <p class="text-sm text-slate-500">Pantau status pengajuan cuti terakhir Anda.</p>
             </div>
-            <a href="#" class="group inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700">
+            <a href="#" class="group inline-flex items-center text-sm font-semibold text-lime-600 hover:text-lime-700">
                 Lihat Semua Riwayat
                 <svg class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none"
                     stroke="currentColor" viewBox="0 0 24 24">
@@ -233,12 +235,12 @@
                         <td class="px-8 py-5">
                             @php
                             $statusStyles = match($item->status) {
-                            'Disetujui' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                            'Disetujui' => 'bg-lime-100 text-lime-700 border-lime-200', // Ubah emerald -> lime
                             'Ditolak' => 'bg-rose-100 text-rose-700 border-rose-200',
                             default => 'bg-amber-100 text-amber-700 border-amber-200',
                             };
                             $dotColor = match($item->status) {
-                            'Disetujui' => 'bg-emerald-500',
+                            'Disetujui' => 'bg-lime-500', // Ubah emerald -> lime
                             'Ditolak' => 'bg-rose-500',
                             default => 'bg-amber-500',
                             };
@@ -251,7 +253,7 @@
                         </td>
                         <td class="px-8 py-5 text-right">
                             <button
-                                class="text-slate-400 hover:text-blue-600 transition-colors p-2 hover:bg-blue-50 rounded-lg">
+                                class="text-slate-400 hover:text-lime-600 transition-colors p-2 hover:bg-lime-50 rounded-lg">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
