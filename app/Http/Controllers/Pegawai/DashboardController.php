@@ -70,6 +70,13 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $today = Carbon::today();
+        $is_cuti = Pengajuan::where('user_id', $user->id)
+            ->where('status', 'Disetujui')
+            ->whereDate('tgl_mulai', '<=', $today)
+            ->whereDate('tgl_selesai', '>=', $today)
+            ->exists();
+
         // Kirim semua variabel ke View
         return view('pegawai.dashboard', compact(
             'user',
@@ -82,7 +89,8 @@ class DashboardController extends Controller
             'persentase_sisa',
             'jumlah_proses',
             'terpakai',
-            'riwayat'
+            'riwayat',
+            'is_cuti'
         ));
     }
 }

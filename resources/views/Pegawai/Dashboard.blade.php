@@ -13,9 +13,11 @@
 
         <div class="relative z-10 p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div class="lg:col-span-7 space-y-6">
+
                 <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-lime-500/20 border border-lime-400/30 text-lime-200 text-xs font-medium backdrop-blur-md">
-                    <span class="w-2 h-2 rounded-full bg-lime-400 animate-pulse"></span>
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full {{ $is_cuti ? 'bg-rose-500/20 border-rose-400/30 text-rose-200 hover:bg-rose-500/30' : 'bg-lime-500/20 border-lime-400/30 text-lime-200 hover:bg-lime-500/30' }} text-xs font-medium backdrop-blur-md transition-all duration-300 cursor-default">
+                    <span
+                        class="w-2 h-2 rounded-full {{ $is_cuti ? 'bg-rose-400' : 'bg-lime-400' }} animate-pulse shadow-[0_0_8px_rgba(0,0,0,0.5)] {{ $is_cuti ? 'shadow-rose-500' : 'shadow-lime-500' }}"></span>
                     {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
                 </div>
 
@@ -26,8 +28,13 @@
                 </h1>
 
                 <p class="text-slate-400 text-lg max-w-lg leading-relaxed">
-                    Pantau kinerja dan cuti Anda dalam satu dashboard terintegrasi. Hari ini status Anda tercatat <span
-                        class="text-lime-400 font-bold">Hadir</span>.
+                    Pantau kinerja dan cuti Anda dalam satu dashboard terintegrasi.
+                    Hari ini status Anda tercatat
+                    @if($is_cuti)
+                    <span class="text-rose-400 font-bold drop-shadow-md">Cuti</span>
+                    @else
+                    <span class="text-lime-400 font-bold drop-shadow-md">Hadir</span>
+                    @endif.
                 </p>
 
                 <div class="flex flex-wrap gap-4 pt-2">
@@ -35,15 +42,16 @@
                         class="px-6 py-3 bg-lime-500 hover:bg-lime-400 text-white rounded-xl font-bold shadow-lg shadow-lime-500/30 transition-all duration-300 ease-out transform hover:-translate-y-1">
                         Ajukan Cuti Baru
                     </button>
-                    <button
-                        class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 ease-out transform hover:-translate-y-1">
+                    <a href="{{ route('pegawai.kalender.index') }}"
+                        class="inline-block px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 ease-out transform hover:-translate-y-1">
                         Lihat Kalender
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <div class="lg:col-span-5 relative">
-                <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl blur opacity-30">
+                <div
+                    class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl blur opacity-30">
                 </div>
                 <div
                     class="relative bg-slate-800/50 backdrop-blur-xl border border-white/10 p-6 rounded-2xl text-white">
@@ -51,8 +59,7 @@
                         <h3 class="font-bold text-lg">⚠️ Aturan Cuti</h3>
                         <span
                             class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-1 rounded uppercase tracking-wider font-bold">Penting!
-                            
-                            </span>
+                        </span>
                     </div>
                     <ul class="space-y-4">
                         <li class="flex gap-3">
@@ -137,7 +144,8 @@
             <div class="flex flex-col h-full justify-between">
                 <div>
                     <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-amber-50 rounded-2xl text-amber-500">
+                        <div
+                            class="p-3 bg-amber-50 rounded-2xl text-amber-500 transition-transform group-hover:scale-110">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -160,14 +168,14 @@
             <div class="flex flex-col h-full justify-between">
                 <div>
                     <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-lime-50 rounded-2xl text-lime-600">
+                        <div
+                            class="p-3 bg-lime-50 rounded-2xl text-lime-600 transition-transform group-hover:scale-110">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 13l4 4L19 7"></path>
                             </svg>
                         </div>
-                        <span
-                            class="px-3 py-1 bg-lime-100 text-lime-700 text-xs font-bold rounded-full">Used</span>
+                        <span class="px-3 py-1 bg-lime-100 text-lime-700 text-xs font-bold rounded-full">Used</span>
                     </div>
                     <h3 class="text-4xl font-bold text-slate-900 mb-1">{{ $terpakai }}</h3>
                     <p class="text-slate-500 font-medium">Hari Terpakai</p>
@@ -235,12 +243,12 @@
                         <td class="px-8 py-5">
                             @php
                             $statusStyles = match($item->status) {
-                            'Disetujui' => 'bg-lime-100 text-lime-700 border-lime-200', // Ubah emerald -> lime
+                            'Disetujui' => 'bg-lime-100 text-lime-700 border-lime-200',
                             'Ditolak' => 'bg-rose-100 text-rose-700 border-rose-200',
                             default => 'bg-amber-100 text-amber-700 border-amber-200',
                             };
                             $dotColor = match($item->status) {
-                            'Disetujui' => 'bg-lime-500', // Ubah emerald -> lime
+                            'Disetujui' => 'bg-lime-500',
                             'Ditolak' => 'bg-rose-500',
                             default => 'bg-amber-500',
                             };
