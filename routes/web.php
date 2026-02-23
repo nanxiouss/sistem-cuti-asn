@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\Pegawai\RegulasiController;
+use App\Http\Controllers\Pegawai\KalenderController;
 
 // 1. Halaman Depan
 Route::get('/', function () {
@@ -33,6 +34,7 @@ Route::middleware(['auth', 'verified', 'role:pelaksana'])->group(function () { /
 
         // Dashboard Pegawai
         Route::get('/dashboard', [PegawaiDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/kalender', [KalenderController::class, 'index'])->name('kalender.index');
         Route::get('/regulasi', [RegulasiController::class, 'index'])->name('regulasi.index');
     });
 });
