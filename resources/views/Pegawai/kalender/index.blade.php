@@ -28,7 +28,7 @@
     </div>
 
     {{-- Box Kalender --}}
-    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200/60">
+    <div class="bg-gradient-to-br from-lime-50 to-white rounded-[1.8rem] p-6 h-full border border-lime-300 relative overflow-hidden">
         <div id='calendar'></div>
     </div>
 </div>

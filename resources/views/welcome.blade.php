@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-5 justify-center" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
-                    <a href="#layanan" class="px-10 py-4 rounded-xl text-white font-bold text-sm tracking-widest uppercase bg-[#F1B320] transition-all duration-300 ease-out hover:-translate-y-[3px] hover:bg-[#ffc333] hover:shadow-[0_10px_25px_rgba(241,179,32,0.5),0_0_15px_rgba(241,179,32,0.3)]" style="box-shadow: 0 4px 15px rgba(241, 179, 32, 0.3);">
+                    <a href="/login" class="px-10 py-4 rounded-xl text-white font-bold text-sm tracking-widest uppercase bg-[#F1B320] transition-all duration-300 ease-out hover:-translate-y-[3px] hover:bg-[#ffc333] hover:shadow-[0_10px_25px_rgba(241,179,32,0.5),0_0_15px_rgba(241,179,32,0.3)]" style="box-shadow: 0 4px 15px rgba(241, 179, 32, 0.3);">
                         Mulai Sekarang
                     </a>
                     <a href="#kontak" class="bg-white/10 text-white px-10 py-4 rounded-xl font-bold text-sm tracking-widest uppercase border border-white/30 transition-all duration-300 hover:bg-white/15 hover:border-white hover:-translate-y-[3px]">
