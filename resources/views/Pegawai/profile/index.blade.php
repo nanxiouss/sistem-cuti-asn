@@ -19,11 +19,9 @@
     <div class="flex flex-col lg:flex-row gap-6 xl:gap-8 items-start">
 
         {{-- KOLOM 1: Card Profil & Menu Sidebar (KIRI) --}}
-        {{-- Lebar dikunci di 280px (Layar LG) dan 300px (Layar XL) --}}
         <div class="w-full lg:w-[280px] xl:w-[300px] flex-shrink-0">
-    {{-- Ubah shadow-sm menjadi shadow-xl atau 2xl dan tambahkan warna shadow --}}
-    <div class="bg-white rounded-3xl shadow-xl shadow-lime-500/20 border border-lime-200/60 overflow-hidden sticky top-28">
-        <div class="px-6 pt-8 pb-6 text-center">
+            <div class="bg-white rounded-3xl shadow-xl shadow-lime-500/20 border border-lime-200/60 overflow-hidden sticky top-28">
+                <div class="px-6 pt-8 pb-6 text-center">
                     
                     {{-- Foto Profil --}}
                     <div class="relative inline-block">
@@ -50,7 +48,8 @@
 
                     {{-- Tombol Aksi --}}
                     <div class="mt-6 flex flex-col gap-3">
-                        <button class="w-full bg-lime-600 hover:bg-lime-500 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lime-500/30 transition-all duration-300 shadow-sm shadow-lime-200 flex items-center justify-center gap-2 text-sm">
+                        {{-- TOMBOL DIUBAH DI SINI: Ditambahkan fungsi scroll ke tengah --}}
+                        <button @click="document.getElementById('kolom-tengah').scrollIntoView({ behavior: 'smooth' }); activeTab = 'Data Utama'" class="w-full bg-lime-600 hover:bg-lime-500 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lime-500/30 transition-all duration-300 shadow-sm shadow-lime-200 flex items-center justify-center gap-2 text-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             Lihat Profil
                         </button>
@@ -81,9 +80,8 @@
         </div>
 
         {{-- KOLOM 2: Konten Utama & Tabs (TENGAH) --}}
-        {{-- flex-1 membuat kolom ini akan mengambil sisa ruang selebar-lebarnya --}}
-        {{-- min-w-0 penting agar tab tidak mendorong layar ke kanan --}}
-        <div class="flex-1 min-w-0 flex flex-col w-full">
+        {{-- WRAPPER DIUBAH DI SINI: Ditambahkan id="kolom-tengah" --}}
+        <div id="lihat-profil" class="flex-1 min-w-0 flex flex-col w-full">
             
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200/60 px-2 pt-2 mb-6 overflow-hidden">
                 <ul class="flex overflow-x-auto hide-scrollbar whitespace-nowrap text-sm font-semibold text-slate-500">
@@ -100,7 +98,7 @@
                 </ul>
             </div>
 
-            <div x-show="activeTab === 'Jabatan'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="bg-white rounded-3xl shadow-sm border border-slate-200/60 p-2">
+            <div x-show="activeTab === 'Jabatan'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="bg-white rounded-3xl shadow-sm border border-slate-200/60 p-2" style="display: none;">
                 <div class="flex flex-col">
                     <div class="flex items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors rounded-t-2xl">
                         <div class="flex items-center gap-4">
@@ -141,7 +139,6 @@
         </div>
 
         {{-- KOLOM 3: Panel Informasi (KANAN) --}}
-        {{-- Lebar dikunci di 260px (Layar LG) dan 280px (Layar XL) agar teks tidak gepeng --}}
         <div class="w-full lg:w-[260px] xl:w-[280px] flex-shrink-0">
             <div class="bg-slate-50 rounded-3xl border border-amber-200/60 shadow-xl shadow-amber-500/20 p-6 sticky top-28">
                 <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
