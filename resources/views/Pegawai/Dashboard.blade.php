@@ -38,10 +38,10 @@
                 </p>
 
                 <div class="flex flex-wrap gap-4 pt-2">
-                    <button
+                    <a href="{{ route('pegawai.pengajuan.create') }}"
                         class="px-6 py-3 bg-lime-500 hover:bg-lime-400 text-white rounded-xl font-bold shadow-lg shadow-lime-500/30 transition-all duration-300 ease-out transform hover:-translate-y-1">
                         Ajukan Cuti Baru
-                    </button>
+                    </a>
                     <a href="{{ route('pegawai.kalender.index') }}"
                         class="inline-block px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 ease-out transform hover:-translate-y-1">
                         Lihat Kalender
@@ -231,7 +231,7 @@
                             </div>
                         </td>
                         <td class="px-8 py-5">
-                            <span class="text-sm font-medium text-slate-700">{{ $item->jenisCuti->nama_cuti ?? '-'
+                            <span class="text-sm font-medium text-slate-700">{{ $item->jenisCuti->nama ?? '-'
                                 }}</span>
                         </td>
                         <td class="px-8 py-5">

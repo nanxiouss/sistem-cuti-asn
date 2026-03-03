@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JenisCuti extends Model
 {
-    protected $table = 'jenis_cuti';
+    protected $table = 'jenis_cutis';
     protected $guarded = [];
 
     // Relasi: Satu jenis cuti bisa memiliki banyak pengajuan
