@@ -10,23 +10,26 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-    {
-        Schema::create('pengajuans', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('jenis_cuti_id')->constrained('jenis_cutis');
-            $table->foreignId('id_atasan')->constrained('users');
-            $table->text('alasan');
-            $table->date('tgl_mulai');
-            $table->date('tgl_selesai');
-            $table->integer('lama_cuti');
-            $table->text('alamat_cuti');
-            $table->string('no_telepon');
-            $table->string('file_bukti')->nullable();
-            $table->string('status')->default('Menunggu Kasi');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('pengajuans', function (Blueprint $table) {
+        $table->id();
+
+        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+        $table->foreignId('jenis_cuti_id')->constrained('jenis_cutis');        
+        $table->unsignedBigInteger('id_atasan');
+        $table->foreign('id_atasan')->references('id')->on('users');
+        $table->text('alasan');
+        $table->date('tgl_mulai');
+        $table->date('tgl_selesai');
+        $table->integer('lama_cuti');
+        $table->text('alamat_cuti');
+        $table->string('no_telepon');
+        $table->string('file_bukti')->nullable();
+        $table->text('ttd_pegawai')->nullable();
+        $table->string('status')->default('Menunggu Kasi');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.

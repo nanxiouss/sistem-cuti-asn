@@ -265,6 +265,44 @@
                     </div>
                 </div>
 
+                {{-- Seksi V: Verifikasi dan Tanda Tangan --}}
+                <div class="mb-8 border-t border-slate-200 pt-6">
+                    <h3 class="text-sm font-bold text-blue-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center text-xs">V</span>
+                        Verifikasi & Tanda Tangan
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {{-- signature pad --}}
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Tanda Tangan Digital <span
+                                    class="text-red-500">*</span></label>
+                            <div class="border-2 border-dashed border-s-slate-300 rounded-xl p-2 bg-slate-50">
+                                <canvas id="signature-pad"
+                                    class="w-full h-40 bg-white rounded-lg border border-slate-200"></canvas>
+                            </div>
+                            <button type="button" id="clear-signature"
+                                class="mt-2 text-xs font-semibold text-red-500 hover:text-red-700">
+                                ❌ Hapus & Tanda Tangan Ulang
+                            </button>
+
+                            {{-- input hidden untuk menyimpan data gambar ttd --}}
+                            <input type="hidden" name="ttd_image" id="ttd_image" value="{{ old('ttd_image') }}">
+                        </div>
+
+                        {{-- password verification --}}
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Konfirmasi Password <span
+                                    class="text-red-500">*</span></label>
+                            <p class="text-xs text-slate-500 mb-3 italic">Silahkan masukkan password akun Anda untuk
+                                mengonfirmasi pengajuan ini.</p>
+                            <input type="password" name="password_verifikasi"
+                                class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Masukkan password Anda..." required>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Lampiran --}}
                 <div class="mb-8 border-t border-slate-200 pt-6">
                     <label class="block text-sm font-bold text-slate-700 mb-2">Lampiran Dokumen Pendukung (PDF/JPG, Maks
@@ -289,7 +327,58 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 <script>
+    // Inisiasi Signature pad
+    const canvas = document.getElementById('signature-pad');
+    const signaturePad = new SignaturePad(canvas, {
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        penColor: 'rgb(0, 0, 0)'
+    });
+
+    function resizeCanvas(){
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    
+        // Simpan data tanda tangan jika sudah ada isinya
+        const data = signaturePad.toData();
+        
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext("2d").scale(ratio, ratio);
+        
+        // Kembalikan data tanda tangan setelah resize agar tidak hilang
+        signaturePad.clear();
+        signaturePad.fromData(data);
+    }
+
+    window.onresize = resizeCanvas;
+    resizeCanvas();
+
+    signaturePad.addEventListener("endStroke", () => {
+        const dataURL = signaturePad.toDataURL('image/png');
+        document.getElementById('ttd_image').value = dataURL;
+    });
+
+    // tombol hapus ttd
+    document.getElementById('clear-signature').addEventListener('click', () => {
+        signaturePad.clear();
+        document.getElementById('ttd_image').value = ''; // Kosongkan input
+    });
+
+    // data ttd ke input hidden
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+        // Jika canvas kosong DAN input hidden kosong
+        if (signaturePad.isEmpty() && document.getElementById('ttd_image').value === '') {
+            e.preventDefault(); // Stop form dikirim
+            alert("Harap bubuhkan tanda tangan terlebih dahulu!");
+            return false;
+        }
+
+        // Jika lolos, pastikan sekali lagi nilainya terisi sebelum benar-benar terkirim
+        document.getElementById('ttd_image').value = signaturePad.toDataURL('image/png');
+    });
+
     // Toggle Dropdown Jenis Cuti
     function toggleCutiDropdown() {
         const dd = document.getElementById("dropdown_jenis_cuti");
