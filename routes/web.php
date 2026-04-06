@@ -15,7 +15,7 @@ Route::get('/', function () {
 // Redirector Dashboard
 Route::get('/dashboard', function () {
     $user = Auth::user();
-    if ($user->role === 'pelaksana') {
+    if ($user->role === 'pegawai') {
         return redirect()->route('pegawai.dashboard');
     }
     return view('dashboard');

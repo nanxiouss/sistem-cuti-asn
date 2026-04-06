@@ -12,10 +12,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // 1. DATA USER LOGIN
-        $user = Auth::user();
+        $user = Auth::user()->load('pegawai'); 
 
-        // 2. LOGIKA SAPAAN WAKTU
         $jam = Carbon::now()->hour;
         if ($jam >= 5 && $jam < 11) {
             $sapaan = "Selamat Pagi";
@@ -27,27 +25,33 @@ class DashboardController extends Controller
             $sapaan = "Selamat Malam";
         }
 
-        // 3. LOGIKA HITUNG SISA CUTI (Sesuai kode Native Anda)
+        // --- LOGIKA HITUNG SISA CUTI (Pecah ke N, N-1, N-2) ---
         $tahun_skrg = date('Y');
 
-        // [SIMULASI] Data sisa tahun lalu (idealnya ini dari database tabel user_balances)
-        $db_sisa_tahun_lalu = 10;
+        // Ambil kuota dasar dari database
+        $kuota_db = $user->pegawai->sisa_cuti_tahunan ?? 12;
 
-        // Rumus N
+        // Pemecahan otomatis
         $sisa_n = 12;
-
-        // Rumus N-1 (Maksimal 6)
-        $sisa_n1 = ($db_sisa_tahun_lalu > 6) ? 6 : $db_sisa_tahun_lalu;
-
-        // Rumus N-2 (Hangus)
+        $sisa_n1 = 0;
         $sisa_n2 = 0;
 
-        // Total Kuota Awal
-        $total_kuota = $sisa_n + $sisa_n1 + $sisa_n2;
+        if ($kuota_db > 12) {
+            $sisa_n1 = $kuota_db - 12;
+            
+            // Aturan PNS/Umum: N-1 maksimal 6, sisanya dilempar ke N-2
+            if ($sisa_n1 > 6) {
+                $sisa_n2 = $sisa_n1 - 6;
+                $sisa_n1 = 6;
+            }
+        } else {
+            // Jika kuota_db kurang dari 12
+            $sisa_n = $kuota_db;
+        }
 
-        // 4. QUERY DATABASE (ELOQUENT)
+        $total_kuota = $sisa_n + $sisa_n1 + $sisa_n2; // Hasilnya pasti sama dengan $kuota_db
 
-        // A. Hitung Cuti Terpakai Tahun Ini (Status: Disetujui)
+        // A. Hitung Cuti Terpakai Tahun Ini
         $terpakai = Pengajuan::where('user_id', $user->id)
             ->where('status', 'Disetujui')
             ->whereYear('tgl_mulai', $tahun_skrg)
@@ -55,18 +59,17 @@ class DashboardController extends Controller
 
         // Sisa Akhir Real-time
         $sisa_total = $total_kuota - $terpakai;
-        $persentase_sisa = ($total_kuota > 0) ? ($sisa_total / $total_kuota) * 100 : 0;
+        $persentase_sisa = ($total_kuota > 0) ? max(0, ($sisa_total / $total_kuota) * 100) : 0;
 
-        // B. Hitung Sedang Diproses (Selain Disetujui & Ditolak)
+        // B. Hitung Sedang Diproses
         $jumlah_proses = Pengajuan::where('user_id', $user->id)
-            ->whereNotIn('status', ['Disetujui', 'Ditolak'])
+            ->whereNotIn('status', ['Disetujui', 'Ditolak', 'Tidak Disetujui'])
             ->count();
 
-        // C. Riwayat Pengajuan (Limit 5, Order by terbaru)
-        // Kita gunakan 'with' untuk join tabel jenis_cuti agar hemat query
+        // C. Riwayat Pengajuan
         $riwayat = Pengajuan::with('jenisCuti')
             ->where('user_id', $user->id)
-            ->latest() // Otomatis order by created_at desc
+            ->latest() 
             ->take(5)
             ->get();
 
@@ -77,7 +80,7 @@ class DashboardController extends Controller
             ->whereDate('tgl_selesai', '>=', $today)
             ->exists();
 
-        // Kirim semua variabel ke View
+        // Kirim sisa_n, n1, n2 kembali ke View agar UI kamu tetap jalan!
         return view('pegawai.dashboard', compact(
             'user',
             'sapaan',

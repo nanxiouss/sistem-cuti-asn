@@ -23,8 +23,10 @@
 
                 <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
                     {{ $sapaan }}, <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-amber-300">{{
-                        $user->nama }}</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-amber-300">
+                        {{-- Memanggil Nama (dari tabel users) dan Jabatan (dari tabel pegawais) --}}
+                        {{ $user->name ?? $user->nama }} {{ $user->pegawai->jabatan ?? '' }}
+                    </span>
                 </h1>
 
                 <p class="text-slate-400 text-lg max-w-lg leading-relaxed">

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -15,12 +14,7 @@ class User extends Authenticatable
         'nip',
         'nama',
         'password',
-        'jabatan',
-        'unit_kerja',
-        'masa_kerja_tahun',
-        'masa_kerja_bulan',
         'role',
-        'id_atasan',
     ];
 
     /**
@@ -36,18 +30,10 @@ class User extends Authenticatable
      */
     protected $casts = [
         'password' => 'hashed',
-        'masa_kerja_tahun' => 'integer',
-        'masa_kerja_bulan' => 'integer',
     ];
 
-
-    public function atasan()
+    public function pegawai()
     {
-        return $this->belongsTo(User::class, 'id_atasan');
-    }
-
-    public function bawahan()
-    {
-        return $this->hasMany(User::class, 'id_atasan');
+        return $this->hasOne(Pegawai::class, 'user_id', 'id');
     }
 }
