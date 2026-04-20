@@ -166,9 +166,9 @@ class PengajuanController extends Controller
             'tgl_selesai'   => $request->tgl_selesai,
             'lama_cuti'     => $lama_cuti,
             'alamat_cuti'   => $request->alamat,
-            'no_telepon'         => $request->no_telepon,
+            'no_telepon'    => $request->no_telepon,
             'id_atasan'     => $request->id_atasan,
-            'status'        => 'Menunggu Kasi',
+            'status'        => 'Menunggu Verifikasi Admin',
             'ttd_pegawai'   => $ttd_path,
         ];
 
