@@ -31,4 +31,9 @@ class Pengajuan extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function atasan()
+    {
+        return $this->belongsTo(User::class, 'id_atasan');
+    }
 }

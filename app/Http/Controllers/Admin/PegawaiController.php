@@ -21,7 +21,7 @@ class PegawaiController extends Controller
 
     public function create()
     {
-        $atasans = User::whereIn('role', ['kasi', 'administrator', 'kadin'])->get();
+        $atasans = User::whereIn('role', ['kasi', 'kabid', 'sekdin', 'kadin'])->get();
 
         return view('admin.pegawai.create', compact('atasans'));
     }
@@ -32,7 +32,7 @@ class PegawaiController extends Controller
             'nip'               => 'required|unique:users,nip|max:30',
             'nama'              => 'required|string|max:100',
             'password'          => 'required|min:6',
-            'role'              => 'required|in:admin,pegawai,kasi,administrator,kadin',
+            'role'              => 'required|in:admin,pegawai,kasi,kabid,sekdin,kadin',
             'atasan_id'         => 'nullable|exists:users,id',
             'pangkat_golongan'  => 'nullable|string|max:100',
             'jabatan'           => 'nullable|string|max:100',
@@ -77,7 +77,7 @@ class PegawaiController extends Controller
     public function edit($id)
     {
         $user = User::with('pegawai')->findOrFail($id);
-        $atasans = User::whereIn('role', ['kasi', 'administrator', 'kadin'])
+        $atasans = User::whereIn('role', ['kasi', 'kabid', 'sekdin', 'kadin'])
             ->where('id', '!=', $id)
             ->get();
 
@@ -92,7 +92,7 @@ class PegawaiController extends Controller
             'nip'               => 'required|max:30|unique:users,nip,' . $user->id,
             'nama'              => 'required|string|max:100',
             'password'          => 'nullable|min:6',
-            'role'              => 'required|in:admin,pegawai,kasi,administrator,kadin',
+            'role'              => 'required|in:admin,pegawai,kasi,kabid,sekdin,kadin',
             'atasan_id'         => 'nullable|exists:users,id',
             'pangkat_golongan'  => 'nullable|string|max:100',
             'jabatan'           => 'nullable|string|max:100',

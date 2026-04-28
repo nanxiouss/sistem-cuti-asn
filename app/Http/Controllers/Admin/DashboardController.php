@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pegawai;
 use App\Models\Pengajuan;
-Use Carbon\Carbon;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -16,7 +16,7 @@ class DashboardController extends Controller
 
         $statistik = [
             'total_pengajuan' => Pengajuan::count(),
-            'menunggu_aksi'   => Pengajuan::whereIn('status', ['Menunggu Verifikasi Admin', 'Dikembalikan Ke Admin'])->count(),
+            'menunggu_aksi'   => Pengajuan::whereIn('status', ['Menunggu Verifikasi Admin', 'Dikembalikan ke Admin'])->count(),
             'disetujui'       => Pengajuan::where('status', 'Disetujui')->count(),
             'ditolak'         => Pengajuan::whereIn('status', ['Ditolak', 'Tidak Disetujui'])->count(),
         ];
@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $cutiHariIni = Pengajuan::with('user.pegawai')
             ->where('status', 'Disetujui')
             ->whereDate('tgl_mulai', '<=', $hariIni)
-            ->whereDate('tgl_selesai', '<=', $hariIni)
+            ->whereDate('tgl_selesai', '>=', $hariIni)
             ->get();
 
         $cutiBulanIni = Pengajuan::where('status', 'Disetujui')

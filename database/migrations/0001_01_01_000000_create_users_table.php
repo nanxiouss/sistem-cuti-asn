@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nip', 30)->unique();
             $table->string('nama', 100);
             $table->string('password');
-            $table->enum('role', ['admin', 'pegawai', 'kasi', 'administrator','kadin'])->default('pegawai');
+            $table->enum('role', ['admin', 'pegawai', 'kasi', 'kabid','sekdin','kadin'])->default('pegawai');
             $table->rememberToken();
             $table->timestamps();
         });

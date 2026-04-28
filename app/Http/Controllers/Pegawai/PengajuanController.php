@@ -61,7 +61,7 @@ class PengajuanController extends Controller
 
         // Ambil atasan berjenjang dari tabel pegawai
         $atasans = User::with('pegawai')
-            ->whereIn('role', ['kasi', 'administrator', 'kadin'])
+            ->whereIn('role', ['kasi', 'kabid', 'sekdin', 'kadin'])
             ->get();
 
         $atasan_sekarang = $user->pegawai->atasan ?? null;
@@ -89,7 +89,7 @@ class PengajuanController extends Controller
             'tgl_selesai'   => 'required|date|after_or_equal:tgl_mulai',
             'alasan'        => 'required',
             'alamat'        => 'required',
-            'no_telepon'         => 'required',
+            'no_telepon'    => 'required',
             'id_atasan'     => 'required',
             'password_verifikasi' => 'required',
             'ttd_image'     => 'required',

@@ -15,13 +15,14 @@ class PegawaiSeeder extends Seeder
     {
         // 1. Cari user berdasarkan NIP yang sudah dibuat di UserSeeder
         $kadin = User::where('nip', '11111111')->first();
+        $sekdin = User::where('nip', '12345678')->first();
         $kabid = User::where('nip', '22222222')->first();
         $kasi = User::where('nip', '33333333')->first();
         $admin = User::where('nip', '99999999')->first();
         $pegawai = User::where('nip', '44444444')->first();
 
         // Pastikan datanya ketemu sebelum membuat Pegawai
-        if($kadin && $kabid && $kasi && $admin && $pegawai) {
+        if($kadin && $sekdin && $kabid && $kasi && $admin && $pegawai) {
             
             // Kadin (Tidak punya atasan)
             Pegawai::create([
@@ -31,6 +32,17 @@ class PegawaiSeeder extends Seeder
                 'jabatan' => 'Kepala Dinas',
                 'unit_kerja' => 'Dinas ABC',
                 'tmt_kerja' => '2016-04-05',
+                'sisa_cuti_tahunan' => 12
+            ]);
+
+            // Sekdin (Atasan: Kadin)
+            Pegawai::create([
+                'user_id' => $sekdin->id,
+                'atasan_id' => $kadin->id,
+                'pangkat_golongan' => 'Sekretaris / III.d',
+                'jabatan' => 'Sekretaris Dinas', 
+                'unit_kerja' => 'Sekretaris Dinas',
+                'tmt_kerja' => '2016-05-25',
                 'sisa_cuti_tahunan' => 12
             ]);
 
