@@ -23,8 +23,10 @@
 
                 <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
                     {{ $sapaan }}, <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-amber-300">{{
-                        $user->nama }}</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-amber-300">
+                        {{-- Memanggil Nama (dari tabel users) dan Jabatan (dari tabel pegawais) --}}
+                        {{ $user->name ?? $user->nama }} {{ $user->pegawai->jabatan ?? '' }}
+                    </span>
                 </h1>
 
                 <p class="text-slate-400 text-lg max-w-lg leading-relaxed">
@@ -38,10 +40,10 @@
                 </p>
 
                 <div class="flex flex-wrap gap-4 pt-2">
-                    <button
+                    <a href="{{ route('pegawai.pengajuan.create') }}"
                         class="px-6 py-3 bg-lime-500 hover:bg-lime-400 text-white rounded-xl font-bold shadow-lg shadow-lime-500/30 transition-all duration-300 ease-out transform hover:-translate-y-1">
                         Ajukan Cuti Baru
-                    </button>
+                    </a>
                     <a href="{{ route('pegawai.kalender.index') }}"
                         class="inline-block px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 ease-out transform hover:-translate-y-1">
                         Lihat Kalender
@@ -231,7 +233,7 @@
                             </div>
                         </td>
                         <td class="px-8 py-5">
-                            <span class="text-sm font-medium text-slate-700">{{ $item->jenisCuti->nama_cuti ?? '-'
+                            <span class="text-sm font-medium text-slate-700">{{ $item->jenisCuti->nama ?? '-'
                                 }}</span>
                         </td>
                         <td class="px-8 py-5">

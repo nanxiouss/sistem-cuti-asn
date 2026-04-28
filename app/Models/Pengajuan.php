@@ -10,22 +10,25 @@ class Pengajuan extends Model
     use HasFactory;
 
     protected $table = 'pengajuans';
-
     protected $guarded = ['id'];
 
-    protected $casts = [
-        'tgl_mulai' => 'date',
-        'tgl_selesai' => 'date',
-        'lama_cuti' => 'integer',
-    ];
-
-    public function user()
+    protected function casts(): array
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'tgl_mulai' => 'date',
+            'tgl_selesai' => 'date',
+        ];
     }
 
     public function jenisCuti()
     {
         return $this->belongsTo(JenisCuti::class, 'jenis_cuti_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -17,7 +17,8 @@
 
             <div class="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-sm p-1 rounded-full border border-white/40 shadow-sm self-center">
                 @php
-                $navClass = "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group overflow-hidden";
+                $navClass = "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group
+                overflow-hidden";
                 $activeClass = "bg-slate-900 text-white shadow-md";
                 // Mengubah warna hover text dari blue-700 menjadi lime-500
                 $inactiveClass = "text-slate-600 hover:text-lime-500 hover:bg-white";
@@ -26,14 +27,13 @@
                 <a href="{{ route('pegawai.dashboard') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.dashboard') ? $activeClass : $inactiveClass }}">
                     Dashboard
                 </a>
-                <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Ajukan Cuti</a>
-                <a href="{{ route('pegawai.kalender.index') }}"
-                    class="{{ $navClass }} {{ request()->routeIs('pegawai.kalender*') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('pegawai.pengajuan.create') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.pengajuan*') ? $activeClass : $inactiveClass }}">
+                    Ajukan Cuti</a>
+                <a href="{{ route('pegawai.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.kalender*') ? $activeClass : $inactiveClass }}">
                     Kalender
                 </a>
                 <a href="#" class="{{ $navClass }} {{ $inactiveClass }}">Riwayat</a>
-                <a href="{{ route('pegawai.regulasi.index') }}"
-                    class="{{ $navClass }} {{ request()->routeIs('pegawai.regulasi.*') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('pegawai.regulasi.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.regulasi.*') ? $activeClass : $inactiveClass }}">
                     Regulasi
                 </a>
             </div>
@@ -77,49 +77,57 @@
                         </svg>
                     </button>
 
-                    <div x-show="profileOpen" 
-     x-transition:enter="transition ease-out duration-200" 
-     x-transition:enter-start="opacity-0 translate-y-2 scale-95" 
-     x-transition:enter-end="opacity-100 translate-y-0 scale-100" 
-     x-transition:leave="transition ease-in duration-150" 
-     x-transition:leave-start="opacity-100 translate-y-0 scale-100" 
-     x-transition:leave-end="opacity-0 translate-y-2 scale-95" 
-     class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 z-50 origin-top-right overflow-hidden" 
-     style="display: none;">
+                    <div x-show="profileOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0 scale-100" x-transition:leave-end="opacity-0 translate-y-2 scale-95" class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200/60 z-50 origin-top-right overflow-hidden" style="display: none;">
 
-    {{-- 1. Bagian Info User (Header) --}}
-    <div class="px-5 py-4 bg-slate-50/50 border-b border-slate-100">
-        <p class="text-sm font-bold text-slate-800 truncate">{{ Auth::user()->nama }}</p>
-        <div class="mt-1.5 flex">
-            {{-- NIP dibuat bergaya badge agar lebih manis --}}
-            <span class="text-[11px] font-semibold text-slate-500 bg-amber-50/80 px-2 py-0.5 rounded-md border border-amber-200/60 truncate">
-                NIP. {{ Auth::user()->nip }}
-            </span>
-        </div>
-    </div>
+                        {{-- 1. Bagian Info User (Header) --}}
+                        <div class="px-5 py-4 bg-slate-50/50 border-b border-slate-100">
+                            <p class="text-sm font-bold text-slate-800 truncate">{{ Auth::user()->nama }}</p>
+                            <div class="mt-1.5 flex">
+                                {{-- NIP dibuat bergaya badge agar lebih manis --}}
+                                <span class="text-[11px] font-semibold text-slate-500 bg-amber-50/80 px-2 py-0.5 rounded-md border border-amber-200/60 truncate">
+                                    NIP. {{ Auth::user()->nip }}
+                                </span>
+                            </div>
+                        </div>
 
-    {{-- 2. Bagian Menu --}}
-    <div class="p-2 space-y-1">
-        <a href="/profile" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 hover:text-lime-600 transition-all group">
-            {{-- Ikon dibungkus kotak kecil --}}
-            Edit Profile
-        </a>
-    </div>
+                        <<<<<<< HEAD {{-- 2. Bagian Menu --}} <div class="p-2 space-y-1">
+                            <a href="/profile" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 hover:text-lime-600 transition-all group">
+                                {{-- Ikon dibungkus kotak kecil --}}
+                                Edit Profile
+                            </a>
+                    </div>
 
-    {{-- 3. Bagian Logout --}}
-    <div class="p-2 border-t border-slate-100">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-all group">
-                Log Out
-            </button>
-        </form>
-    </div>
+                    {{-- 3. Bagian Logout --}}
+                    <div class="p-2 border-t border-slate-100">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-all group">
+                                Log Out
+                            </button>
+                        </form>
+                    </div>
 
-</div>
+                </div>
+                =======
+                <div class="py-1">
+                    <a href="#" class="flex items-center px-5 py-2.5 text-sm text-slate-600 hover:bg-lime-50 hover:text-lime-600 transition-colors">
+                        <i class="fas fa-user-edit w-4 h-4 mr-3"></i> Edit Profile
+                    </a>
                 </div>
 
+                <div class="py-1 border-t border-slate-50">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="flex w-full items-center px-5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors">
+                            <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i> Sign Out
+                        </button>
+                    </form>
+                </div>
             </div>
+            >>>>>>> e0e68729d23dd0b5d4b85e9e85fcbfec5d89e477
         </div>
+
+    </div>
+    </div>
     </div>
 </nav>

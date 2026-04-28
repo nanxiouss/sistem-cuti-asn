@@ -10,36 +10,10 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. BUAT SITI DULU (ID 5)
-        User::updateOrCreate(
-            ['nip' => '199107042024211016'],
-            [
-                'id' => 5, // ID ini harus ada duluan
-                'nama' => 'Siti Aminah',
-                'password' => Hash::make('123456'),
-                'jabatan' => 'Kasi Listrik',
-                'unit_kerja' => 'Seksi Listrik',
-                'masa_kerja_tahun' => 18,
-                'masa_kerja_bulan' => 3,
-                'role' => 'kasi',
-                'id_atasan' => null, // Kasi tidak punya atasan di tabel ini
-            ]
-        );
-
-        // 2. BARU BUAT BAMBANG (ID 1)
-        User::updateOrCreate(
-            ['nip' => '198501012010011001'],
-            [
-                'id' => 1,
-                'nama' => 'Bambang Pamungkas',
-                'password' => Hash::make('123456'),
-                'jabatan' => 'Analisis Kelistrikan',
-                'unit_kerja' => 'Bidang Ketenagalistrikan',
-                'masa_kerja_tahun' => 12,
-                'masa_kerja_bulan' => 5,
-                'role' => 'pelaksana',
-                'id_atasan' => 5, // Aman, karena ID 5 sudah dibuat di atas
-            ]
-        );
+        $kadin = User::create(['nip' => '11111111', 'nama' => 'Ir. Bapak Kadin, M.Si', 'password' => Hash::make('123456'), 'role' => 'kadin']);
+        $kabid = User::create(['nip' => '22222222', 'nama' => 'Bapak Kabid, S.T', 'password' => Hash::make('123456'), 'role' => 'administrator']);
+        $kasi = User::create(['nip' => '33333333', 'nama' => 'Bapak Kasi, S.Kom', 'password' => Hash::make('123456'), 'role' => 'kasi']);
+        $admin = User::create(['nip' => '99999999', 'nama' => 'Admin Kepegawaian', 'password' => Hash::make('123456'), 'role' => 'admin']);
+        $pegawai = User::create(['nip' => '44444444', 'nama' => 'Andi Staf Biasa', 'password' => Hash::make('123456'), 'role' => 'pegawai']);
     }
 }

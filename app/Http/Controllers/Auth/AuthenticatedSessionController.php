@@ -28,32 +28,34 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // --- MODIFIKASI DIMULAI DARI SINI ---
-
         // Ambil role user yang sedang login
         $role = $request->user()->role;
 
         // Cek Role dan Redirect sesuai tujuan
         switch ($role) {
-            case 'pelaksana':
-                // Ini route yang tadi sudah kita buat
+            case 'pegawai':
                 return redirect()->intended(route('pegawai.dashboard', absolute: false));
 
             case 'kasi':
-                // PENTING: Pastikan route 'kasi.dashboard' sudah dibuat di web.php
-                // Kalau belum ada, baris ini akan error. 
-                // Untuk sementara bisa diarahkan ke 'dashboard' biasa dulu jika belum siap.
+                // Pastikan route 'kasi.dashboard' nanti dibuat di web.php
                 return redirect()->intended(route('kasi.dashboard', absolute: false));
 
-            case 'admin':
-                // Contoh untuk admin
+            case 'administrator': // Untuk Kabid
+                // Pastikan route 'administrator.dashboard' nanti dibuat di web.php
+                return redirect()->intended(route('administrator.dashboard', absolute: false));
+
+            case 'kadin': // Untuk Kepala Dinas
+                // Pastikan route 'kadin.dashboard' nanti dibuat di web.php
+                return redirect()->intended(route('kadin.dashboard', absolute: false));
+
+            case 'admin': // Untuk Admin Kepegawaian
+                // Pastikan route 'admin.dashboard' nanti dibuat di web.php
                 return redirect()->intended(route('admin.dashboard', absolute: false));
 
             default:
-                // Fallback: Kalau role tidak dikenali, lempar ke dashboard default/umum
+                // Fallback: Kalau role tidak dikenali
                 return redirect()->intended(route('dashboard', absolute: false));
         }
-        // --- SELESAI MODIFIKASI ---
     }
 
     /**

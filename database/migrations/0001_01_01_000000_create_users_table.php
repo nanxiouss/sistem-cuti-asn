@@ -16,21 +16,9 @@ return new class extends Migration
             $table->string('nip', 30)->unique();
             $table->string('nama', 100);
             $table->string('password');
-            $table->string('jabatan', 100)->nullable();
-            $table->string('unit_kerja', 100)->nullable();
-            $table->integer('masa_kerja_tahun')->nullable()->default(0);
-            $table->integer('masa_kerja_bulan')->nullable()->default(0);
-            $table->string('role', 20)->nullable()->default('pelaksana');
-            $table->unsignedBigInteger('id_atasan')->nullable();
-            $table->foreign('id_atasan')->references('id')->on('users')->nullOnDelete();
+            $table->enum('role', ['admin', 'pegawai', 'kasi', 'administrator','kadin'])->default('pegawai');
             $table->rememberToken();
             $table->timestamps();
-        });
-
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
         });
 
         Schema::create('sessions', function (Blueprint $table) {
@@ -43,13 +31,9 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
 };
