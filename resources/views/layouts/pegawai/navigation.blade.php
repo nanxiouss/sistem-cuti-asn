@@ -20,7 +20,6 @@
                 $navClass = "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group
                 overflow-hidden";
                 $activeClass = "bg-slate-900 text-white shadow-md";
-                // Mengubah warna hover text dari blue-700 menjadi lime-500
                 $inactiveClass = "text-slate-600 hover:text-lime-500 hover:bg-white";
                 @endphp
 
@@ -83,51 +82,31 @@
                         <div class="px-5 py-4 bg-slate-50/50 border-b border-slate-100">
                             <p class="text-sm font-bold text-slate-800 truncate">{{ Auth::user()->nama }}</p>
                             <div class="mt-1.5 flex">
-                                {{-- NIP dibuat bergaya badge agar lebih manis --}}
                                 <span class="text-[11px] font-semibold text-slate-500 bg-amber-50/80 px-2 py-0.5 rounded-md border border-amber-200/60 truncate">
                                     NIP. {{ Auth::user()->nip }}
                                 </span>
                             </div>
                         </div>
 
-                        <<<<<<< HEAD {{-- 2. Bagian Menu --}} <div class="p-2 space-y-1">
+                        {{-- 2. Bagian Menu --}} 
+                        <div class="p-2 space-y-1">
                             <a href="/profile" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 hover:text-lime-600 transition-all group">
-                                {{-- Ikon dibungkus kotak kecil --}}
                                 Edit Profile
                             </a>
+                        </div>
+
+                        {{-- 3. Bagian Logout --}}
+                        <div class="p-2 border-t border-slate-100">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-all group">
+                                    Log Out
+                                </button>
+                            </form>
+                        </div>
                     </div>
-
-                    {{-- 3. Bagian Logout --}}
-                    <div class="p-2 border-t border-slate-100">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-rose-50 hover:text-rose-600 transition-all group">
-                                Log Out
-                            </button>
-                        </form>
-                    </div>
-
-                </div>
-                =======
-                <div class="py-1">
-                    <a href="#" class="flex items-center px-5 py-2.5 text-sm text-slate-600 hover:bg-lime-50 hover:text-lime-600 transition-colors">
-                        <i class="fas fa-user-edit w-4 h-4 mr-3"></i> Edit Profile
-                    </a>
-                </div>
-
-                <div class="py-1 border-t border-slate-50">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="flex w-full items-center px-5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors">
-                            <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i> Sign Out
-                        </button>
-                    </form>
                 </div>
             </div>
-            >>>>>>> e0e68729d23dd0b5d4b85e9e85fcbfec5d89e477
         </div>
-
-    </div>
-    </div>
     </div>
 </nav>

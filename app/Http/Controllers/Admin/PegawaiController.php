@@ -17,6 +17,8 @@ class PegawaiController extends Controller
         $user = User::with(['pegawai', 'pegawai.atasan'])
             ->orderBy('created_at', 'desc')
             ->get();
+        
+        return view('admin.pegawai.index', compact('user'));
     }
 
     public function create()
@@ -64,7 +66,7 @@ class PegawaiController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('admin.pegawai.index')->with('succes', 'Data pegawai berhasil ditambahkan!');
+            return redirect()->route('admin.pegawai.index')->with('success', 'Data pegawai berhasil ditambahkan!');
 
         } catch (\Exception $e) {
             DB::rollBack();

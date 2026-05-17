@@ -18,13 +18,14 @@
                 <tr class="bg-slate-50/50">
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Pegawai</th>
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Jabatan / Unit</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">TMT Kerja</th>
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Sisa Cuti</th>
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status Akun</th>
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
-                @forelse($users as $u)
+                @forelse($user as $u)
                 <tr class="hover:bg-slate-50/50 transition-colors">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
@@ -40,6 +41,9 @@
                     <td class="px-6 py-4">
                         <p class="text-sm text-slate-700">{{ $u->pegawai->jabatan ?? '-' }}</p>
                         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wide">{{ $u->pegawai->unit_kerja ?? '-' }}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <p class="text-sm text-slate-700">{{ $u->pegawai->tmt_kerja ?? '-' }}</p>
                     </td>
                     <td class="px-6 py-4 text-center">
                         <span class="text-sm font-bold text-slate-700">{{ $u->pegawai->sisa_cuti_tahunan ?? 0 }} Hari</span>
