@@ -1,7 +1,4 @@
-@extends('layouts.kasi.app')
-
-@section('content')
-<div class="mb-8">
+<x-app-layout>
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -18,7 +15,7 @@
 
                         <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
                             Selamat Pagi,<br>
-                            <span class="text-lime-400">{{ explode(' ', Auth::user()->nama)[0] }}</span>
+                            <span class="text-lime-400">{{ explode(' ', Auth::user()->nama ?? '')[0] }}</span>
                         </h1>
 
                         <p class="text-slate-400 text-sm md:text-base max-w-lg mb-8 leading-relaxed">
@@ -26,7 +23,7 @@
                         </p>
 
                         <div class="flex items-center gap-4">
-                            <a href="{{ route('kasi.persetujuan.index') }}" class="px-6 py-3 bg-lime-500 hover:bg-lime-600 text-slate-900 font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(132,204,22,0.3)]">
+                            <a href="{{ route('kabid.persetujuan.index') }}" class="px-6 py-3 bg-lime-500 hover:bg-lime-600 text-slate-900 font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(132,204,22,0.3)]">
                                 Review Pengajuan
                             </a>
                             <a href="#" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl transition-all border border-slate-700">
@@ -45,7 +42,7 @@
 
                         <ul class="space-y-4">
                             <li class="flex justify-between items-center border-b border-slate-700/50 pb-3">
-                                <span class="text-sm text-slate-400">Menunggu ACC Kasi</span>
+                                <span class="text-sm text-slate-400">Menunggu ACC Kabid</span>
                                 <span class="text-lg font-bold text-rose-400">{{ $statistik['menunggu_aksi'] ?? 0 }}</span>
                             </li>
                             <li class="flex justify-between items-center pb-1">
@@ -90,9 +87,9 @@
                 <div class="p-6 border-b border-slate-100 flex justify-between items-center">
                     <div>
                         <h2 class="text-lg font-bold text-slate-800">Menunggu Persetujuan Anda</h2>
-                        <p class="text-sm text-slate-500">Daftar pengajuan cuti yang telah divalidasi oleh admin dan menunggu ACC Kasi.</p>
+                        <p class="text-sm text-slate-500">Daftar pengajuan cuti yang telah divalidasi oleh kasi dan menunggu ACC Kabid.</p>
                     </div>
-                    <a href="#" class="text-sm font-semibold text-lime-600 hover:text-lime-700">Lihat Semua &rarr;</a>
+                    <a href="{{ route('kabid.persetujuan.index') }}" class="text-sm font-semibold text-lime-600 hover:text-lime-700">Lihat Semua &rarr;</a>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -126,9 +123,8 @@
                                     {{ \Carbon\Carbon::parse($item->tgl_mulai)->diffInDays(\Carbon\Carbon::parse($item->tgl_selesai)) + 1 }} Hari
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    {{-- Tombol ini nanti diarahkan ke halaman detail persetujuan Kasi --}}
-                                    <a href="{{ route('kasi.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
-                                        <i class="fas fa-search"></i> Proses
+                                    <a href="{{ route('kabid.persetujuan.show', $item->id) }}" class="px-4 py-2 bg-gradient-to-r from-lime-400 to-lime-500 hover:from-lime-500 hover:to-lime-600 text-slate-900 text-sm font-bold rounded-xl transition-all shadow-lg shadow-lime-500/30">
+                                        Review Pengajuan
                                     </a>
                                 </td>
                             </tr>
@@ -148,6 +144,4 @@
             </div>
         </div>
     </div>
-</div>
-
-@endsection
+</x-app-layout>

@@ -1,5 +1,4 @@
-<nav x-data="{ open: false, profileOpen: false }"
-    class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-50 transition-all duration-300 supports-[backdrop-filter]:bg-white/60">
+<nav x-data="{ open: false, profileOpen: false }" class="bg-white/80 backdrop-blur-md border-b border-slate-200/60 sticky top-0 z-50 transition-all duration-300 supports-[backdrop-filter]:bg-white/60">
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20">
@@ -21,16 +20,13 @@
                 $inactiveClass = "text-slate-600 hover:text-lime-500 hover:bg-white";
                 @endphp
 
-                <a href="{{ route('admin.dashboard') }}"
-                    class="{{ $navClass }} {{ request()->routeIs('admin.dashboard') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('admin.dashboard') }}" class="{{ $navClass }} {{ request()->routeIs('admin.dashboard') ? $activeClass : $inactiveClass }}">
                     Dashboard
                 </a>
-                <a href="{{ route('admin.pegawai.index') }}" 
-                    class="{{ $navClass }} {{ request()->routeIs('admin.pegawai*') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('admin.pegawai.index') }}" class="{{ $navClass }} {{ request()->routeIs('admin.pegawai*') ? $activeClass : $inactiveClass }}">
                     Kelola Pegawai
                 </a>
-                <a href="{{ route('admin.pengajuan.index') }}"
-                    class="{{ $navClass }} {{ request()->routeIs('admin.pengajuan*') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('admin.pengajuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('admin.pengajuan*') ? $activeClass : $inactiveClass }}">
                     Data Pengajuan
                 </a>
                 <a href="#" class="{{ $navClass }} {{ request()->routeIs('admin.laporan*') ? $activeClass : $inactiveClass }}">
@@ -49,8 +45,7 @@
                 <div class="h-6 w-px bg-slate-200 mx-1 hidden sm:block"></div>
 
                 <div class="relative" @click.outside="profileOpen = false">
-                    <button @click="profileOpen = !profileOpen"
-                        class="flex items-center gap-3 cursor-pointer group focus:outline-none p-1 rounded-full hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200">
+                    <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 cursor-pointer group focus:outline-none p-1 rounded-full hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200">
                         <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-500 to-rose-600 p-[2px]">
                             <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
                                 <span class="font-bold text-sm text-rose-600">
@@ -73,12 +68,7 @@
                         </svg>
                     </button>
 
-                    <div x-show="profileOpen" x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-                        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
-                        x-transition:leave-end="opacity-0 translate-y-2"
-                        class="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 py-2 z-50 origin-top-right"
-                        style="display: none;">
+                    <div x-show="profileOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 py-2 z-50 origin-top-right" style="display: none;">
 
                         <div class="px-5 py-3 border-b border-slate-50">
                             <p class="text-sm font-bold text-slate-800">{{ Auth::user()->nama }}</p>

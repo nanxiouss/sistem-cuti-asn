@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-bold text-xl text-slate-800 leading-tight">Daftar Persetujuan Akhir (Kadin)</h2>
+        <h2 class="font-bold text-xl text-slate-800 leading-tight">Daftar Persetujuan Cuti (Kabid)</h2>
     </x-slot>
 
     <div class="py-12">
@@ -8,7 +8,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="p-6 border-b border-slate-100 bg-slate-50">
                     <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
-                        <i class="fas fa-folder-open text-purple-500"></i> Antrean Berkas Menunggu Keputusan Kadin
+                        <i class="fas fa-inbox text-indigo-500"></i> Antrean Berkas Menunggu ACC Kabid
                     </h3>
                 </div>
                 <div class="overflow-x-auto">
@@ -26,7 +26,7 @@
                                 <td class="px-6 py-4 font-bold text-slate-800">{{ $item->user->nama ?? '-' }}</td>
                                 <td class="px-6 py-4">{{ $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}</td>
                                 <td class="px-6 py-4 text-center">
-                                    <a href="{{ route('kadin.persetujuan.show', $item->id) }}" class="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800">
+                                    <a href="{{ route('kabid.persetujuan.show', $item->id) }}" class="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800">
                                         Proses
                                     </a>
                                 </td>
@@ -34,7 +34,7 @@
                             @empty
                             <tr>
                                 <td colspan="3" class="px-6 py-12 text-center text-slate-500">
-                                    <p class="font-medium">Tidak ada berkas yang memerlukan tanda tangan Anda.</p>
+                                    <p class="font-medium">Tidak ada antrean persetujuan.</p>
                                 </td>
                             </tr>
                             @endforelse

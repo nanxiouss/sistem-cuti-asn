@@ -51,33 +51,33 @@
     </div>
     <div class="p-0">
         @if(isset($butuhAksi) && $butuhAksi->count() > 0)
-            <ul class="divide-y divide-slate-100">
-                @foreach($butuhAksi as $aksi)
-                    <li class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-full bg-amber-100 flex shrink-0 items-center justify-center text-amber-600 font-bold">
-                                {{ substr($aksi->user->nama ?? 'P', 0, 1) }}
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-slate-800">{{ $aksi->user->nama ?? 'Nama Tidak Ditemukan' }}</p>
-                                <p class="text-xs text-slate-500">
-                                    Mengajukan {{ $aksi->jenisCuti->nama ?? 'Cuti' }} ({{ $aksi->lama_cuti }} Hari)
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 uppercase tracking-wider">
-                                {{ $aksi->status }}
-                            </span>
-                            <a href="#" class="p-2 text-slate-400 hover:text-indigo-600 transition" title="Verifikasi">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        </div>
-                    </li>
-                @endforeach
-            </ul>
+        <ul class="divide-y divide-slate-100">
+            @foreach($butuhAksi as $aksi)
+            <li class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-amber-100 flex shrink-0 items-center justify-center text-amber-600 font-bold">
+                        {{ substr($aksi->user->nama ?? 'P', 0, 1) }}
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-slate-800">{{ $aksi->user->nama ?? 'Nama Tidak Ditemukan' }}</p>
+                        <p class="text-xs text-slate-500">
+                            Mengajukan {{ $aksi->jenisCuti->nama ?? 'Cuti' }} ({{ $aksi->lama_cuti }} Hari)
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 uppercase tracking-wider">
+                        {{ $aksi->status }}
+                    </span>
+                    <a href="#" class="p-2 text-slate-400 hover:text-indigo-600 transition" title="Verifikasi">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </li>
+            @endforeach
+        </ul>
         @else
-            <p class="text-slate-500 text-sm italic text-center py-8">Belum ada pengajuan cuti yang perlu diverifikasi.</p>
+        <p class="text-slate-500 text-sm italic text-center py-8">Belum ada pengajuan cuti yang perlu diverifikasi.</p>
         @endif
     </div>
 </div>
