@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-layouts.kasi.app>
     <x-slot name="header">
         <div class="flex items-center gap-3">
             <a href="{{ route('kasi.dashboard') }}" class="text-slate-400 hover:text-slate-600 transition-colors">
@@ -113,4 +113,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.kasi.app>

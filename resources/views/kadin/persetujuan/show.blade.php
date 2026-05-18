@@ -1,8 +1,8 @@
-<x-app-layout>
-    <x-slot name="header">
+<x-layouts.kadin.app>
+    <div>
         <a href="{{ route('kadin.dashboard') }}" class="text-slate-400 hover:text-slate-600 mr-4"><i class="fas fa-arrow-left"></i> Kembali</a>
-        <h2 class="font-bold text-xl text-slate-800 leading-tight inline">Keputusan Final Pengajuan Cuti (Kadin)</h2>
-    </x-slot>
+        <h2 class="font-bold text-xl text-slate-800 leading-tight inline">Keputusan Final Pengajuan Cuti</h2>
+    </div>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,4 +41,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.kadin.app>

@@ -24,8 +24,11 @@
                     Dashboard
                 </a>
                 <a href="{{ route('kasi.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.persetujuan*') ? $activeClass : $inactiveClass }}">
-                    Kelola Pegawai
+                    Persetujuan Cuti
                 </a>
+                {{-- <a href="{{ route('#') }}" class="{{ navClass }} {{ request()->routeIs('kasi.riwayat') ? $activeClass : $inactiveClass }}">
+                    Riwayat
+                </a> --}}
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">
@@ -53,7 +56,7 @@
                                 {{ Auth::user()->nama }}
                             </span>
                             <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-600 tracking-wider uppercase border border-rose-100 mt-1">
-                                Kepala Dinas
+                                Kepala Seksi
                             </span>
                         </div>
 
@@ -79,7 +82,7 @@
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="flex w-full items-center px-5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors">
-                                    <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i> Sign Out
+                                    <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i> Log Out
                                 </button>
                             </form>
                         </div>

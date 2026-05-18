@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-layouts.kabid.app>
     <x-slot name="header">
         <h2 class="font-bold text-xl text-slate-800 leading-tight">Daftar Persetujuan Cuti (Kabid)</h2>
     </x-slot>
@@ -44,4 +44,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.kabid.app>

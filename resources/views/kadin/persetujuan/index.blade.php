@@ -1,8 +1,7 @@
-<x-app-layout>
+<x-layouts.kadin.app>
     <x-slot name="header">
-        <h2 class="font-bold text-xl text-slate-800 leading-tight">Daftar Persetujuan Akhir (Kadin)</h2>
+        <h2 class="font-bold text-xl text-slate-800 leading-tight">Daftar Persetujuan Akhir</h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
@@ -44,4 +43,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.kadin.app>

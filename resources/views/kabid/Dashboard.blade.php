@@ -1,4 +1,5 @@
-<x-app-layout>
+<x-layouts.kabid.app>
+    <x-slot:title>Dashboad Kepala Bidang - E-CUTI ESDM</x-slot:title>
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -144,4 +145,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.kabid.app>

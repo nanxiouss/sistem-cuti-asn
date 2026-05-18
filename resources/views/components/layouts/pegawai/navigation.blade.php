@@ -9,7 +9,7 @@
 
                     <div class="leading-tight border-l-2 border-slate-200 pl-4">
                         <span class="text-xl font-extrabold tracking-tighter text-slate-800 block">E-CUTI</span>
-                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">Dinas ESDM Sumsel</p>
+                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">PANEL Pegawai</p>
                     </div>
                 </a>
             </div>

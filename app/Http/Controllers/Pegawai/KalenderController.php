@@ -16,13 +16,11 @@ class KalenderController extends Controller
             ->where('status', 'Disetujui')
             ->get();
 
-        // TRANSFORMASI DATA (Cara yang lebih aman)
+        // TRANSFORMASI DATA 
         $events = $dataCuti->map(function ($cuti) {
-            // 1. Tentukan Nama Cuti (Pakai optional chaining agar tidak error jika null)
             $namaCuti = $cuti->jenisCuti->nama_cuti ?? 'Cuti';
 
-            // 2. Tentukan Warna
-            $warna = '#3B82F6'; // Default Biru
+            $warna = '#3B82F6'; 
             if (str_contains($namaCuti, 'Sakit')) {
                 $warna = '#EF4444';
             } elseif (str_contains($namaCuti, 'Melahirkan')) {
@@ -44,7 +42,6 @@ class KalenderController extends Controller
             ];
         });
 
-        // Pastikan TIDAK ADA koma setelah compact
         return view('Pegawai.kalender.index', compact('events'));
     }
 }

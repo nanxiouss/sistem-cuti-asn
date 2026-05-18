@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-layouts.sekdin.app>
     <x-slot name="header">
         <a href="{{ route('sekdin.dashboard') }}" class="text-slate-400 hover:text-slate-600 mr-4"><i class="fas fa-arrow-left"></i> Kembali</a>
         <h2 class="font-bold text-xl text-slate-800 leading-tight inline">Review Berkas Pengajuan Cuti (Sekdin)</h2>
@@ -41,4 +41,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.sekdin.app>

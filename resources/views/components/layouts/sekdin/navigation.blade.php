@@ -8,7 +8,7 @@
                     <img src="/images/logo.PNG" alt="Logo Sumsel Lumbung Energi" class="h-10 w-auto object-contain">
                     <div class="leading-tight border-l-2 border-slate-200 pl-4">
                         <span class="text-xl font-extrabold tracking-tighter text-slate-800 block">E-CUTI</span>
-                        <p class="text-[9px] font-bold text-rose-500 uppercase tracking-[0.2em]">PANEL ADMIN</p>
+                        <p class="text-[9px] font-bold text-rose-500 uppercase tracking-[0.2em]">PANEL Sekretaris Dinas</p>
                     </div>
                 </a>
             </div>
@@ -20,12 +20,15 @@
                 $inactiveClass = "text-slate-600 hover:text-lime-500 hover:bg-white";
                 @endphp
 
-                <a href="{{ route('kadin.dashboard') }}" class="{{ $navClass }} {{ request()->routeIs('kadin.dashboard') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('sekdin.dashboard') }}" class="{{ $navClass }} {{ request()->routeIs('sekdin.dashboard') ? $activeClass : $inactiveClass }}">
                     Dashboard
                 </a>
-                <a href="{{ route('kadin.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kadin.persetujuan*') ? $activeClass : $inactiveClass }}">
-                    Kelola Pegawai
+                <a href="{{ route('sekdin.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('sekdin.persetujuan*') ? $activeClass : $inactiveClass }}">
+                    Persetujuan Cuti
                 </a>
+                {{-- <a href="{{ route('#') }}" class="{{ navClass }} {{ request()->routeIs('kasi.riwayat') ? $activeClass : $inactiveClass }}">
+                    Riwayat
+                </a> --}}
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">
@@ -53,7 +56,7 @@
                                 {{ Auth::user()->nama }}
                             </span>
                             <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-600 tracking-wider uppercase border border-rose-100 mt-1">
-                                Kepala Dinas
+                                Sekretaris Dinas
                             </span>
                         </div>
 
@@ -79,13 +82,12 @@
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="flex w-full items-center px-5 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors">
-                                    <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i> Sign Out
+                                    <i class="fas fa-sign-out-alt w-4 h-4 mr-3"></i> Log Out
                                 </button>
                             </form>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
