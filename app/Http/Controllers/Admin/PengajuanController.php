@@ -34,42 +34,6 @@ class PengajuanController extends Controller
         return redirect()->back()->withErrors(['error' => 'Status pengajuan tidak valid untuk diteruskan ke Kasi.']);
     }
 
-    public function teruskanKeKabid(Request $request, $id)
-    {
-        $pengajuan = Pengajuan::findOrFail($id);
-
-        if ($pengajuan->status == 'ACC Kasi') { 
-            $pengajuan->update(['status' => 'Menunggu Kabid']);
-            return redirect()->back()->with('success', 'Berkas divalidasi ulang, diteruskan ke Kabid.');
-        }
-
-        return redirect()->back()->withErrors(['error' => 'Status pengajuan tidak valid untuk diteruskan ke Kabid.']);
-    }
-
-    public function teruskanKeSekdin(Request $request, $id)
-    {
-        $pengajuan = Pengajuan::findOrFail($id);
-
-        if ($pengajuan->status == 'ACC Kabid') {
-            $pengajuan->update(['status' => 'Menunggu Sekdin']);
-            return redirect()->back()->with('success', 'Berkas divalidasi ulang, diteruskan ke Sekdin.');
-        }
-
-        return redirect()->back()->withErrors(['error' => 'Status pengajuan tidak valid untuk diteruskan ke Sekdin.']);
-    }
-
-    public function teruskanKeKadin(Request $request, $id)
-    {
-        $pengajuan = Pengajuan::findOrFail($id);
-
-        if ($pengajuan->status == 'ACC Sekdin') {
-            $pengajuan->update(['status' => 'Menunggu Kadin']);
-            return redirect()->back()->with('success', 'Berkas divalidasi ulang, diteruskan ke Kadin.');
-        }
-
-        return redirect()->back()->withErrors(['error' => 'Status pengajuan tidak valid untuk diteruskan ke Kadin.']);
-    }
-
     public function cetak($id)
     {
         $pengajuan = Pengajuan::with('user.pegawai', 'atasan.pegawai', 'jenisCuti')->findOrFail($id);

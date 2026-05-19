@@ -28,16 +28,17 @@ Route::get('/dashboard', function () {
     $user = Auth::user();
     if ($user->role === 'pegawai') {
         return redirect()->route('pegawai.dashboard');
-    } elseif ($user->role === 'admin' || $user->role === 'administrator') {
+    } elseif ($user->role === 'admin') {
         return redirect()->route('admin.dashboard');
+    } elseif ($user->role === 'kasubbag_umum') {
+        return redirect()->route('kasubbag_umum.dashboard');
     } elseif ($user->role === 'kasi') {
         return redirect()->route('kasi.dashboard');
     } elseif ($user->role === 'kabid') {
         return redirect()->route('kabid.dashboard');
     } elseif ($user->role === 'sekdin') {
         return redirect()->route('sekdin.dashboard');
-    }
-    elseif ($user->role === 'kadin') { // <-- TAMBAHAN KADIN
+    } elseif ($user->role === 'kadin') {
         return redirect()->route('kadin.dashboard');
     }
     return view('dashboard');
