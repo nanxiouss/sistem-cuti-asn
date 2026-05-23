@@ -19,6 +19,8 @@ class Pegawai extends Model
         'tmt_kerja',
         'sisa_cuti_tahunan',
         'no_hp',
+        'foto_profil', 
+        'foto_ttd'
     ];
 
     public function user()

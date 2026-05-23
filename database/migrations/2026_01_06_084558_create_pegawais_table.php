@@ -25,6 +25,9 @@ return new class extends Migration
             $table->integer('sisa_cuti_tahunan')->default(12);
             $table->string('no_telepon', 20)->nullable();
 
+            $table->string('foto_profil')->nullable();
+            $table->string('foto_ttd')->nullable();
+
             $table->timestamps();
         });
     }

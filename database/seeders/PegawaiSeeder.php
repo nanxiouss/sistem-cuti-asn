@@ -26,8 +26,8 @@ class PegawaiSeeder extends Seeder
         $pegawai1 = User::where('nip', '41414141')->first();
 
         // Pastikan datanya ketemu sebelum membuat Pegawai
-        if($kadin && $sekdin && $kabid && $kasi && $admin && $pegawai) {
-            
+        if ($kadin && $sekdin && $kabid && $kasi && $admin && $pegawai) {
+
             // Kadin (Tidak punya atasan)
             Pegawai::create([
                 'user_id' => $kadin->id,
@@ -44,7 +44,7 @@ class PegawaiSeeder extends Seeder
                 'user_id' => $sekdin->id,
                 'atasan_id' => $kadin->id,
                 'pangkat_golongan' => 'Sekretaris / III.d',
-                'jabatan' => 'Sekretaris Dinas', 
+                'jabatan' => 'Sekretaris Dinas',
                 'unit_kerja' => 'Sekretaris Dinas',
                 'tmt_kerja' => '2016-05-25',
                 'sisa_cuti_tahunan' => 12
@@ -128,7 +128,7 @@ class PegawaiSeeder extends Seeder
 
             Pegawai::create([
                 'user_id' => $pegawai1->id,
-                'atasan_id' => $kasi->id,
+                'atasan_id' => $kasi1->id,
                 'pangkat_golongan' => 'Pengatur Tingkat I / II.d',
                 'jabatan' => 'Staf Tata Usaha',
                 'unit_kerja' => 'Subbag Tata Usaha',
