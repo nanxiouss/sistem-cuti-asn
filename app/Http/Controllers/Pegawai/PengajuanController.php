@@ -6,52 +6,35 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Pegawai;
 use App\Models\JenisCuti;
 use App\Models\Pengajuan;
-use Carbon\Carbon;
 
 class PengajuanController extends Controller
 {
+    // 1. FORM FORMULIR PENGAJUAN CUTI BARU
     public function create()
     {
-        $user = Auth::user()->load('pegawai');
+        // Load data user login beserta profil pegawai dan relasi bidang kerjanya
+        $user = Auth::user()->load(['pegawai.atasan', 'pegawai.bidang']);
 
         if (!$user->pegawai) {
-            return back()->withErrors(['error' => 'Data pegawai belum lengkap!']);
+            return back()->withErrors(['error' => 'Profil kepegawaian Anda belum terdaftar di sistem. Silakan hubungi admin!']);
         }
 
         $tahun_skrg = date('Y');
         $min_date = date('Y-m-d');
 
-        // --- Logika Pemecahan Saldo ---
-        $kuota_db = $user->pegawai->sisa_cuti_tahunan ?? 12;
-        $sisa_n = 12;
-        $sisa_n1 = 0;
-        $sisa_n2 = 0;
+        // --- Logika Kuota Cuti Riil dari Database ---
+        $sisa_total = $user->pegawai->sisa_cuti_tahunan ?? 0;
 
-        if ($kuota_db > 12) {
-            $sisa_n1 = $kuota_db - 12;
-            if ($sisa_n1 > 6) {
-                $sisa_n2 = $sisa_n1 - 6;
-                $sisa_n1 = 6;
-            }
-        } else {
-            $sisa_n = $kuota_db;
-        }
+        // Pecahan data N, N-1, N-2 untuk display informasi di Blade
+        $sisa_n = $sisa_total > 12 ? 12 : $sisa_total;
+        $sisa_n1 = ($sisa_total - $sisa_n) > 6 ? 6 : ($sisa_total - $sisa_n);
+        $sisa_n2 = ($sisa_total - $sisa_n - $sisa_n1) > 0 ? ($sisa_total - $sisa_n - $sisa_n1) : 0;
 
-        $total_kuota = $sisa_n + $sisa_n1 + $sisa_n2;
-
-        $terpakai = Pengajuan::where('user_id', $user->id)
-            ->where('status', 'like', '%Disetujui%')
-            ->whereYear('tgl_mulai', $tahun_skrg)
-            ->sum('lama_cuti');
-
-        $sisa_total = $total_kuota - $terpakai;
-
-        // Modifikasi Koleksi Jenis Cuti
+        // Modifikasi Koleksi kuota pilihan Jenis Cuti khusus untuk Cuti Tahunan
         $jenis_cutis = JenisCuti::all()->map(function ($item) use ($sisa_total) {
             if (strtolower($item->nama) == 'cuti tahunan') {
                 $item->kuota = $sisa_total;
@@ -59,34 +42,40 @@ class PengajuanController extends Controller
             return $item;
         });
 
-        // --- Logika Penentuan List Atasan (Dropdown) ---
+        // --- Logika Penentuan List Dropdown Atasan Berdasarkan Kluster Bidang Dinas ---
         if (!empty($user->pegawai->atasan_id)) {
+            // Jika user sudah dikunci atasan langsungnya oleh admin, panggil atasan tersebut secara spesifik
             $atasans = User::with('pegawai')
                 ->where('id', $user->pegawai->atasan_id)
                 ->get();
         } else {
             $role_user = $user->role;
-            $unit_kerja = $user->pegawai->unit_kerja ?? '';
+            // Ambil bidang_id langsung dari properti foreign key tabel pegawais
+            $bidang_id = $user->pegawai->bidang_id ?? ($user->pegawai->bidang->id ?? null);
 
-            if ($role_user == 'kasi' || $role_user == 'kasubbag_umum') {
+            if (in_array($role_user, ['kasi', 'kasubbag_umum'])) {
+                // Kasi & Kasubbag mengajukan verifikasi langsung ke Kabid atau Sekdin
                 $atasans = User::with('pegawai')
                     ->whereIn('role', ['kabid', 'sekdin'])
                     ->get();
-            } elseif ($role_user == 'kabid' || $role_user == 'sekdin') {
+            } elseif (in_array($role_user, ['kabid', 'sekdin'])) {
+                // Level Kabid & Sekdin langsung diverifikasi oleh Kepala Dinas
                 $atasans = User::with('pegawai')
                     ->where('role', 'kadin')
                     ->get();
             } else {
+                // Pegawai/Staf biasa mendeteksi Atasan (Kasi/Kasubbag/Kabid) yang berada di dalam SATU BIDANG YANG SAMA
                 $atasans = User::with('pegawai')
                     ->whereIn('role', ['kasi', 'kasubbag_umum', 'kabid'])
-                    ->whereHas('pegawai', function ($query) use ($unit_kerja) {
-                        if (!empty($unit_kerja)) {
-                            $query->where('unit_kerja', $unit_kerja);
+                    ->whereHas('pegawai', function ($query) use ($bidang_id) {
+                        if (!empty($bidang_id)) {
+                            $query->where('bidang_id', $bidang_id);
                         }
                     })->get();
 
+                // Langkah Cadangan (Fallback): Jika di bidangnya belum ada atasan, tampilkan list seluruh pejabat struktural dinas
                 if ($atasans->isEmpty()) {
-                    $atasans = User::with('pegawai')->whereIn('role', ['kasi', 'kabid'])->get();
+                    $atasans = User::with('pegawai')->whereIn('role', ['kasi', 'kabid', 'kasubbag_umum'])->get();
                 }
             }
         }
@@ -107,82 +96,82 @@ class PengajuanController extends Controller
         ));
     }
 
+    // 2. PROSES PENYIMPANAN DATA PENGAJUAN CUTI
     public function store(Request $request)
     {
-        // 1. Validasi Input Form
+        // Validasi struktur inputan form aplikasi cuti
         $request->validate([
             'id_jenis_cuti'       => 'required|exists:jenis_cutis,id',
             'tgl_mulai'           => 'required|date',
             'tgl_selesai'         => 'required|date|after_or_equal:tgl_mulai',
-            'alasan'              => 'required',
-            'alamat'              => 'required',
-            'no_telepon'          => 'required',
-            'id_atasan'           => 'required',
+            'alasan'              => 'required|string',
+            'alamat'              => 'required|string',
+            'no_telepon'          => 'nullable|string', 
+            'id_atasan'           => 'required|exists:users,id',
             'konfirmasi_ttd'      => 'required|accepted',
             'password_verifikasi' => 'required',
             'bukti'               => 'nullable|file|mimes:pdf,jpeg,png,jpg|max:2048'
         ], [
-            'id_jenis_cuti.required' => 'Jenis cuti harus dipilih.',
-            'id_atasan.required'     => 'Atasan penilai harus dipilih.',
+            'id_jenis_cuti.required' => 'Jenis kategori cuti wajib Anda tentukan.',
+            'id_atasan.required'     => 'Pejabat atasan penilai wajib dipilih.',
+            'konfirmasi_ttd.accepted'=> 'Anda harus menyetujui penyematan tanda tangan elektronik.',
         ]);
 
         $user = Auth::user()->load('pegawai');
 
-        // 2. Validasi Keamanan: Cek Password
+        // Validasi Kredensial Keamanan: Verifikasi kecocokan password user
         if (!Hash::check($request->password_verifikasi, $user->password)) {
-            return back()->withInput()->withErrors(['error' => 'Password verifikasi salah!']);
+            return back()->withInput()->withErrors(['error' => 'Password verifikasi yang Anda masukkan tidak valid!']);
         }
 
-        // 3. Validasi Keamanan: Blokir Pengajuan Ganda yang Masih Berjalan
+        // Validasi Alur Kerja: Blokir pengajuan baru jika ada berkas lama yang statusnya belum selesai
         $sedangProses = Pengajuan::where('user_id', $user->id)
-            ->where('status', 'not like', '%Disetujui%')
-            ->where('status', 'not like', '%Ditolak%')
+            ->whereNotIn('status', ['Disetujui', 'Ditolak', 'Dibatalkan'])
             ->exists();
 
         if ($sedangProses) {
             return back()
                 ->withInput()
-                ->withErrors(['error' => 'Gagal: Anda masih memiliki pengajuan cuti yang sedang diproses. Harap tunggu hingga proses selesai.']);
+                ->withErrors(['error' => 'Gagal mengirim berkas! Anda masih memiliki dokumen pengajuan cuti yang berstatus aktif berjalan di sistem.']);
         }
 
-        // 4. Validasi Keamanan: Pastikan Pegawai SUDAH PUNYA file Tanda Tangan di profilnya
-        // *Catatan: Sesuaikan 'foto_ttd' di bawah ini dengan nama kolom asli pada tabel 'pegawais' Anda
+        // Validasi Kelengkapan Dokumen: Pastikan user sudah mengatur berkas spesimen tanda tangan digital (TTD)
         if (!$user->pegawai || empty($user->pegawai->foto_ttd)) {
             return back()
                 ->withInput()
-                ->withErrors(['error' => 'Gagal: Anda belum mengunggah file tanda tangan di halaman profil. Silakan lengkapi profil terlebih dahulu!']);
+                ->withErrors(['error' => 'Fitur Diblokir: Anda belum mengunggah file tanda tangan elektronik di pengaturan profil akun Anda.']);
         }
 
-        // 5. Hitung Hari Kerja (Senin-Jumat)
+        // Perhitungan Jumlah Hari Kerja Nyata (Mengecualikan Hari Sabtu dan Minggu) menggunakan Object Cloning
         $mulai = new \DateTime($request->tgl_mulai);
         $selesai = new \DateTime($request->tgl_selesai);
-
+        
+        $pencacah = clone $mulai;
         $lama_cuti = 0;
-        while ($mulai <= $selesai) {
-            if (!in_array($mulai->format('N'), [6, 7])) {
+        
+        while ($pencacah <= $selesai) {
+            if (!in_array($pencacah->format('N'), [6, 7])) { // 6 = Sabtu, 7 = Minggu
                 $lama_cuti++;
             }
-            $mulai->modify('+1 day');
+            $pencacah->modify('+1 day');
         }
 
-        // 6. Blokir jika durasi melebihi saldo Cuti Tahunan
+        if ($lama_cuti == 0) {
+            return back()->withInput()->withErrors(['error' => 'Gagal: Rentang tanggal yang Anda pilih hanya berisi hari libur akhir pekan (Sabtu/Minggu).']);
+        }
+
+        // Validasi Saldo Batas Atas Kuota Cuti Tahunan
         $jenisCuti = JenisCuti::find($request->id_jenis_cuti);
 
         if ($jenisCuti && strtolower($jenisCuti->nama) == 'cuti tahunan') {
-            $total_kuota = $user->pegawai->sisa_cuti_tahunan ?? 12;
-
-            $terpakai = Pengajuan::where('user_id', $user->id)
-                ->where('status', 'like', '%Disetujui%')
-                ->sum('lama_cuti');
-
-            $sisa_total = $total_kuota - $terpakai;
+            $sisa_total = $user->pegawai->sisa_cuti_tahunan ?? 0;
 
             if ($lama_cuti > $sisa_total) {
-                return back()->withErrors(['error' => "Gagal: Durasi cuti Anda ($lama_cuti hari) melebihi sisa Cuti Tahunan yang tersedia ($sisa_total hari)."]);
+                return back()->withInput()->withErrors(['error' => "Batas Kuota Melampaui: Durasi pengajuan Anda ($lama_cuti hari) melebihi sisa saldo cuti tahunan aktif Anda ($sisa_total hari)."]);
             }
         }
 
-        // 7. Mapping Data untuk Disimpan
+        // Penyusunan Array data objek pemetaan data ke dalam database tabel pengajuans
         $data = [
             'user_id'       => $user->id,
             'jenis_cuti_id' => $request->id_jenis_cuti,
@@ -191,22 +180,20 @@ class PengajuanController extends Controller
             'tgl_selesai'   => $request->tgl_selesai,
             'lama_cuti'     => $lama_cuti,
             'alamat_cuti'   => $request->alamat,
-            'no_telepon'    => $request->no_telepon,
+            'no_telepon'    => $request->no_telepon ?? $user->pegawai->no_telepon,
             'id_atasan'     => $request->id_atasan,
-            'status'        => 'Menunggu Verifikasi Admin',
-
-            // Mengambil langsung path string/text dari tanda tangan profil pegawai
+            'status'        => 'Menunggu Verifikasi Admin', // Alur masuk berkas ke meja Admin Umum terlebih dahulu
             'ttd_pegawai'   => $user->pegawai->foto_ttd,
         ];
 
-        // 8. Handle Upload File Bukti (Jika Ada)
+        // Eksekusi penyimpanan berkas lampiran pendukung berkas cuti (Jika diunggah)
         if ($request->hasFile('bukti')) {
-            $data['file_bukti'] = $request->file('bukti')->store('bukti', 'public');
+            $data['file_bukti'] = $request->file('bukti')->store('bukti_cuti', 'public');
         }
 
-        // 9. Eksekusi Create Data
+        // Lakukan create row pengajuan baru
         Pengajuan::create($data);
 
-        return redirect()->route('pegawai.dashboard')->with('success', 'Pengajuan cuti berhasil dikirim ke Sub Bagian Umum & Kepegawaian!');
+        return redirect()->route('pegawai.dashboard')->with('success', 'Dokumen permohonan cuti berhasil diajukan! Berkas kini berada di antrean Sub Bagian Umum & Kepegawaian.');
     }
 }

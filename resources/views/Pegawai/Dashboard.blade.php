@@ -24,14 +24,13 @@
                     <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
                         {{ $sapaan }}, <br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-amber-300">
-                            {{-- Memanggil Nama (dari tabel users) dan Jabatan (dari tabel pegawais) --}}
-                            {{ $user->name ?? $user->nama }} {{ $user->pegawai->jabatan ?? '' }}
+                            {{ $user->name ?? $user->nama }} - <span class="text-xl font-medium text-slate-300">{{ $user->pegawai->jabatan ?? 'Pegawai' }}</span>
                         </span>
                     </h1>
 
                     <p class="text-slate-400 text-lg max-w-lg leading-relaxed">
                         Pantau kinerja dan cuti Anda dalam satu dashboard terintegrasi.
-                        Hari ini status Anda tercatat
+                        Hari ini status Anda tercatat 
                         @if($is_cuti)
                         <span class="text-rose-400 font-bold drop-shadow-md">Cuti</span>
                         @else
@@ -69,9 +68,8 @@
                                     class="mt-1 w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold shrink-0">
                                     1</div>
                                 <div>
-                                    <span class="block text-sm font-semibold text-amber-400">Cuti Tahunan Hangus</span>
-                                    <p class="text-xs text-slate-400 leading-relaxed mt-0.5">Sisa cuti N-2 (2 tahun lalu)
-                                        otomatis hangus jika tidak dipakai.</p>
+                                    <span class="block text-sm font-semibold text-amber-400">Cuti Tahunan Hak N-2</span>
+                                    <p class="text-xs text-slate-400 leading-relaxed mt-0.5">Sisa cuti jatah dua tahun lalu (N-2) otomatis hangus apabila tidak digunakan pada masa tahun berjalan aktif.</p>
                                 </div>
                             </li>
                             <li class="flex gap-3">
@@ -79,9 +77,8 @@
                                     class="mt-1 w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold shrink-0">
                                     2</div>
                                 <div>
-                                    <span class="block text-sm font-semibold text-amber-400">Cuti Besar</span>
-                                    <p class="text-xs text-slate-400 leading-relaxed mt-0.5">Min 5 tahun kerja. Mengambil
-                                        ini menghapus jatah tahunan.</p>
+                                    <span class="block text-sm font-semibold text-amber-400">Verifikasi Berkas</span>
+                                    <p class="text-xs text-slate-400 leading-relaxed mt-0.5">Setiap pengajuan wajib lolos pemeriksaan administratif oleh Sub Bagian Umum sebelum diteruskan ke Pejabat Penilai.</p>
                                 </div>
                             </li>
                         </ul>
@@ -112,7 +109,7 @@
 
                     <div class="space-y-3">
                         <div class="flex justify-between text-xs font-medium text-slate-500">
-                            <span>Progress Penggunaan</span>
+                            <span>Sisa Kuota Aktif</span>
                             <span>{{ round($persentase_sisa) }}% Tersedia</span>
                         </div>
                         <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
@@ -124,17 +121,17 @@
                     <div
                         class="mt-6 flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
                         <div class="text-center px-2">
-                            <div class="text-[10px] text-slate-400">N-2</div>
+                            <div class="text-[10px] text-slate-400">Jatah N-2</div>
                             <div class="font-bold text-slate-700">{{ $sisa_n2 }}</div>
                         </div>
                         <div class="w-px h-6 bg-slate-100"></div>
                         <div class="text-center px-2">
-                            <div class="text-[10px] text-slate-400">N-1</div>
-                            <div class="font-bold text-lime-600">{{ $sisa_n1 }}</div>
+                            <div class="text-[10px] text-slate-400">Jatah N-1</div>
+                            <div class="font-bold text-slate-700">{{ $sisa_n1 }}</div>
                         </div>
                         <div class="w-px h-6 bg-slate-100"></div>
                         <div class="text-center px-2">
-                            <div class="text-[10px] text-slate-400">Tahun Ini</div>
+                            <div class="text-[10px] text-slate-400">Tahun Ini (N)</div>
                             <div class="font-bold text-lime-600">{{ $sisa_n }}</div>
                         </div>
                     </div>
@@ -157,10 +154,10 @@
                             <span class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">Proses</span>
                         </div>
                         <h3 class="text-4xl font-bold text-slate-900 mb-1">{{ $jumlah_proses }}</h3>
-                        <p class="text-slate-500 font-medium">Pengajuan Pending</p>
+                        <p class="text-slate-500 font-medium">Pengajuan Aktif</p>
                     </div>
                     <div class="mt-4 pt-4 border-t border-slate-50">
-                        <p class="text-xs text-slate-400">Menunggu persetujuan atasan atau verifikasi admin.</p>
+                        <p class="text-xs text-slate-400">Berkas dalam tahap tinjauan administrasi kepegawaian atau persetujuan pimpinan.</p>
                     </div>
                 </div>
             </div>
@@ -183,8 +180,7 @@
                         <p class="text-slate-500 font-medium">Hari Terpakai</p>
                     </div>
                     <div class="mt-4 pt-4 border-t border-slate-50">
-                        <p class="text-xs text-slate-400">Total akumulasi cuti yang telah diambil pada tahun {{ $tahun_skrg
-                            }}.</p>
+                        <p class="text-xs text-slate-400">Total akumulasi kuota cuti yang disetujui resmi sepanjang tahun {{ $tahun_skrg }}.</p>
                     </div>
                 </div>
             </div>
@@ -194,8 +190,8 @@
             <div
                 class="px-8 py-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">Riwayat Pengajuan</h2>
-                    <p class="text-sm text-slate-500">Pantau status pengajuan cuti terakhir Anda.</p>
+                    <h2 class="text-xl font-bold text-slate-900">Riwayat Pengajuan Cuti</h2>
+                    <p class="text-sm text-slate-500">Pantau pergerakan posisi lembar dokumen pengajuan cuti Anda.</p>
                 </div>
                 <a href="#" class="group inline-flex items-center text-sm font-semibold text-lime-600 hover:text-lime-700">
                     Lihat Semua Riwayat
@@ -213,13 +209,11 @@
                 <table class="w-full text-left">
                     <thead class="bg-slate-50 border-b border-slate-100">
                         <tr>
-                            <th class="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Tanggal & Waktu
-                            </th>
+                            <th class="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Tanggal & Waktu</th>
                             <th class="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Jenis Cuti</th>
                             <th class="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Durasi</th>
-                            <th class="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                            <th class="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Aksi
-                            </th>
+                            <th class="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Status Berkas</th>
+                            <th class="px-8 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider text-right">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">
@@ -227,50 +221,45 @@
                         <tr class="group hover:bg-slate-50/80 transition-colors duration-200">
                             <td class="px-8 py-5">
                                 <div class="flex flex-col">
-                                    <span class="text-sm font-bold text-slate-900">{{ $item->created_at->translatedFormat('d
-                                        F Y') }}</span>
+                                    <span class="text-sm font-bold text-slate-900">{{ $item->created_at->translatedFormat('d F Y') }}</span>
                                     <span class="text-xs text-slate-500">{{ $item->created_at->format('H:i') }} WIB</span>
                                 </div>
                             </td>
                             <td class="px-8 py-5">
-                                <span class="text-sm font-medium text-slate-700">{{ $item->jenisCuti->nama ?? '-'
-                                    }}</span>
+                                <span class="text-sm font-medium text-slate-700">{{ $item->jenisCuti->nama ?? '-' }}</span>
                             </td>
                             <td class="px-8 py-5">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
                                     {{ $item->lama_cuti }} Hari
                                 </span>
                             </td>
                             <td class="px-8 py-5">
                                 @php
                                 $statusStyles = match($item->status) {
-                                'Disetujui' => 'bg-lime-100 text-lime-700 border-lime-200',
-                                'Ditolak' => 'bg-rose-100 text-rose-700 border-rose-200',
-                                default => 'bg-amber-100 text-amber-700 border-amber-200',
+                                    'Disetujui' => 'bg-lime-100 text-lime-700 border-lime-200',
+                                    'Ditolak'   => 'bg-rose-100 text-rose-700 border-rose-200',
+                                    'Dibatalkan'=> 'bg-slate-100 text-slate-600 border-slate-200',
+                                    default     => 'bg-amber-100 text-amber-700 border-amber-200',
                                 };
                                 $dotColor = match($item->status) {
-                                'Disetujui' => 'bg-lime-500',
-                                'Ditolak' => 'bg-rose-500',
-                                default => 'bg-amber-500',
+                                    'Disetujui' => 'bg-lime-500',
+                                    'Ditolak'   => 'bg-rose-500',
+                                    'Dibatalkan'=> 'bg-slate-400',
+                                    default     => 'bg-amber-500',
                                 };
                                 @endphp
-                                <span
-                                    class="inline-flex items-center pl-2 pr-3 py-1 rounded-full text-xs font-bold border {{ $statusStyles }}">
+                                <span class="inline-flex items-center pl-2 pr-3 py-1 rounded-full text-xs font-bold border {{ $statusStyles }}">
                                     <span class="w-1.5 h-1.5 rounded-full mr-2 {{ $dotColor }}"></span>
                                     {{ $item->status }}
                                 </span>
                             </td>
                             <td class="px-8 py-5 text-right">
-                                <button
-                                    class="text-slate-400 hover:text-lime-600 transition-colors p-2 hover:bg-lime-50 rounded-lg">
+                                <a href="#" class="inline-block text-slate-400 hover:text-lime-600 transition-colors p-2 hover:bg-lime-50 rounded-lg">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     </svg>
-                                </button>
+                                </a>
                             </td>
                         </tr>
                         @if($loop->last)
@@ -280,17 +269,13 @@
             @endif
             @empty
             <div class="py-16 text-center">
-                <div
-                    class="bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                <div class="bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
                     <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                 </div>
                 <h3 class="text-slate-900 font-bold text-lg">Tidak ada riwayat</h3>
-                <p class="text-slate-500 mt-1 max-w-sm mx-auto">Anda belum pernah mengajukan cuti. Klik tombol ajukan di
-                    atas untuk memulai.</p>
+                <p class="text-slate-500 mt-1 max-w-sm mx-auto">Anda belum pernah melakukan pengisian berkas aplikasi cuti. Gunakan tombol di atas untuk membuat pengajuan pertama.</p>
             </div>
             @endforelse
         </div>

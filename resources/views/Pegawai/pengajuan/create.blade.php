@@ -91,8 +91,8 @@
                                 <input type="text" value="{{ $user->pegawai->jabatan ?? 'Belum Diatur' }}" class="w-full bg-slate-100 border-0 rounded-lg px-3 py-2 text-slate-700 text-sm cursor-not-allowed" readonly>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-500 mb-1">Unit Kerja</label>
-                                <input type="text" value="{{ $user->pegawai->unit_kerja ?? 'Belum Diatur' }}" class="w-full bg-slate-100 border-0 rounded-lg px-3 py-2 text-slate-700 text-sm cursor-not-allowed" readonly>
+                                <label class="block text-xs font-semibold text-slate-500 mb-1">Bidang</label>
+                                <input type="text" value="{{ $user->pegawai->bidang->nama_bidang ?? 'Belum Diatur' }}" class="w-full bg-slate-100 border-0 rounded-lg px-3 py-2 text-slate-700 text-sm cursor-not-allowed" readonly>
                             </div>
                         </div>
                     </div>
@@ -238,7 +238,6 @@
                                         Saya menyetujui formulir ini menggunakan Tanda Tangan Digital dari profil saya.
                                     </label>
                                     <div class="w-24 h-16 bg-white border border-slate-200 rounded-lg flex items-center justify-center p-1 shadow-sm shrink-0">
-                                        {{-- Path storage/ disesuaikan dengan sistem penyimpanan aplikasi anda --}}
                                         <img src="{{ asset('storage/' . $user->pegawai->foto_ttd) }}" alt="Tanda Tangan Profil" class="max-w-full max-h-full object-contain">
                                     </div>
                                 </div>
@@ -354,14 +353,18 @@
         // Jalankan hitung durasi otomatis jika form direload karena error (dan input tanggal sudah terisi)
         document.addEventListener("DOMContentLoaded", hitungDurasi);
 
-        // Tutup dropdown jika klik di luar elemen dropdown terkait
+        // Tutup dropdown secara spesifik jika klik di luar elemen dropdown terkait
         window.addEventListener('click', function(e) {
-            if (!e.target.closest('.parent-dropdown')) {
-                document.getElementById("dropdown_jenis_cuti").classList.add("hidden");
-                document.getElementById("dropdown_id_atasan").classList.add("hidden");
+            const dropdownCuti = document.getElementById("dropdown_jenis_cuti");
+            const dropdownAtasan = document.getElementById("dropdown_id_atasan");
+
+            if (!e.target.closest('#dropdown_jenis_cuti') && !e.target.closest('button[onclick*="toggleCutiDropdown"]')) {
+                dropdownCuti.classList.add("hidden");
+            }
+            if (!e.target.closest('#dropdown_id_atasan') && !e.target.closest('button[onclick*="toggleAtasanDropdown"]')) {
+                dropdownAtasan.classList.add("hidden");
             }
         });
-
     </script>
     @endpush
 </x-layouts.pegawai.app>

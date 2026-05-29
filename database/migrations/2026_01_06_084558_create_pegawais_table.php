@@ -16,10 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->unsignedBigInteger('atasan_id')->nullable();
             $table->foreign('atasan_id')->references('id')->on('users')->onDelete('set null');
-
+            $table->foreignId('bidang_id')->nullable()->constrained('bidangs')->nullOnDelete();
             $table->string('pangkat_golongan', 100)->nullable();
             $table->string('jabatan', 100)->nullable();
-            $table->string('unit_kerja', 100)->nullable();
             $table->date('tmt_kerja')->nullable();
 
             $table->integer('sisa_cuti_tahunan')->default(12);

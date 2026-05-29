@@ -12,7 +12,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user()->load('pegawai'); 
+        // Load data user login beserta profil pegawai dan relasi bidang kerjanya
+        $user = Auth::user()->load(['pegawai.bidang']); 
 
         $jam = Carbon::now()->hour;
         if ($jam >= 5 && $jam < 11) {
@@ -25,45 +26,29 @@ class DashboardController extends Controller
             $sapaan = "Selamat Malam";
         }
 
-        // --- LOGIKA HITUNG SISA CUTI (Pecah ke N, N-1, N-2) ---
         $tahun_skrg = date('Y');
 
-        // Ambil kuota dasar dari database
-        $kuota_db = $user->pegawai->sisa_cuti_tahunan ?? 12;
+        // --- LOGIKA TAMPILAN SISA CUTI (Sinkron Database Riil) ---
+        $sisa_total = $user->pegawai->sisa_cuti_tahunan ?? 0;
 
-        // Pemecahan otomatis
-        $sisa_n = 12;
-        $sisa_n1 = 0;
-        $sisa_n2 = 0;
+        // Pecahan otomatis untuk visualisasi kartu informasi dashboard (Maksimal N=12, N-1=6, sisa N-2)
+        $sisa_n = $sisa_total > 12 ? 12 : $sisa_total;
+        $sisa_n1 = ($sisa_total - $sisa_n) > 6 ? 6 : ($sisa_total - $sisa_n);
+        $sisa_n2 = ($sisa_total - $sisa_n - $sisa_n1) > 0 ? ($sisa_total - $sisa_n - $sisa_n1) : 0;
 
-        if ($kuota_db > 12) {
-            $sisa_n1 = $kuota_db - 12;
-            
-            // Aturan PNS/Umum: N-1 maksimal 6, sisanya dilempar ke N-2
-            if ($sisa_n1 > 6) {
-                $sisa_n2 = $sisa_n1 - 6;
-                $sisa_n1 = 6;
-            }
-        } else {
-            // Jika kuota_db kurang dari 12
-            $sisa_n = $kuota_db;
-        }
+        // Menghitung persentase ketersediaan jatah cuti (asumsi jatah ideal awal gabungan adalah 12 + sisa)
+        $kuota_maksimal = 12 + $sisa_n1 + $sisa_n2;
+        $persentase_sisa = ($kuota_maksimal > 0) ? max(0, ($sisa_total / $kuota_maksimal) * 100) : 0;
 
-        $total_kuota = $sisa_n + $sisa_n1 + $sisa_n2; // Hasilnya pasti sama dengan $kuota_db
-
-        // A. Hitung Cuti Terpakai Tahun Ini
+        // A. Hitung Cuti Terpakai Tahun Ini (Hanya yang sudah disetujui penuh)
         $terpakai = Pengajuan::where('user_id', $user->id)
             ->where('status', 'Disetujui')
             ->whereYear('tgl_mulai', $tahun_skrg)
             ->sum('lama_cuti');
 
-        // Sisa Akhir Real-time
-        $sisa_total = $total_kuota - $terpakai;
-        $persentase_sisa = ($total_kuota > 0) ? max(0, ($sisa_total / $total_kuota) * 100) : 0;
-
-        // B. Hitung Sedang Diproses
+        // B. Hitung Berkas Sedang Diproses (Masih berada di dalam rentang alur verifikasi/persetujuan)
         $jumlah_proses = Pengajuan::where('user_id', $user->id)
-            ->whereNotIn('status', ['Disetujui', 'Ditolak', 'Tidak Disetujui'])
+            ->whereNotIn('status', ['Disetujui', 'Ditolak', 'Dibatalkan'])
             ->count();
 
         // C. Riwayat Pengajuan
@@ -73,6 +58,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        // Cek apakah hari ini pegawai sedang dalam masa cuti aktif
         $today = Carbon::today();
         $is_cuti = Pengajuan::where('user_id', $user->id)
             ->where('status', 'Disetujui')
@@ -80,7 +66,6 @@ class DashboardController extends Controller
             ->whereDate('tgl_selesai', '>=', $today)
             ->exists();
 
-        // Kirim sisa_n, n1, n2 kembali ke View agar UI kamu tetap jalan!
         return view('pegawai.dashboard', compact(
             'user',
             'sapaan',

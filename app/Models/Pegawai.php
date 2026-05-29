@@ -13,12 +13,12 @@ class Pegawai extends Model
     protected $fillable = [
         'user_id',
         'atasan_id',
+        'bidang_id', // 1. Ditambahkan agar bisa disimpan oleh Admin
         'pangkat_golongan',
         'jabatan',
-        'unit_kerja',
         'tmt_kerja',
         'sisa_cuti_tahunan',
-        'no_hp',
+        'no_telepon', // 2. Disamakan dengan nama kolom di migration Anda
         'foto_profil', 
         'foto_ttd'
     ];
@@ -26,6 +26,11 @@ class Pegawai extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function bidang()
+    {
+        return $this->belongsTo(Bidang::class, 'bidang_id');
     }
 
     public function atasan()
