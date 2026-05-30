@@ -52,7 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         } elseif ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
         } elseif ($user->role === 'kasubbag_umum') {
-            return redirect()->route('kasubbag_umum.dashboard'); // Pastikan Anda nanti membuat grup ini jika ada fiturnya
+            return redirect()->route('kasubbag_umum.dashboard');
         } elseif ($user->role === 'kasi') {
             return redirect()->route('kasi.dashboard');
         } elseif ($user->role === 'kabid') {
@@ -74,7 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/regulasi', [RegulasiController::class, 'index'])->name('regulasi.index');
     });
 
-    // 3. Ruang Lingkup: ADMIN (Sekarang Sudah Aman di Dalam Middleware Auth)
+    // 3. Ruang Lingkup: ADMIN
     Route::prefix('admin')->name('admin.')->group(function () {
         // Dashboard Admin
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -88,10 +88,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/pegawai/{id}', [AdminPegawaiController::class, 'update'])->name('pegawai.update');
         Route::delete('/pegawai/{id}', [AdminPegawaiController::class, 'destroy'])->name('pegawai.destroy');
 
-        // Verifikasi Berkas Pengajuan Cuti oleh Admin
+        // Verifikasi Berkas Pengajuan Cuti oleh Admin (SUDAH DISINKRONKAN)
         Route::get('/pengajuan', [AdminPengajuanController::class, 'index'])->name('pengajuan.index');
-        Route::get('/pengajuan/{id}/verif', [AdminPengajuanController::class, 'show'])->name('pengajuan.show');
-        Route::patch('/pengajuan/{id}/verif', [AdminPengajuanController::class, 'updateStatus'])->name('pengajuan.update');
+        Route::get('/pengajuan/{id}', [AdminPengajuanController::class, 'show'])->name('pengajuan.show');
+        Route::post('/pengajuan/{id}/teruskan', [AdminPengajuanController::class, 'teruskanKeKasi'])->name('pengajuan.teruskan');
+        Route::get('/pengajuan/{id}/cetak', [AdminPengajuanController::class, 'cetak'])->name('pengajuan.cetak');
     });
 
     // 4. Ruang Lingkup: KASI
@@ -123,7 +124,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [KadinDashboardController::class, 'index'])->name('dashboard');
         Route::get('/persetujuan', [KadinPersetujuanController::class, 'index'])->name('persetujuan.index');
         Route::get('/persetujuan/{id}', [KadinPersetujuanController::class, 'show'])->name('persetujuan.show');
-        Route::put('/persetujuan/{id}', [KadinPersetujuanController::class, 'update'])->name('persetujuan.update'); // Typo 'kadinPersetujuan' sudah diperbaiki ke PascalCase 'KadinPersetujuan'
+        Route::put('/persetujuan/{id}', [KadinPersetujuanController::class, 'update'])->name('persetujuan.update');
     });
 
     // 8. Manajemen Profil Pengguna Mandiri (Universal)
@@ -133,5 +134,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Sertakan rute bawaan Laravel Breeze / Jetstream Auth (Login, Register, Reset Password)
+// Sertakan rute bawaan Laravel Breeze / Jetstream Auth
 require __DIR__ . '/auth.php';

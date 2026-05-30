@@ -18,16 +18,17 @@ class DashboardController extends Controller
         $tahunIni = $sekarang->year;
 
         // KATEGORI STATISTIK SESUAI ALUR FLOWCHART
+        // PERBAIKAN: Disesuaikan persis dengan string status yang ada di database
         $statistik = [
             // 1. Antrean Utama Admin
             'menunggu_admin'   => Pengajuan::where('status', 'Menunggu Verifikasi Admin')->count(),
             
-            // 2. Tracking Posisi Berkas di Atasan (Sesuai Tahapan Flowchart)
-            'proses_kasi'      => Pengajuan::where('status', 'Menunggu Persetujuan Kasi')->count(),
-            'proses_kabid'     => Pengajuan::where('status', 'Menunggu Persetujuan Kabid')->count(),
-            'proses_kasubbag'  => Pengajuan::where('status', 'Menunggu Persetujuan Kasubbag Umum')->count(),
-            'proses_sekdin'    => Pengajuan::where('status', 'Menunggu Persetujuan Sekdin')->count(),
-            'proses_kadin'     => Pengajuan::where('status', 'Menunggu Persetujuan Kadin')->count(),
+            // 2. Tracking Posisi Berkas di Atasan
+            'proses_kasi'      => Pengajuan::where('status', 'Menunggu Kasi')->count(),
+            'proses_kabid'     => Pengajuan::where('status', 'Menunggu Kabid')->count(),
+            'proses_kasubbag'  => Pengajuan::where('status', 'Menunggu Kasubbag')->count(), // Sesuaikan jika di DB "Menunggu Kasubbag Umum"
+            'proses_sekdin'    => Pengajuan::where('status', 'Menunggu Sekdin')->count(),
+            'proses_kadin'     => Pengajuan::where('status', 'Menunggu Kadin')->count(),
             
             // 3. Status Akhir Pengajuan
             'disetujui'        => Pengajuan::where('status', 'Disetujui')->count(),
@@ -39,14 +40,14 @@ class DashboardController extends Controller
             'total_pegawai'    => User::where('role', '!=', 'admin')->count(),
         ];
 
-        // AKSI ADMIN: Hanya mengambil pengajuan yang tertahan di meja Admin (Tahap 1 Flowchart)
+        // AKSI ADMIN: Mengambil pengajuan yang butuh verifikasi awal admin
         $butuhAksi = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
             ->where('status', 'Menunggu Verifikasi Admin')
             ->latest()
             ->take(5)
             ->get();
 
-        // MONITORING: Pegawai yang saat ini sedang menjalani cuti (Status: Disetujui & Rentang Tanggal Aktif)
+        // MONITORING: Pegawai yang saat ini sedang menjalani cuti
         $cutiHariIni = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
             ->where('status', 'Disetujui')
             ->whereDate('tgl_mulai', '<=', $hariIni)
