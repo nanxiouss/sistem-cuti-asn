@@ -5,7 +5,7 @@
 
             <div class="flex items-center gap-5">
                 <a href="/" class="flex-shrink-0 flex items-center gap-4 group">
-                    <img src="/images/logo.PNG" alt="Logo Sumsel Lumbung Energi" class="h-10 w-auto object-contain">
+                    <img src="/images/logo.png" alt="Logo Sumsel DESDM" class="h-10 w-auto object-contain">
                     <div class="leading-tight border-l-2 border-slate-200 pl-4">
                         <span class="text-xl font-extrabold tracking-tighter text-slate-800 block">E-CUTI</span>
                         <p class="text-[9px] font-bold text-rose-500 uppercase tracking-[0.2em]">PANEL Kepala Bidang</p>
