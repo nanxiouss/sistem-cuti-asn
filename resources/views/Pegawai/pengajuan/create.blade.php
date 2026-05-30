@@ -55,26 +55,26 @@
                                 <p class="text-xl font-bold text-slate-400">{{ $sisa_n2 }}</p>
                                 <p class="text-[9px] text-slate-400 mt-1 italic">Hangus</p>
                             </div>
-                            <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-center">
-                                <p class="text-[10px] text-blue-500 font-bold uppercase mb-1">Tahun {{ $tahun_skrg-1 }} (N-1)</p>
-                                <p class="text-xl font-bold text-blue-600">{{ $sisa_n1 }}</p>
+                            <div class="bg-lime-50 border border-lime-300 rounded-xl p-3 text-center">
+                                <p class="text-[10px] text-lime-500 font-bold uppercase mb-1">Tahun {{ $tahun_skrg-1 }} (N-1)</p>
+                                <p class="text-xl font-bold text-lime-600">{{ $sisa_n1 }}</p>
                             </div>
-                            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3 text-center">
-                                <p class="text-[10px] text-indigo-500 font-bold uppercase mb-1">Tahun {{ $tahun_skrg }} (N)</p>
-                                <p class="text-xl font-bold text-indigo-700">{{ $sisa_n }}</p>
+                            <div class="bg-lime-50 border border-lime-300 rounded-xl p-3 text-center">
+                                <p class="text-[10px] text-lime-500 font-bold uppercase mb-1">Tahun {{ $tahun_skrg }} (N)</p>
+                                <p class="text-xl font-bold text-lime-600">{{ $sisa_n }}</p>
                             </div>
-                            <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-3 text-center group hover:border-emerald-300 transition shadow-sm">
-                                <p class="text-[10px] text-emerald-600 font-bold uppercase mb-1">Total Tersedia</p>
-                                <p class="text-xl font-extrabold text-emerald-600">{{ $sisa_total }}</p>
-                                <p class="text-[9px] text-emerald-500 mt-1 font-semibold">Siap Digunakan</p>
+                            <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-center group hover:border-amber-600 transition shadow-sm">
+                                <p class="text-[10px] text-amber-600 font-bold uppercase mb-1">Total Tersedia</p>
+                                <p class="text-xl font-extrabold text-amber-600">{{ $sisa_total }}</p>
+                                <p class="text-[9px] text-amber-500 mt-1 font-semibold">Siap Digunakan</p>
                             </div>
                         </div>
                     </div>
 
                     {{-- SEKSI I: Data Pegawai --}}
                     <div class="mb-8 border-b border-slate-200 pb-6">
-                        <h3 class="text-sm font-bold text-blue-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center text-xs">I</span>
+                        <h3 class="text-sm font-bold text-lime-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded bg-lime-100 flex items-center justify-center text-xs">I</span>
                             Data Pegawai
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -99,8 +99,8 @@
 
                     {{-- SEKSI II: Detail Pengajuan --}}
                     <div class="mb-8">
-                        <h3 class="text-sm font-bold text-blue-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center text-xs">II</span>
+                        <h3 class="text-sm font-bold text-lime-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded bg-lime-100 flex items-center justify-center text-xs">II</span>
                             Detail Pengajuan
                         </h3>
 
@@ -149,16 +149,16 @@
                             </div>
                         </div>
 
-                        <div class="p-4 bg-blue-50 border border-blue-100 rounded-xl mb-6">
-                            <span class="text-xs font-bold text-blue-800 uppercase">Kalkulasi Durasi:</span>
-                            <p id="durasi_teks" class="text-sm text-blue-900 font-medium mt-1 italic">- Masukkan tanggal untuk menghitung hari kerja -</p>
+                        <div class="p-4 bg-lime-50 border border-lime-100 rounded-xl mb-6">
+                            <span class="text-xs font-bold text-lime-800 uppercase">Kalkulasi Durasi:</span>
+                            <p id="durasi_teks" class="text-sm text-lime-900 font-medium mt-1 italic">- Masukkan tanggal untuk menghitung hari kerja -</p>
                         </div>
                     </div>
 
                     {{-- SEKSI III: Kontak & Alamat --}}
                     <div class="mb-8 border-t border-slate-200 pt-6">
-                        <h3 class="text-sm font-bold text-blue-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center text-xs">III</span>
+                        <h3 class="text-sm font-bold text-lime-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded bg-lime-100 flex items-center justify-center text-xs">III</span>
                             Alamat Selama Cuti
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -175,14 +175,14 @@
 
                     {{-- SEKSI IV: Pejabat Penilai --}}
                     <div class="mb-8 border-t border-slate-200 pt-6">
-                        <h3 class="text-sm font-bold text-blue-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center text-xs">IV</span>
+                        <h3 class="text-sm font-bold text-lime-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded bg-lime-100 flex items-center justify-center text-xs">IV</span>
                             Pejabat Penilai (Atasan)
                         </h3>
 
                         <div class="relative parent-dropdown">
                             <input type="hidden" name="id_atasan" id="input_id_atasan" value="{{ old('id_atasan', $atasan_sekarang->id ?? '') }}" required>
-                            <button type="button" onclick="toggleAtasanDropdown(event)" class="w-full inline-flex items-center justify-between text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 font-medium rounded-lg text-sm px-4 py-3 transition shadow-sm focus:ring-2 focus:ring-blue-500">
+                            <button type="button" onclick="toggleAtasanDropdown(event)" class="w-full inline-flex items-center justify-between text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 font-medium rounded-lg text-sm px-4 py-3 transition shadow-sm focus:ring-2 focus:ring-amber-300">
                                 @php
                                 $selectedAtasanId = old('id_atasan', $atasan_sekarang->id ?? '');
                                 $selectedAtasan = collect($atasans)->firstWhere('id', $selectedAtasanId);
@@ -198,18 +198,18 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7" />
                                 </svg>
                             </button>
-                            <div id="dropdown_id_atasan" class="hidden absolute z-10 w-full bg-white border border-slate-200 rounded-lg shadow-xl mt-1 max-h-64 overflow-y-auto border-t-4 border-t-blue-500">
+                            <div id="dropdown_id_atasan" class="hidden absolute z-10 w-full bg-white border border-slate-200 rounded-lg shadow-xl mt-1 max-h-64 overflow-y-auto border-t-4 border-t-amber-300">
                                 <ul class="p-2 text-sm text-slate-700">
                                     @foreach($atasans as $boss)
                                     <li>
                                         <button type="button" onclick="pilihAtasan('{{ $boss->id }}', '{{ $boss->nama }} | {{ $boss->nip }}')" class="w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-left flex items-center gap-3 transition mb-1">
-                                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shrink-0 shadow-sm">
+                                            <div class="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center text-white font-bold shrink-0 shadow-sm">
                                                 {{ strtoupper(substr($boss->nama, 0, 1)) }}
                                             </div>
                                             <div class="flex flex-col overflow-hidden">
                                                 <span class="font-bold text-slate-900 truncate leading-tight">{{ $boss->nama }}</span>
                                                 <span class="text-[11px] text-slate-500 font-medium uppercase tracking-tighter">{{ $boss->pegawai->jabatan ?? '-' }}</span>
-                                                <span class="text-[10px] text-blue-600 font-mono">{{ $boss->nip }}</span>
+                                                <span class="text-[10px] text-amber-600 font-mono">{{ $boss->nip }}</span>
                                             </div>
                                         </button>
                                     </li>
@@ -221,8 +221,8 @@
 
                     {{-- Seksi V: Verifikasi dan Tanda Tangan --}}
                     <div class="mb-8 border-t border-slate-200 pt-6">
-                        <h3 class="text-sm font-bold text-blue-700 uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <span class="w-6 h-6 rounded bg-blue-100 flex items-center justify-center text-xs">V</span>
+                        <h3 class="text-sm font-bold text-lime-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded bg-lime-100 flex items-center justify-center text-xs">V</span>
                             Verifikasi & Tanda Tangan Digital
                         </h3>
 
@@ -233,7 +233,7 @@
 
                                 @if($user->pegawai && $user->pegawai->foto_ttd)
                                 <div class="flex items-center gap-4 p-4 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition shadow-sm">
-                                    <input type="checkbox" name="konfirmasi_ttd" id="konfirmasi_ttd" value="1" required class="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer">
+                                    <input type="checkbox" name="konfirmasi_ttd" id="konfirmasi_ttd" value="1" required class="w-5 h-5 text-amber-600 border-slate-300 rounded focus:ring-amber-500 cursor-pointer">
                                     <label for="konfirmasi_ttd" class="text-sm font-semibold text-slate-700 cursor-pointer flex-1">
                                         Saya menyetujui formulir ini menggunakan Tanda Tangan Digital dari profil saya.
                                     </label>
@@ -276,7 +276,7 @@
                         <a href="{{ route('pegawai.dashboard') }}" class="px-6 py-3 bg-white text-slate-700 font-bold rounded-xl border border-slate-300 hover:bg-slate-50 transition">Batal</a>
 
                         @if($user->pegawai && $user->pegawai->foto_ttd)
-                        <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition transform hover:-translate-y-1">
+                        <button type="submit" class="px-6 py-3 bg-lime-600 text-white font-bold rounded-xl hover:bg-lime-700 shadow-lg shadow-lime-200 transition transform hover:-translate-y-1">
                             Kirim Pengajuan
                         </button>
                         @else
