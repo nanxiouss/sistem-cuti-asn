@@ -1,9 +1,68 @@
 <x-layouts.admin.app>
     <x-slot:title>Dashboard Admin - E-CUTI ESDM</x-slot:title>
 
-    <div class="mb-8">
-        <p class="text-slate-500">Selamat Datang di Panel Administrator E-Cuti. Pantau dan verifikasi alur pengajuan di sini.</p>
+    {{-- HERO SECTION ADMIN (Dark Mode Style) --}}
+    <div class="bg-slate-900 rounded-[2rem] p-6 lg:p-8 mb-8 text-white shadow-lg relative overflow-hidden flex flex-col lg:flex-row gap-8 justify-between items-center">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 blur-3xl rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
+
+        <div class="z-10 w-full lg:w-3/5">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-slate-800/80 border border-slate-700 rounded-full text-xs font-semibold text-emerald-400 mb-6">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+            </div>
+
+            {{-- Logic Sapaan Berdasarkan Waktu --}}
+            @php
+            $hour = now()->format('H');
+            if ($hour < 11) $greeting='Pagi' ; elseif ($hour < 15) $greeting='Siang' ; elseif ($hour < 18) $greeting='Sore' ; else $greeting='Malam' ; @endphp <h1 class="text-3xl lg:text-5xl font-bold mb-4 tracking-tight">
+                Selamat {{ $greeting }},<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-amber-300">{{ Auth::user()->nama ?? 'Administrator' }}</span>
+                </h1>
+
+                <p class="text-slate-400 mb-8 max-w-xl text-sm lg:text-base leading-relaxed">
+                    Kelola seluruh data cuti pegawai, pantau alur birokrasi, dan verifikasi kelengkapan administratif dalam satu dashboard terpusat.
+                </p>
+
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="{{ route('admin.pengajuan.index') }}" class="px-6 py-3 bg-lime-500 hover:bg-lime-400 text-slate-900 font-bold rounded-xl transition shadow-[0_0_15px_rgba(132,204,22,0.3)] flex items-center gap-2">
+                        <i class="fas fa-clipboard-check"></i> Cek Antrean Berkas
+                    </a>
+                    <a href="#" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium rounded-xl transition flex items-center gap-2">
+                        <i class="fas fa-users"></i> Kelola Pegawai
+                    </a>
+                </div>
+        </div>
+
+        <div class="z-10 w-full lg:w-2/5">
+            <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 relative backdrop-blur-sm">
+                <div class="absolute -top-3 -right-3 px-3 py-1 bg-amber-500/20 border border-amber-500/30 text-amber-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">
+                    Fokus Utama
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-200 mb-4 flex items-center gap-2">
+                    <i class="fas fa-shield-alt text-amber-500"></i> Peran Administrator
+                </h3>
+
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-full bg-slate-700 text-slate-300 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">1</div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-200">Verifikasi Administratif</p>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Pastikan seluruh berkas pengajuan lolos pemeriksaan Sub Bagian Umum sebelum diteruskan ke pimpinan.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <div class="w-6 h-6 rounded-full bg-slate-700 text-slate-300 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">2</div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-200">Kawal Alur Persetujuan</p>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Pantau *Tracking Alur Cuti* di bawah untuk memastikan tidak ada dokumen yang tertahan di satu tahap.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
+
 
     {{-- KARTU UTAMA INDIKATOR RINGKASAN --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -87,7 +146,7 @@
 
     {{-- SPLIT GRID: MEJA KERJA ADMIN VS MONITORING REALTIME --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         {{-- SISI KIRI: ANTRIAN BUTUH AKSI ADMIN --}}
         <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center">
@@ -166,7 +225,7 @@
                     Semua pegawai hadir penuh hari ini.
                 </div>
                 @endif
-                
+
                 {{-- STATISTIK BULANAN --}}
                 <div class="mt-6 pt-6 border-t border-slate-100 flex justify-between items-center text-sm">
                     <span class="text-slate-500 font-medium">Total Cuti Bulan Ini:</span>
