@@ -40,6 +40,12 @@ return new class extends Migration
             $table->text('ttd_sekdin')->nullable();
             $table->text('ttd_kadin')->nullable();
 
+            $table->dateTime('tgl_ttd_kasi')->nullable();
+            $table->dateTime('tgl_ttd_kabid')->nullable();
+            $table->dateTime('tgl_ttd_kasubbag_umum')->nullable();
+            $table->dateTime('tgl_ttd_sekdin')->nullable();
+            $table->dateTime('tgl_ttd_kadin')->nullable();
+
             // DEFAULT STATUS SESUAI FLOWCHART: Lari ke Penelaah Teknis (Admin) dulu
             $table->string('status')->default('Menunggu Verifikasi Admin');
 

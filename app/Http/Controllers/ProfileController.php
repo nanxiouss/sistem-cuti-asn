@@ -13,20 +13,28 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Display the user's profile form dynamically based on role.
      */
-
     public function index(Request $request): View
     {
-        return view('Pegawai.profile.index', [
-            'user' => $request->user(),
+        $user = $request->user();
+
+        // Mengarahkan ke folder view sesuai role user yang sedang login (lowercase)
+        // Pastikan nama folder di resources/views sama dengan nama role di database
+        return view("{$user->role}.profile.index", [
+            'user' => $user,
         ]);
     }
 
+    /**
+     * Display the edit form dynamically based on role.
+     */
     public function edit(Request $request): View
     {
-        return view('Pegawai.profile.edit', [
-            'user' => $request->user(),
+        $user = $request->user();
+
+        return view("{$user->role}.profile.edit", [
+            'user' => $user,
         ]);
     }
 

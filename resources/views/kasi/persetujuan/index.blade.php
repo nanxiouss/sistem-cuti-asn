@@ -7,6 +7,18 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {{-- Alert Flash Message jika ada error/success --}}
+            @if(session('success'))
+                <div class="mb-4 p-4 bg-lime-100 border border-lime-200 text-lime-800 rounded-xl font-medium text-sm">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="mb-4 p-4 bg-rose-100 border border-rose-200 text-rose-800 rounded-xl font-medium text-sm">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
                     <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">

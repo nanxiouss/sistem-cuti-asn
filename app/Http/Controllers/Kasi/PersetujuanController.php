@@ -6,20 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PersetujuanController extends Controller
 {
-    // 1. Menampilkan Halaman Semua Daftar Persetujuan (Menu Persetujuan)
     public function index()
     {
         $user = Auth::user();
-        $unitKerjaKasi = $user->pegawai->unit_kerja ?? null;
+        $bidangIdKasi = $user->pegawai->bidang_id ?? null;
 
-        $pengajuan = Pengajuan::with(['user.pegawai', 'jenisCuti'])
-            ->where('status', 'Menunggu ACC Kasi')
-            ->when($unitKerjaKasi, function ($query) use ($unitKerjaKasi) {
-                $query->whereHas('user.pegawai', function ($q) use ($unitKerjaKasi) {
-                    $q->where('unit_kerja', $unitKerjaKasi);
+        $pengajuan = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
+            ->where('status', 'Menunggu Kasi')
+            ->when($bidangIdKasi, function ($query) use ($bidangIdKasi) {
+                $query->whereHas('user.pegawai', function ($q) use ($bidangIdKasi) {
+                    $q->where('bidang_id', $bidangIdKasi);
                 });
             })
             ->latest()
@@ -28,44 +28,70 @@ class PersetujuanController extends Controller
         return view('kasi.persetujuan.index', compact('pengajuan'));
     }
 
-    // 2. Menampilkan Halaman Detail Spesifik 1 Pengajuan
     public function show($id)
     {
-        $pengajuan = Pengajuan::with(['user.pegawai', 'jenisCuti'])->findOrFail($id);
+        $pengajuan = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])->findOrFail($id);
 
-        // Keamanan: Pastikan Kasi cuma bisa buka yang statusnya beneran nunggu dia
-        if ($pengajuan->status !== 'Menunggu ACC Kasi') {
-            return redirect()->route('kasi.dashboard')->with('error', 'Berkas ini sudah diproses atau tidak valid.');
+        if ($pengajuan->status !== 'Menunggu Kasi') {
+            return redirect()->route('kasi.persetujuan.index')->with('error', 'Berkas ini sudah diproses atau tidak valid.');
         }
 
         return view('kasi.persetujuan.show', compact('pengajuan'));
     }
 
-    // 3. Memproses Aksi Disetujui (ACC) atau Ditolak
     public function update(Request $request, $id)
     {
-        // Validasi input dari form
+        // Validasi input mengikuti format penamaan di role pegawai
         $request->validate([
-            'status' => 'required|in:Disetujui,Ditolak',
-            'catatan' => 'nullable|string'
+            'status' => 'required|in:Disetujui,Ditolak', 
+            'catatan' => 'required_if:status,Ditolak|nullable|string|max:500',
+            'password_verifikasi' => 'required_if:status,Disetujui|nullable|string'
+        ], [
+            'catatan.required_if' => 'Alasan penolakan (catatan) wajib diisi jika Anda menolak pengajuan ini.',
+            'password_verifikasi.required_if' => 'Password verifikasi wajib diisi untuk menyetujui dan menandatangani berkas.'
         ]);
 
         $pengajuan = Pengajuan::findOrFail($id);
         
-        // Update data
-        $pengajuan->status = $request->status;
+        if ($pengajuan->status !== 'Menunggu Kasi') {
+            return redirect()->route('kasi.persetujuan.index')->with('error', 'Berkas sudah diproses di tahapan lain.');
+        }
+
+        // JIKA DISETUJUI (Proses TTD Digital Gambar)
+        if ($request->status === 'Disetujui') {
+            
+            // 1. Verifikasi Password Akun Kasi
+            if (!Hash::check($request->password_verifikasi, Auth::user()->password)) {
+                return redirect()->back()
+                    ->withErrors(['password_verifikasi' => 'Password verifikasi yang Anda masukkan tidak valid!'])
+                    ->withInput();
+            }
+
+            // 2. Proteksi jika Kasi belum upload spesimen TTD di profilnya
+            if (!Auth::user()->pegawai || empty(Auth::user()->pegawai->foto_ttd)) {
+                return redirect()->back()
+                    ->withErrors(['password_verifikasi' => 'Fitur Diblokir: Anda belum mengunggah file spesimen tanda tangan di profil akun Anda.'])
+                    ->withInput();
+            }
+
+            // 3. Update Status Alur Berjalan ke Kabid
+            $pengajuan->status = 'Menunggu Kabid'; 
+            
+            // 4. Salin foto TTD Kasi & Catat Waktu Riil Persetujuan
+            $pengajuan->ttd_kasi = Auth::user()->pegawai->foto_ttd;
+            $pengajuan->tgl_ttd_kasi = now();
+            
+            $pesan = 'Berkas pengajuan cuti berhasil disetujui, ditandatangani, dan diteruskan ke Kabid!';
+            
+        } else {
+            // JIKA DITOLAK
+            $pengajuan->status = 'Ditolak Kasi'; 
+            $pesan = 'Berkas pengajuan cuti telah ditolak.';
+        }
         
-        // Kalau di database lu ada field buat nyimpen alasan penolakan dari Kasi,
-        // misalnya field 'catatan_kasi', aktifin kode di bawah ini:
-        // $pengajuan->catatan_kasi = $request->catatan; 
-        
+        $pengajuan->catatan_kasi = $request->catatan; 
         $pengajuan->save();
 
-        // Tentukan pesan sukses berdasarkan aksi
-        $pesan = $request->status === 'Disetujui' 
-            ? 'Berkas pengajuan cuti berhasil disetujui!' 
-            : 'Berkas pengajuan cuti telah ditolak.';
-
-        return redirect()->route('kasi.dashboard')->with('success', $pesan);
+        return redirect()->route('kasi.persetujuan.index')->with('success', $pesan);
     }
 }
