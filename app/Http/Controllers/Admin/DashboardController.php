@@ -26,7 +26,7 @@ class DashboardController extends Controller
             // 2. Tracking Posisi Berkas di Atasan
             'proses_kasi'      => Pengajuan::where('status', 'Menunggu Kasi')->count(),
             'proses_kabid'     => Pengajuan::where('status', 'Menunggu Kabid')->count(),
-            'proses_kasubbag'  => Pengajuan::where('status', 'Menunggu Kasubbag')->count(), // Sesuaikan jika di DB "Menunggu Kasubbag Umum"
+            'proses_kasubbag'  => Pengajuan::where('status', 'Menunggu Kasubbag Umum')->count(), // Sesuaikan jika di DB "Menunggu Kasubbag Umum"
             'proses_sekdin'    => Pengajuan::where('status', 'Menunggu Sekdin')->count(),
             'proses_kadin'     => Pengajuan::where('status', 'Menunggu Kadin')->count(),
             
