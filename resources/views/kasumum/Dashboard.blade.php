@@ -1,15 +1,15 @@
-<x-layouts.kadin.app>
+<x-layouts.kasumum.app>
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
                 <h2 class="font-bold text-2xl text-slate-800 leading-tight">
-                    Dashboard Kepala Dinas
+                    Dashboard Kasubbag Umum dan Kepegawaian
                 </h2>
-                <p class="text-xs text-slate-500 mt-0.5">Persetujuan akhir berkas cuti tingkat tertinggi instansi.</p>
+                <p class="text-xs text-slate-500 mt-0.5">Monitoring & verifikasi berkas cuti lintas seluruh bidang kerja.</p>
             </div>
             <div class="px-3 py-1.5 bg-slate-100 rounded-xl text-xs font-semibold text-slate-600 flex items-center gap-2 border border-slate-200 shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-                Mode Akses: Kepala Dinas / Final Approval
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Mode Akses: Semua Bidang
             </div>
         </div>
     </x-slot>
@@ -20,17 +20,17 @@
             {{-- Grid Statistik Utama --}}
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 
-                {{-- Card 1: Antrean Berkas Kadin --}}
+                {{-- Card 1: Antrean Berkas --}}
                 <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center justify-between transition-all hover:shadow-md">
                     <div class="space-y-1">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Antrian Persetujuan</span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Antrian Review</span>
                         <h3 class="text-3xl font-black text-slate-800 tracking-tight">{{ $statistik['menunggu_aksi'] }}</h3>
                         <p class="text-[11px] text-amber-600 font-medium flex items-center gap-1 pt-1">
-                            <i class="fas fa-clock"></i> Menunggu acc Kadin
+                            <i class="fas fa-clock"></i> Perlu verifikasi Anda
                         </p>
                     </div>
                     <div class="w-14 h-14 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center text-xl shadow-inner border border-amber-100/50">
-                        <i class="fas fa-file-signature"></i>
+                        <i class="fas fa-folder-open"></i>
                     </div>
                 </div>
 
@@ -54,7 +54,7 @@
                         <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Disetujui Bulan Ini</span>
                         <h3 class="text-3xl font-black text-slate-800 tracking-tight">{{ $statistik['disetujui_bulan_ini'] }}</h3>
                         <p class="text-[11px] text-indigo-600 font-medium flex items-center gap-1 pt-1">
-                            <i class="fas fa-calendar-check"></i> Total akumulasi instansi
+                            <i class="fas fa-calendar-check"></i> Akumulasi bulan ini
                         </p>
                     </div>
                     <div class="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center text-xl shadow-inner border border-indigo-100/50">
@@ -69,11 +69,11 @@
                 <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50">
                     <div>
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fas fa-list text-amber-500"></i> Berkas Masuk Perlu Validasi Akhir
+                            <i class="fas fa-list text-amber-500"></i> Berkas Masuk Perlu Review
                         </h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Daftar pengajuan yang telah diparaf oleh Sekretaris Dinas.</p>
+                        <p class="text-xs text-slate-500 mt-0.5">Daftar pengajuan seluruh bidang yang telah disetujui oleh para Kabid.</p>
                     </div>
-                    <a href="{{ route('kadin.persetujuan.index') }}" class="px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm">
+                    <a href="{{ route('kasumum.persetujuan.index') }}" class="px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm">
                         Lihat Semua Berkas
                     </a>
                 </div>
@@ -123,10 +123,10 @@
                                     <td class="py-4 px-6 text-slate-500 font-medium text-xs">
                                         {{ $item->created_at ? $item->created_at->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
                                     </td>
-                                    {{-- Tombol Aksi Persetujuan Akhir --}}
+                                    {{-- Tombol Aksi Review --}}
                                     <td class="py-4 px-6 text-center">
-                                        <a href="{{ route('kadin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm shadow-indigo-600/10">
-                                            <i class="fas fa-check-double text-[10px]"></i> Tinjau
+                                        <a href="{{ route('kasumum.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-lime-400 hover:bg-lime-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm shadow-lime-400/10">
+                                            <i class="fas fa-search-plus text-[10px]"></i> Review
                                         </a>
                                     </td>
                                 </tr>
@@ -137,7 +137,7 @@
                                             <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 text-lg">
                                                 <i class="fas fa-folder-open"></i>
                                             </div>
-                                            <p class="text-xs font-bold text-slate-500">Tidak ada berkas pengajuan baru yang perlu divalidasi.</p>
+                                            <p class="text-xs font-bold text-slate-500">Tidak ada berkas antrian baru dari bidang mana pun.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -149,4 +149,4 @@
 
         </div>
     </div>
-</x-layouts.kadin.app>
+</x-layouts.kasumum.app>

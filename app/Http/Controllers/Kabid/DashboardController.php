@@ -13,22 +13,55 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $hariIni = Carbon::today();
+        $bulanIni = Carbon::now()->month;
+
+        // Ambil bidang_id Kabid untuk memfilter bawahan di Bidang yang sama
+        // Sesuai perubahan struktur tabel kedinasan terbaru
+        $bidangIdKabid = $user->pegawai->bidang_id ?? null;
+
+        // Scope Query dasar agar tidak menuliskan kode penapis bidang berulang-ulang
+        $queryBidangKabid = function ($query) use ($bidangIdKabid) {
+            if ($bidangIdKabid) {
+                $query->whereHas('user.pegawai', function ($q) use ($bidangIdKabid) {
+                    $q->where('bidang_id', $bidangIdKabid);
+                });
+            }
+        };
+
+        // --- Logika statistik Kabid (Hanya Bidang Sendiri) ---
         
-        // Logika statistik Kabid (Asumsi status antreannya 'Menunggu ACC Kabid')
+        // 1. Total antrean berstatus 'Menunggu Kabid' di bidang tersebut
+        $totalMenungguAksi = Pengajuan::where('status', 'Menunggu Kabid')
+            ->where($queryBidangKabid)
+            ->count();
+
+        // 2. Hitung jumlah bawahan satu bidang yang sedang menjalani cuti HARI INI
+        // (Status 'Disetujui' adalah status final akhir atau tahap setelah Kabid berlalu)
+        $pegawaiCutiHariIni = Pengajuan::where('status', 'Disetujui')
+            ->whereDate('tgl_mulai', '<=', $hariIni)
+            ->whereDate('tgl_selesai', '>=', $hariIni)
+            ->where($queryBidangKabid)
+            ->count();
+
+        // 3. Hitung total akumulasi cuti bawahan di bidang tersebut yang disetujui sepanjang bulan ini
+        $disetujuiBulanIni = Pengajuan::where('status', 'Disetujui')
+            ->whereMonth('tgl_mulai', $bulanIni)
+            ->where($queryBidangKabid)
+            ->count();
+
+        // Membungkus data statistik ke dalam satu array untuk dikirim ke view
         $statistik = [
-            'menunggu_aksi' => Pengajuan::where('status', 'Menunggu ACC Kabid')->count(),
-            'pegawai_cuti' => Pengajuan::where('status', 'Disetujui')
-                ->whereDate('tgl_mulai', '<=', Carbon::today())
-                ->whereDate('tgl_selesai', '>=', Carbon::today())
-                ->count(),
-            'disetujui_bulan_ini' => Pengajuan::where('status', 'Disetujui')
-                ->whereMonth('updated_at', Carbon::now()->month)
-                ->count(),
+            'menunggu_aksi' => $totalMenungguAksi,
+            'pegawai_cuti' => $pegawaiCutiHariIni,
+            'disetujui_bulan_ini' => $disetujuiBulanIni,
         ];
 
-        // Ambil 5 data terbaru yang butuh di-ACC Kabid
-        $pengajuanButuhAksi = Pengajuan::with(['user', 'jenisCuti'])
-            ->where('status', 'Menunggu ACC Kabid')
+        // --- Ambil data antrean untuk tabel (Limit 5) ---
+        // Menyertakan eager loading 'user.pegawai.bidang' agar view bisa mencetak nama seksi bawahan
+        $pengajuanButuhAksi = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
+            ->where('status', 'Menunggu Kabid')
+            ->where($queryBidangKabid)
             ->latest()
             ->take(5)
             ->get();

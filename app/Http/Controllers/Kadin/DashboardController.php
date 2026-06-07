@@ -12,21 +12,38 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Statistik Kadin
+        $user = Auth::user();
+        $hariIni = Carbon::today();
+        $bulanIni = Carbon::now()->month;
+
+        // --- Logika statistik Kepala Dinas (Global / Instansi) ---
+        
+        // 1. Total antrean berstatus 'Menunggu Kadin'
+        $totalMenungguAksi = Pengajuan::where('status', 'Menunggu Kadin')
+            ->count();
+
+        // 2. Hitung jumlah seluruh pegawai instansi yang sedang menjalani cuti HARI INI
+        $pegawaiCutiHariIni = Pengajuan::where('status', 'Disetujui')
+            ->whereDate('tgl_mulai', '<=', $hariIni)
+            ->whereDate('tgl_selesai', '>=', $hariIni)
+            ->count();
+
+        // 3. Hitung total akumulasi cuti seluruh pegawai yang disetujui sepanjang bulan ini
+        $disetujuiBulanIni = Pengajuan::where('status', 'Disetujui')
+            ->whereMonth('tgl_mulai', $bulanIni)
+            ->count();
+
+        // Membungkus data statistik ke dalam satu array untuk dikirim ke view
         $statistik = [
-            'menunggu_aksi' => Pengajuan::where('status', 'Menunggu ACC Kadin')->count(),
-            'pegawai_cuti' => Pengajuan::where('status', 'Disetujui')
-                ->whereDate('tgl_mulai', '<=', Carbon::today())
-                ->whereDate('tgl_selesai', '>=', Carbon::today())
-                ->count(),
-            'disetujui_bulan_ini' => Pengajuan::where('status', 'Disetujui')
-                ->whereMonth('updated_at', Carbon::now()->month)
-                ->count(),
+            'menunggu_aksi' => $totalMenungguAksi,
+            'pegawai_cuti' => $pegawaiCutiHariIni,
+            'disetujui_bulan_ini' => $disetujuiBulanIni,
         ];
 
-        // Antrean 5 data teratas yang nunggu keputusan Kadin
-        $pengajuanButuhAksi = Pengajuan::with(['user', 'jenisCuti'])
-            ->where('status', 'Menunggu ACC Kadin')
+        // --- Ambil data antrean untuk tabel (Limit 5) ---
+        // Kadin memproses berkas yang sudah melewati tahap Sekdin
+        $pengajuanButuhAksi = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
+            ->where('status', 'Menunggu Kadin')
             ->latest()
             ->take(5)
             ->get();

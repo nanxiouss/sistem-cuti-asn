@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Sekdin;
+namespace App\Http\Controllers\Kasumum;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,10 +16,10 @@ class DashboardController extends Controller
         $hariIni = Carbon::today();
         $bulanIni = Carbon::now()->month;
 
-        // --- Logika statistik Sekretaris Dinas (Global / Seluruh Bidang) ---
+        // --- Logika statistik Kasubbag Umum (Global / Seluruh Bidang) ---
         
-        // 1. Total antrean berstatus 'Menunggu Sekretaris Dinas' di seluruh bidang
-        $totalMenungguAksi = Pengajuan::where('status', 'Menunggu Sekdin')
+        // 1. Total antrean berstatus 'Menunggu Kasubbag Umum' di seluruh bidang
+        $totalMenungguAksi = Pengajuan::where('status', 'Menunggu Kasubbag Umum')
             ->count();
 
         // 2. Hitung jumlah seluruh pegawai instansi yang sedang menjalani cuti HARI INI
@@ -41,13 +41,13 @@ class DashboardController extends Controller
         ];
 
         // --- Ambil data antrean untuk tabel (Limit 5) ---
-        // Sekdin memproses berkas yang sudah melewati tahap Kasubbag Umum
+        // Tanpa query penapis bidang karena Kasubbag Umum memproses seluruh berkas masuk
         $pengajuanButuhAksi = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
-            ->where('status', 'Menunggu Sekdin')
+            ->where('status', 'Menunggu Kasubbag Umum')
             ->latest()
             ->take(5)
             ->get();
 
-        return view('sekdin.dashboard', compact('statistik', 'pengajuanButuhAksi'));
+        return view('kasumum.dashboard', compact('statistik', 'pengajuanButuhAksi'));
     }
 }

@@ -36,19 +36,19 @@ class DashboardController extends Controller
         $sisa_n1 = ($sisa_total - $sisa_n) > 6 ? 6 : ($sisa_total - $sisa_n);
         $sisa_n2 = ($sisa_total - $sisa_n - $sisa_n1) > 0 ? ($sisa_total - $sisa_n - $sisa_n1) : 0;
 
-        // Menghitung persentase ketersediaan jatah cuti (asumsi jatah ideal awal gabungan adalah 12 + sisa)
+        // Menghitung persentase ketersediaan jatah cuti
         $kuota_maksimal = 12 + $sisa_n1 + $sisa_n2;
         $persentase_sisa = ($kuota_maksimal > 0) ? max(0, ($sisa_total / $kuota_maksimal) * 100) : 0;
 
-        // A. Hitung Cuti Terpakai Tahun Ini (Hanya yang sudah disetujui penuh)
+        // FIXED A: Hitung Cuti Terpakai Tahun Ini menggunakan status 'Selesai'
         $terpakai = Pengajuan::where('user_id', $user->id)
-            ->where('status', 'Disetujui')
+            ->where('status', 'Selesai')
             ->whereYear('tgl_mulai', $tahun_skrg)
             ->sum('lama_cuti');
 
-        // B. Hitung Berkas Sedang Diproses (Masih berada di dalam rentang alur verifikasi/persetujuan)
+        // FIXED B: Pengajuan Aktif berkurang jika status sudah final ('Selesai', 'Ditolak', 'Dibatalkan')
         $jumlah_proses = Pengajuan::where('user_id', $user->id)
-            ->whereNotIn('status', ['Disetujui', 'Ditolak', 'Dibatalkan'])
+            ->whereNotIn('status', ['Selesai', 'Ditolak', 'Dibatalkan'])
             ->count();
 
         // C. Riwayat Pengajuan
@@ -58,10 +58,10 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Cek apakah hari ini pegawai sedang dalam masa cuti aktif
+        // FIXED: Cek apakah hari ini pegawai sedang dalam masa cuti aktif dengan status 'Selesai'
         $today = Carbon::today();
         $is_cuti = Pengajuan::where('user_id', $user->id)
-            ->where('status', 'Disetujui')
+            ->where('status', 'Selesai')
             ->whereDate('tgl_mulai', '<=', $today)
             ->whereDate('tgl_selesai', '>=', $today)
             ->exists();

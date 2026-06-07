@@ -49,7 +49,7 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->intended(route('kadin.dashboard', absolute: false));
             
             case 'kasubbag_umum' : // Untuk Kasubbag Umum
-                return redirect()->intended(route('kasubbag_umum.dashboard', absolute: false));
+                return redirect()->intended(route('kasumum.dashboard', absolute: false));
 
             case 'admin': // Untuk Admin Kepegawaian
                 return redirect()->intended(route('admin.dashboard', absolute: false));

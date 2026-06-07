@@ -29,8 +29,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
-                {{-- Detail Informasi Sebelah Kiri --}}
+                {{-- KONTEN SEBELAH KIRI (Ambil 2 Kolom) --}}
                 <div class="md:col-span-2 space-y-6">
+                    
                     {{-- Informasi Pegawai --}}
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                         <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
@@ -109,9 +110,43 @@
                         </div>
                         @endif
                     </div>
-                </div>
 
-                {{-- Panel Konfirmasi Aksi Sebelah Kanan --}}
+                    {{-- Komponen Tracking TTD Pegawai (Pemohon) - SEKARANG ADA DI DALAM BLOK KIRI --}}
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                                <i class="fas fa-check-double text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-base font-bold text-slate-900 tracking-tight">Tanda Tangan Pemohon Valid</h4>
+                                <p class="text-xs text-slate-500 mt-0.5 font-medium">
+                                    Diajukan pada: {{ $pengajuan->created_at ? \Carbon\Carbon::parse($pengajuan->created_at)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Pemohon</span>
+                            
+                            {{-- Area Spesimen TTD Gambar Asli + Badge Aplikasi --}}
+                            <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
+                                @if(!empty($pengajuan->user->ttd))
+                                    <img src="{{ asset('storage/' . $pengajuan->user->ttd) }}" alt="Tanda Tangan Pegawai" class="h-12 object-contain mix-blend-multiply max-w-[120px]">
+                                @elseif(!empty($pengajuan->ttd_pegawai))
+                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" alt="Tanda Tangan Pegawai" class="h-12 object-contain mix-blend-multiply max-w-[120px]">
+                                @else
+                                    <span class="text-[10px] text-slate-400 italic mr-1">(Belum ada spesimen TTD)</span>
+                                @endif
+
+                                <div class="px-2.5 py-1 bg-blue-600 text-white font-black text-xs italic rounded tracking-wide shadow-sm select-none uppercase transform -rotate-1">
+                                    cutinya'
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> {{-- <-- PENUTUP BLOK SEBELAH KIRI PINDAH KE SINI --}}
+
+                {{-- KONTEN SEBELAH KANAN (Panel Konfirmasi Aksi) --}}
                 <div class="space-y-6">
                     <div class="bg-slate-900 rounded-2xl p-6 shadow-md text-white border border-slate-800">
                         <h3 class="text-lg font-bold text-white mb-2 border-b border-slate-800 pb-3 flex items-center gap-2">
@@ -125,7 +160,6 @@
                             @csrf
                             @method('PUT')
 
-                            {{-- Catatan Alasan --}}
                             <div class="mb-4">
                                 <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                                     Catatan Kasi <span class="text-[10px] text-rose-400 font-normal lowercase">(wajib jika menolak)</span>
@@ -133,7 +167,6 @@
                                 <textarea name="catatan" rows="3" class="w-full bg-slate-800 border-slate-700 text-white rounded-xl focus:ring-lime-500 focus:border-lime-500 text-xs placeholder-slate-500" placeholder="Tambahkan instruksi atau alasan penolakan..."></textarea>
                             </div>
 
-                            {{-- Input Password Verifikasi TTD --}}
                             <div class="mb-6 border-t border-slate-800 pt-4">
                                 <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
                                     Password Verifikasi <span class="text-[10px] text-lime-400 font-normal lowercase">(wajib jika setuju)</span>
@@ -147,7 +180,6 @@
                                 <p class="text-[10px] text-slate-500 mt-1 leading-normal">*Guna memberikan tanda tangan elektronik yang terdata pada sistem.</p>
                             </div>
 
-                            {{-- Tombol Kirim Form --}}
                             <div class="flex flex-col gap-2.5">
                                 <button type="submit" name="status" value="Disetujui" class="w-full flex items-center justify-center gap-2 py-3 bg-lime-400 hover:bg-lime-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-lime-400/20">
                                     <i class="fas fa-file-signature"></i> SETUJUI & SEMATKAN TTD

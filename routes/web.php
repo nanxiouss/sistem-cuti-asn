@@ -9,13 +9,18 @@ use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardControll
 use App\Http\Controllers\Pegawai\PengajuanController as PegawaiPengajuanController;
 use App\Http\Controllers\Pegawai\RegulasiController;
 use App\Http\Controllers\Pegawai\KalenderController;
+use App\Http\Controllers\Pegawai\RiwayatController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PegawaiController as AdminPegawaiController;
 use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
+use App\Http\Controllers\Admin\PemberkasanController as AdminPemberkasanController;
 
 use App\Http\Controllers\Kasi\DashboardController as KasiDashboardController;
 use App\Http\Controllers\Kasi\PersetujuanController as KasiPersetujuanController;
+
+use App\Http\Controllers\Kasumum\DashboardController as KasumumDashboardController;
+use App\Http\Controllers\Kasumum\PersetujuanController as KasumumPersetujuanController;
 
 use App\Http\Controllers\Kabid\DashboardController as KabidDashboardController;
 use App\Http\Controllers\Kabid\PersetujuanController as KabidPersetujuanController;
@@ -52,7 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         } elseif ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
         } elseif ($user->role === 'kasubbag_umum') {
-            return redirect()->route('kasubbag_umum.dashboard');
+            return redirect()->route('kasumum.dashboard');
         } elseif ($user->role === 'kasi') {
             return redirect()->route('kasi.dashboard');
         } elseif ($user->role === 'kabid') {
@@ -70,6 +75,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [PegawaiDashboardController::class, 'index'])->name('dashboard');
         Route::get('/pengajuan/create', [PegawaiPengajuanController::class, 'create'])->name('pengajuan.create');
         Route::post('/pengajuan/store', [PegawaiPengajuanController::class, 'store'])->name('pengajuan.store');
+        Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
+        Route::get('/riwayat/{pengajuan}', [RiwayatController::class, 'show'])->name('riwayat.show');
         Route::get('/kalender', [KalenderController::class, 'index'])->name('kalender.index');
         Route::get('/regulasi', [RegulasiController::class, 'index'])->name('regulasi.index');
     });
@@ -92,7 +99,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pengajuan', [AdminPengajuanController::class, 'index'])->name('pengajuan.index');
         Route::get('/pengajuan/{id}', [AdminPengajuanController::class, 'show'])->name('pengajuan.show');
         Route::post('/pengajuan/{id}/teruskan', [AdminPengajuanController::class, 'teruskanKeKasi'])->name('pengajuan.teruskan');
-        Route::get('/pengajuan/{id}/cetak', [AdminPengajuanController::class, 'cetak'])->name('pengajuan.cetak');
+
+        Route::get('/pemberkasan', [AdminPemberkasanController::class, 'index'])->name('pemberkasan.index');
+        Route::get('/pemberkasan/{id}', [AdminPemberkasanController::class, 'show'])->name('pemberkasan.show');
+        Route::post('/pemberkasan/{id}/proses', [AdminPemberkasanController::class, 'prosesPemberkasan'])->name('pemberkasan.proses');
     });
 
     // 4. Ruang Lingkup: KASI
@@ -109,6 +119,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/persetujuan', [KabidPersetujuanController::class, 'index'])->name('persetujuan.index');
         Route::get('/persetujuan/{id}', [KabidPersetujuanController::class, 'show'])->name('persetujuan.show');
         Route::put('/persetujuan/{id}', [KabidPersetujuanController::class, 'update'])->name('persetujuan.update');
+    });
+
+    // Ruang Lingkup: KASUBBAG_UMUM
+    Route::prefix('kasumum')->name('kasumum.')->group(function () {
+        Route::get('/dashboard', [KasumumDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/persetujuan', [KasumumPersetujuanController::class, 'index'])->name('persetujuan.index');
+        Route::get('/persetujuan/{id}', [KasumumPersetujuanController::class, 'show'])->name('persetujuan.show');
+        Route::put('/persetujuan/{id}', [KasumumPersetujuanController::class, 'update'])->name('persetujuan.update');
     });
 
     // 6. Ruang Lingkup: SEKDIN

@@ -6,52 +6,33 @@
             <div class="flex items-center gap-5">
                 <a href="/" class="flex-shrink-0 flex items-center gap-4 group">
                     <img src="/images/logo.png" alt="Logo Sumsel DESDM" class="h-10 w-auto object-contain">
-
                     <div class="leading-tight border-l-2 border-slate-200 pl-4">
                         <span class="text-xl font-extrabold tracking-tighter text-slate-800 block">E-CUTI</span>
-                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">PANEL Pegawai</p>
+                        <p class="text-[9px] font-bold text-rose-500 uppercase tracking-[0.2em]">PANEL Kepala Sub Bagian Umum dan Kepegawaian</p>
                     </div>
                 </a>
             </div>
 
-
             <div class="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-sm p-1 rounded-full border border-white/40 shadow-sm self-center">
                 @php
-                $navClass = "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group
-                overflow-hidden";
+                $navClass = "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group overflow-hidden";
                 $activeClass = "bg-slate-900 text-white shadow-md";
                 $inactiveClass = "text-slate-600 hover:text-lime-500 hover:bg-white";
                 @endphp
 
-                <a href="{{ route('pegawai.dashboard') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.dashboard') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('kasumum.dashboard') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.dashboard') ? $activeClass : $inactiveClass }}">
                     Dashboard
                 </a>
-
-                <a href="{{ route('pegawai.pengajuan.create') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.pengajuan*') ? $activeClass : $inactiveClass }}">
-                    Ajukan Cuti
-                </a>
-
-                <a href="{{ route('pegawai.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.kalender*') ? $activeClass : $inactiveClass }}">
-                    Kalender
-                </a>
-
-                <a href="{{ route('pegawai.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.riwayat*') ? $activeClass : $inactiveClass }}">
-                    Riwayat
-                </a>
-
-                <a href="{{ route('pegawai.regulasi.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.regulasi*') ? $activeClass : $inactiveClass }}">
-                    Regulasi
+                <a href="{{ route('kasumum.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.persetujuan*') ? $activeClass : $inactiveClass }}">
+                    Persetujuan Cuti
                 </a>
             </div>
 
-
             <div class="flex items-center gap-3 sm:gap-4">
-
                 <button class="relative p-2.5 text-slate-400 hover:text-lime-600 hover:bg-lime-50 rounded-full transition-all duration-200 focus:outline-none">
                     <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                     </svg>
                 </button>
 
@@ -59,27 +40,25 @@
 
                 <div class="relative" @click.outside="profileOpen = false">
                     <button @click="profileOpen = !profileOpen" class="flex items-center gap-3 cursor-pointer group focus:outline-none p-1 rounded-full hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-200">
-
-                        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-lime-600 to-lime-600 p-[2px]">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-500 to-rose-600 p-[2px]">
                             <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-                                <span class="font-bold text-sm text-lime-600">
+                                <span class="font-bold text-sm text-rose-600">
                                     {{ substr(Auth::user()->nama, 0, 1) }}
                                 </span>
                             </div>
                         </div>
 
                         <div class="hidden sm:flex flex-col items-start justify-center text-left pr-1">
-                            <span class="text-sm font-bold text-slate-700 group-hover:text-lime-700 transition leading-tight">
+                            <span class="text-sm font-bold text-slate-700 group-hover:text-rose-600 transition leading-tight">
                                 {{ Auth::user()->nama }}
                             </span>
-                            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-lime-50 text-lime-600 tracking-wider uppercase border border-lime-100 mt-1">
-                                {{ Auth::user()->jabatan ?? 'Pegawai' }}
+                            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-600 tracking-wider uppercase border border-rose-100 mt-1">
+                                Kasubbag Umum dan Kepegawaian
                             </span>
                         </div>
 
                         <svg class="w-4 h-4 text-slate-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
 
@@ -97,7 +76,7 @@
 
                         {{-- 2. Bagian Menu --}} 
                         <div class="p-2 space-y-1">
-                            <a href="/profile" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 hover:text-lime-600 transition-all group">
+                            <a href="{{ route('profile.index') }}" class="flex items-center w-full px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 hover:text-lime-600 transition-all group">
                                 Edit Profile
                             </a>
                         </div>
@@ -113,6 +92,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

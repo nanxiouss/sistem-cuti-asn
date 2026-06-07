@@ -1,11 +1,11 @@
-<x-layouts.sekdin.app>
+<x-layouts.kasumum.app>
     <x-slot name="header">
         <div class="flex items-center gap-3">
-            <a href="{{ route('sekdin.persetujuan.index') }}" class="text-slate-400 hover:text-slate-600 transition-colors">
+            <a href="{{ route('kasumum.persetujuan.index') }}" class="text-slate-400 hover:text-slate-600 transition-colors">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <h2 class="font-bold text-xl text-slate-800 leading-tight">
-                Review Berkas Pengajuan Cuti (Sekretaris Dinas)
+                Review Berkas Pengajuan Cuti (Kasubbag Umum)
             </h2>
         </div>
     </x-slot>
@@ -35,7 +35,7 @@
                     {{-- Informasi Pegawai --}}
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                         <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-user-circle text-amber-500"></i> Informasi Pegawai
+                            <i class="fas fa-user-circle text-lime-500"></i> Informasi Pegawai
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                             <div>
@@ -60,7 +60,7 @@
                     {{-- Detail Pengajuan Cuti --}}
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                         <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-file-alt text-amber-500"></i> Detail Pengajuan Cuti
+                            <i class="fas fa-file-alt text-lime-500"></i> Detail Pengajuan Cuti
                         </h3>
                         
                         <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-5">
@@ -111,104 +111,78 @@
                         @endif
                     </div>
 
-                    {{-- Tracking Riwayat TTD Validasi Berkas Sebelum Sekdin --}}
+                    {{-- Tracking Riwayat TTD Validasi Berkas Sebelum Kasubbag --}}
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
                         <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-2">
-                            <i class="fas fa-history text-slate-400"></i> Riwayat Verifikasi Alur Berkas
+                            <i class="fas fa-history text-slate-400"></i> Riwayat Verifikasi Berkas
                         </h3>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {{-- TTD Pemohon --}}
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-150 flex flex-col justify-between gap-2">
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-150 flex items-center justify-between">
                                 <div>
                                     <p class="text-[10px] uppercase font-bold text-slate-400">1. TTD Pemohon</p>
                                     <p class="text-xs font-bold text-slate-700 mt-0.5">Sudah Valid</p>
                                 </div>
-                                <div class="flex justify-end">
-                                    @if(!empty($pengajuan->ttd_pegawai))
-                                        <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-8 object-contain mix-blend-multiply">
-                                    @else
-                                        <i class="fas fa-check-circle text-emerald-500"></i>
-                                    @endif
-                                </div>
+                                @if(!empty($pengajuan->ttd_pegawai))
+                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-8 object-contain mix-blend-multiply">
+                                @else
+                                    <i class="fas fa-check-circle text-emerald-500"></i>
+                                @endif
                             </div>
 
                             {{-- TTD Kabid --}}
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-150 flex flex-col justify-between gap-2">
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-150 flex items-center justify-between">
                                 <div>
                                     <p class="text-[10px] uppercase font-bold text-slate-400">2. Persetujuan Kabid</p>
                                     <p class="text-xs font-bold text-slate-700 mt-0.5">Disetujui</p>
                                 </div>
-                                <div class="flex justify-end">
-                                    @if(!empty($pengajuan->ttd_kabid))
-                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-8 object-contain mix-blend-multiply">
-                                    @else
-                                        <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-bold">Sistem ACC</span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            {{-- TTD Kasubbag Umum --}}
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-150 flex flex-col justify-between gap-2">
-                                <div>
-                                    <p class="text-[10px] uppercase font-bold text-slate-400">3. Kasubbag Umum</p>
-                                    <p class="text-xs font-bold text-slate-700 mt-0.5">Disetujui</p>
-                                </div>
-                                <div class="flex justify-end">
-                                    @if(!empty($pengajuan->ttd_kasubbag))
-                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-8 object-contain mix-blend-multiply">
-                                    @else
-                                        <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-bold">Sistem ACC</span>
-                                    @endif
-                                </div>
+                                @if(!empty($pengajuan->ttd_kabid))
+                                    <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-8 object-contain mix-blend-multiply">
+                                @else
+                                    <span class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold">Manual/Sistem</span>
+                                @endif
                             </div>
                         </div>
-                        
-                        @if($pengajuan->catatan_kasubbag)
-                        <div class="p-3 bg-amber-50/70 text-slate-700 rounded-xl border border-amber-100 text-xs">
-                            <span class="font-bold text-amber-800"><i class="fas fa-comment-dots"></i> Catatan Kasubbag Umum:</span> 
-                            <p class="mt-0.5 italic">"{{ $pengajuan->catatan_kasubbag }}"</p>
-                        </div>
-                        @endif
                     </div>
                 </div>
 
-                {{-- KONTEN SEBELAH KANAN (Panel Aksi Form Sekdin) --}}
+                {{-- KONTEN SEBELAH KANAN (Panel Aksi Form Kasubbag) --}}
                 <div class="space-y-6">
                     <div class="bg-slate-900 rounded-2xl p-6 shadow-md text-white border border-slate-800">
                         <h3 class="text-lg font-bold text-white mb-2 border-b border-slate-800 pb-3 flex items-center gap-2">
-                            <i class="fas fa-pen-fancy text-amber-400"></i> Tindakan Sekdin
+                            <i class="fas fa-pen-fancy text-lime-400"></i> Tindakan Kasubbag
                         </h3>
                         <p class="text-xs text-slate-400 mb-5 leading-relaxed">
-                            Berkas yang disetujui akan dibubuhkan spesimen TTD Anda dan diteruskan secara otomatis ke tingkat akhir yaitu Kepala Dinas (Kadis).
+                            Berkas yang disetujui akan dibubuhkan spesimen TTD Anda dan diteruskan secara otomatis ke meja Sekretaris Dinas (Sekdin).
                         </p>
 
-                        <form action="{{ route('sekdin.persetujuan.update', $pengajuan->id) }}" method="POST">
+                        <form action="{{ route('kasumum.persetujuan.update', $pengajuan->id) }}" method="POST">
                             @csrf
                             @method('PUT')
 
                             <div class="mb-4">
                                 <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                                    Catatan Sekdin <span class="text-[10px] text-rose-400 font-normal lowercase">(wajib jika menolak)</span>
+                                    Catatan Kasubbag <span class="text-[10px] text-rose-400 font-normal lowercase">(wajib jika menolak)</span>
                                 </label>
-                                <textarea name="catatan_sekdin" rows="3" class="w-full bg-slate-800 border-slate-700 text-white rounded-xl focus:ring-amber-500 focus:border-amber-500 text-xs placeholder-slate-500" placeholder="Tambahkan instruksi / alasan jika menolak..."></textarea>
+                                <textarea name="catatan_kasubbag" rows="3" class="w-full bg-slate-800 border-slate-700 text-white rounded-xl focus:ring-lime-500 focus:border-lime-500 text-xs placeholder-slate-500" placeholder="Tambahkan instruksi / alasan jika menolak..."></textarea>
                             </div>
 
                             <div class="mb-6 border-t border-slate-800 pt-4">
                                 <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                                    Password Verifikasi <span class="text-[10px] text-amber-400 font-normal lowercase">(wajib jika setuju)</span>
+                                    Password Verifikasi <span class="text-[10px] text-lime-400 font-normal lowercase">(wajib jika setuju)</span>
                                 </label>
                                 <div class="relative">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-xs">
                                         <i class="fas fa-key"></i>
                                     </span>
-                                    <input type="password" name="password_verifikasi" class="w-full bg-slate-800 border-slate-700 text-white rounded-xl pl-9 pr-4 py-2 focus:ring-amber-500 focus:border-amber-500 text-xs placeholder-slate-500" placeholder="Masukkan password login Anda...">
+                                    <input type="password" name="password_verifikasi" class="w-full bg-slate-800 border-slate-700 text-white rounded-xl pl-9 pr-4 py-2 focus:ring-lime-500 focus:border-lime-500 text-xs placeholder-slate-500" placeholder="Masukkan password login Anda...">
                                 </div>
                             </div>
 
                             <div class="flex flex-col gap-2.5">
-                                <button type="submit" name="status" value="Disetujui" class="w-full flex items-center justify-center gap-2 py-3 bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-400/20">
-                                    <i class="fas fa-file-signature"></i> SETUJU & TERUSKAN KE KADIS
+                                <button type="submit" name="status" value="Disetujui" class="w-full flex items-center justify-center gap-2 py-3 bg-lime-400 hover:bg-lime-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-lime-400/20">
+                                    <i class="fas fa-file-signature"></i> SETUJU & TERUSKAN KE SEKDIN
                                 </button>
 
                                 <button type="submit" name="status" value="Ditolak" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors border border-slate-700 hover:border-rose-600">
@@ -222,4 +196,4 @@
             </div>
         </div>
     </div>
-</x-layouts.sekdin.app>
+</x-layouts.kasumum.app>

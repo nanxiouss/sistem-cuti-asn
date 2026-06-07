@@ -1,43 +1,224 @@
 <x-layouts.kadin.app>
-    <div>
-        <a href="{{ route('kadin.dashboard') }}" class="text-slate-400 hover:text-slate-600 mr-4"><i class="fas fa-arrow-left"></i> Kembali</a>
-        <h2 class="font-bold text-xl text-slate-800 leading-tight inline">Keputusan Final Pengajuan Cuti</h2>
-    </div>
+    <x-slot name="header">
+        <div class="flex items-center gap-3">
+            <a href="{{ route('kadin.persetujuan.index') }}" class="text-slate-400 hover:text-slate-600 transition-colors">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h2 class="font-bold text-xl text-slate-800 leading-tight">
+                Review Berkas Pengajuan Cuti (Kepala Dinas)
+            </h2>
+        </div>
+    </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            {{-- Alert Error Validasi Internal Form --}}
+            @if ($errors->any())
+                <div class="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-sm font-medium shadow-sm">
+                    <div class="font-bold mb-1 flex items-center gap-2">
+                        <i class="fas fa-exclamation-triangle"></i> Gagal Memproses Berkas:
+                    </div>
+                    <ul class="list-disc list-inside text-xs space-y-0.5 opacity-90">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                {{-- KONTEN SEBELAH KIRI (Detail Informasi Berkas) --}}
                 <div class="md:col-span-2 space-y-6">
+                    
+                    {{-- Informasi Pegawai --}}
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                        <h3 class="text-lg font-bold text-slate-800 mb-4">Detail Pengajuan Berkas</h3>
-                        <p><strong>Nama Pegawai:</strong> {{ $pengajuan->user->nama ?? '-' }}</p>
-                        <p><strong>Jenis Cuti:</strong> {{ $pengajuan->jenisCuti->nama_cuti ?? '-' }}</p>
-                        <p><strong>Tanggal Cuti:</strong> {{ \Carbon\Carbon::parse($pengajuan->tgl_mulai)->format('d M Y') }} s/d {{ \Carbon\Carbon::parse($pengajuan->tgl_selesai)->format('d M Y') }}</p>
-                        <p><strong>Alasan Pengajuan:</strong> {{ $pengajuan->alasan ?? '-' }}</p>
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-user-circle text-red-500"></i> Informasi Pegawai
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Nama Lengkap</p>
+                                <p class="font-medium text-slate-800">{{ $pengajuan->user->nama ?? '-' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">NIP / NIK</p>
+                                <p class="font-medium text-slate-800">{{ $pengajuan->user->pegawai->nip ?? $pengajuan->user->nip ?? '-' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Asal Bidang</p>
+                                <p class="font-medium text-slate-800">{{ $pengajuan->user->pegawai->bidang->nama_bidang ?? '-' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Jabatan</p>
+                                <p class="font-medium text-slate-800">{{ $pengajuan->user->pegawai->jabatan ?? '-' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Detail Pengajuan Cuti --}}
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fas fa-file-alt text-red-500"></i> Detail Pengajuan Cuti
+                        </h3>
+                        
+                        <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-semibold text-slate-600">Jenis Cuti</span>
+                                <span class="px-3 py-1 bg-indigo-100 text-indigo-700 font-bold rounded-lg text-sm">
+                                    {{ $pengajuan->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm font-semibold text-slate-600">Tanggal Pelaksanaan</span>
+                                <span class="font-medium text-slate-800 text-sm">
+                                    {{ \Carbon\Carbon::parse($pengajuan->tgl_mulai)->translatedFormat('d M Y') }} s/d 
+                                    {{ \Carbon\Carbon::parse($pengajuan->tgl_selesai)->translatedFormat('d M Y') }}
+                                    <span class="text-indigo-600 font-semibold">({{ $pengajuan->lama_cuti }} Hari Kerja)</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5 border-b border-slate-100 pb-5 text-sm">
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">No. WhatsApp</p>
+                                <p class="font-medium text-slate-800 flex items-center gap-1">
+                                    <i class="fab fa-whatsapp text-emerald-500 text-base"></i>
+                                    {{ $pengajuan->no_telepon ?? '-' }}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Alamat Selama Cuti</p>
+                                <p class="font-medium text-slate-800">{{ $pengajuan->alamat_cuti ?? '-' }}</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-4 text-sm">
+                            <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Alasan Cuti</p>
+                            <p class="text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200 italic">
+                                "{{ $pengajuan->alasan ?? 'Tidak ada alasan yang dicantumkan.' }}"
+                            </p>
+                        </div>
+
+                        @if($pengajuan->file_bukti)
+                        <div class="mt-4">
+                            <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-2">Dokumen Lampiran</p>
+                            <a href="{{ asset('storage/' . $pengajuan->file_bukti) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition-colors border border-slate-200">
+                                <i class="fas fa-paperclip text-slate-500"></i> Lihat Lampiran Bukti
+                            </a>
+                        </div>
+                        @endif
+                    </div>
+
+                    {{-- Tracking Riwayat TTD Validasi Berkas Sebelum Kadin --}}
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-2">
+                            <i class="fas fa-history text-slate-400"></i> Alur Verifikasi Berkas Sebelumnya
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            {{-- TTD Pemohon --}}
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-150 flex flex-col justify-between gap-2">
+                                <div>
+                                    <p class="text-[10px] uppercase font-bold text-slate-400">1. TTD Pemohon</p>
+                                    <p class="text-xs font-bold text-slate-700 mt-0.5">Valid</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    @if(!empty($pengajuan->ttd_pegawai))
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-8 object-contain mix-blend-multiply">
+                                    @else
+                                        <i class="fas fa-check-circle text-emerald-500"></i>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- TTD Kasubbag Umum --}}
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-150 flex flex-col justify-between gap-2">
+                                <div>
+                                    <p class="text-[10px] uppercase font-bold text-slate-400">2. Kasubbag Umum</p>
+                                    <p class="text-xs font-bold text-slate-700 mt-0.5">Disetujui</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    @if(!empty($pengajuan->ttd_kasubbag))
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-8 object-contain mix-blend-multiply">
+                                    @else
+                                        <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-bold">Sistem ACC</span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- TTD Sekdin --}}
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-150 flex flex-col justify-between gap-2">
+                                <div>
+                                    <p class="text-[10px] uppercase font-bold text-slate-400">3. Sekretaris Dinas</p>
+                                    <p class="text-xs font-bold text-slate-700 mt-0.5">Disetujui</p>
+                                </div>
+                                <div class="flex justify-end">
+                                    @if(!empty($pengajuan->ttd_sekdin))
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-8 object-contain mix-blend-multiply">
+                                    @else
+                                        <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-bold">Sistem ACC</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @if($pengajuan->catatan_sekdin)
+                        <div class="p-3 bg-amber-50/70 text-slate-700 rounded-xl border border-amber-100 text-xs">
+                            <span class="font-bold text-amber-800"><i class="fas fa-comment-dots"></i> Catatan Sekretaris Dinas:</span> 
+                            <p class="mt-0.5 italic">"{{ $pengajuan->catatan_sekdin }}"</p>
+                        </div>
+                        @endif
                     </div>
                 </div>
 
+                {{-- KONTEN SEBELAH KANAN (Panel Aksi Form Kadin) --}}
                 <div class="space-y-6">
-                    <div class="bg-slate-900 rounded-2xl p-6 shadow-md text-white">
-                        <h3 class="text-lg font-bold mb-4 border-b border-slate-700 pb-3">Keputusan Kepala Dinas</h3>
+                    <div class="bg-slate-900 rounded-2xl p-6 shadow-md text-white border border-slate-800">
+                        <h3 class="text-lg font-bold text-white mb-2 border-b border-slate-800 pb-3 flex items-center gap-2">
+                            <i class="fas fa-pen-fancy text-red-400"></i> Keputusan Kadin
+                        </h3>
+                        <p class="text-xs text-slate-400 mb-5 leading-relaxed">
+                            Berkas yang disetujui akan langsung dibubuhi tanda tangan digital Anda dan dilempar otomatis ke sistem Admin untuk proses pencetakan SK / nomor berkas.
+                        </p>
+
                         <form action="{{ route('kadin.persetujuan.update', $pengajuan->id) }}" method="POST">
                             @csrf
                             @method('PUT')
-                            <div class="mb-5">
-                                <label class="block text-sm text-slate-300 mb-2">Catatan Kepala Dinas</label>
-                                <textarea name="catatan" rows="3" class="w-full bg-slate-800 border-slate-700 rounded-xl text-sm text-white"></textarea>
+
+                            <div class="mb-4">
+                                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                                    Catatan Kadin <span class="text-[10px] text-rose-400 font-normal lowercase">(wajib jika menolak)</span>
+                                </label>
+                                <textarea name="catatan_kadin" rows="3" class="w-full bg-slate-800 border-slate-700 text-white rounded-xl focus:ring-red-500 focus:border-red-500 text-xs placeholder-slate-500" placeholder="Tambahkan instruksi / alasan jika menolak..."></textarea>
                             </div>
-                            <div class="flex flex-col gap-3">
-                                <button type="submit" name="status" value="Disetujui" class="w-full py-3 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-xl shadow-lg shadow-purple-500/20">
-                                    SAHKAN & SETUJUI
+
+                            <div class="mb-6 border-t border-slate-800 pt-4">
+                                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                                    Password Verifikasi <span class="text-[10px] text-red-400 font-normal lowercase">(wajib jika setuju)</span>
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-xs">
+                                        <i class="fas fa-key"></i>
+                                    </span>
+                                    <input type="password" name="password_verifikasi" class="w-full bg-slate-800 border-slate-700 text-white rounded-xl pl-9 pr-4 py-2 focus:ring-red-500 focus:border-red-500 text-xs placeholder-slate-500" placeholder="Masukkan password login Anda...">
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-2.5">
+                                <button type="submit" name="status" value="Disetujui" class="w-full flex items-center justify-center gap-2 py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg shadow-red-600/20">
+                                    <i class="fas fa-file-signature"></i> ACC & LEMPAR KE ADMIN
                                 </button>
-                                <button type="submit" name="status" value="Ditolak" class="w-full py-3 bg-slate-800 hover:bg-rose-600 text-white font-bold rounded-xl border border-slate-700">
-                                    TOLAK PENGAJUAN
+
+                                <button type="submit" name="status" value="Ditolak" class="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors border border-slate-700 hover:border-rose-600">
+                                    <i class="fas fa-times-circle"></i> TOLAK PENGAJUAN
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

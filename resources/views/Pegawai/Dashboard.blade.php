@@ -70,7 +70,7 @@
                                     <span class="block text-sm font-semibold text-amber-400">Cuti Tahunan Hak N-2</span>
                                     <p class="text-xs text-slate-400 leading-relaxed mt-1">Sisa cuti jatah dua tahun lalu (N-2) otomatis hangus apabila tidak digunakan pada masa tahun berjalan aktif.</p>
                                 </div>
-                            </li>
+                            </li >
                             <li class="flex gap-4">
                                 <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-slate-300 shrink-0">2</div>
                                 <div>
@@ -157,7 +157,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             </div>
-                            <span class="px-3 py-1 bg-lime-50 text-lime-600 border border-lime-100 text-xs font-bold rounded-full">Used</span>
+                            <span class="px-3 py-1 bg-lime-50 text-lime-600 border border-lime-100 text-xs font-bold rounded-full">Selesai</span>
                         </div>
                         <h3 class="text-4xl font-extrabold text-slate-800 mb-1 tracking-tight">{{ $terpakai }}</h3>
                         <p class="text-slate-500 font-medium text-sm">Hari Terpakai</p>
@@ -175,7 +175,7 @@
                     <h2 class="text-xl font-extrabold text-slate-800">Riwayat Pengajuan Cuti</h2>
                     <p class="text-sm text-slate-500 mt-1">Pantau pergerakan posisi lembar dokumen pengajuan cuti Anda.</p>
                 </div>
-                <a href="#" class="group inline-flex items-center justify-center px-4 py-2 bg-amber-50 hover:bg-lime-100 rounded-xl text-sm font-semibold text-slate-600 transition-colors">
+                <a href="{{ route('pegawai.riwayat.index') }}" class="group inline-flex items-center justify-center px-4 py-2 bg-amber-50 hover:bg-lime-100 rounded-xl text-sm font-semibold text-slate-600 transition-colors">
                     Lihat Semua
                     <svg class="w-4 h-4 ml-2 text-slate-400 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -216,13 +216,13 @@
                             <td class="px-6 md:px-8 py-5">
                                 @php
                                 $statusStyles = match($item->status) {
-                                    'Disetujui' => 'bg-lime-50 text-lime-700 border-lime-200',
+                                    'Selesai'   => 'bg-lime-50 text-lime-700 border-lime-200',
                                     'Ditolak'   => 'bg-rose-50 text-rose-700 border-rose-200',
                                     'Dibatalkan'=> 'bg-slate-50 text-slate-600 border-slate-200',
                                     default     => 'bg-amber-50 text-amber-700 border-amber-200',
                                 };
                                 $dotColor = match($item->status) {
-                                    'Disetujui' => 'bg-lime-500',
+                                    'Selesai'   => 'bg-lime-500',
                                     'Ditolak'   => 'bg-rose-500',
                                     'Dibatalkan'=> 'bg-slate-400',
                                     default     => 'bg-amber-500',
@@ -234,7 +234,7 @@
                                 </span>
                             </td>
                             <td class="px-6 md:px-8 py-5 text-right">
-                                <a href="#" class="inline-flex items-center justify-center text-slate-400 hover:text-lime-600 transition-colors p-2 hover:bg-lime-50 rounded-xl" title="Lihat Detail">
+                                <a href="{{ route('pegawai.riwayat.index') }}" class="inline-flex items-center justify-center text-slate-400 hover:text-lime-600 transition-colors p-2 hover:bg-lime-50 rounded-xl" title="Lihat Detail">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

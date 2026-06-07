@@ -19,9 +19,14 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
+        // Mapping folder khusus untuk kasubbag_umum ke kasumum
+        $roleFolder = $user->role;
+        if ($roleFolder === 'kasubbag_umum') {
+            $roleFolder = 'kasumum';
+        }
+        
         // Mengarahkan ke folder view sesuai role user yang sedang login (lowercase)
-        // Pastikan nama folder di resources/views sama dengan nama role di database
-        return view("{$user->role}.profile.index", [
+        return view("{$roleFolder}.profile.index", [
             'user' => $user,
         ]);
     }
@@ -33,7 +38,13 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        return view("{$user->role}.profile.edit", [
+        // Mapping folder khusus untuk kasubbag_umum ke kasumum agar tidak error saat edit
+        $roleFolder = $user->role;
+        if ($roleFolder === 'kasubbag_umum') {
+            $roleFolder = 'kasumum';
+        }
+
+        return view("{$roleFolder}.profile.edit", [
             'user' => $user,
         ]);
     }
