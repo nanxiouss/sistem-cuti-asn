@@ -17,7 +17,6 @@ class DashboardController extends Controller
         $bulanIni = $sekarang->month;
         $tahunIni = $sekarang->year;
 
-        // KATEGORI STATISTIK SESUAI ALUR FLOWCHART
         // PERBAIKAN: Disesuaikan persis dengan string status yang ada di database
         $statistik = [
             // 1. Antrean Utama Admin
@@ -26,7 +25,7 @@ class DashboardController extends Controller
             // 2. Tracking Posisi Berkas di Atasan
             'proses_kasi'      => Pengajuan::where('status', 'Menunggu Kasi')->count(),
             'proses_kabid'     => Pengajuan::where('status', 'Menunggu Kabid')->count(),
-            'proses_kasubbag'  => Pengajuan::where('status', 'Menunggu Kasubbag Umum')->count(), // Sesuaikan jika di DB "Menunggu Kasubbag Umum"
+            'proses_kasubbag'  => Pengajuan::where('status', 'Menunggu Kasubbag Umum')->count(), 
             'proses_sekdin'    => Pengajuan::where('status', 'Menunggu Sekdin')->count(),
             'proses_kadin'     => Pengajuan::where('status', 'Menunggu Kadin')->count(),
             
