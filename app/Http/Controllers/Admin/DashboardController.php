@@ -17,12 +17,11 @@ class DashboardController extends Controller
         $bulanIni = $sekarang->month;
         $tahunIni = $sekarang->year;
 
-        // PERBAIKAN: Disesuaikan persis dengan string status yang ada di database
         $statistik = [
             // 1. Antrean Utama Admin
             'menunggu_admin'   => Pengajuan::where('status', 'Menunggu Verifikasi Admin')->count(),
             
-            // 2. Tracking Posisi Berkas di Atasan
+            // 2. Tracking Posisi Berkas
             'proses_kasi'      => Pengajuan::where('status', 'Menunggu Kasi')->count(),
             'proses_kabid'     => Pengajuan::where('status', 'Menunggu Kabid')->count(),
             'proses_kasubbag'  => Pengajuan::where('status', 'Menunggu Kasubbag Umum')->count(), 
@@ -30,11 +29,11 @@ class DashboardController extends Controller
             'proses_kadin'     => Pengajuan::where('status', 'Menunggu Kadin')->count(),
             
             // 3. Status Akhir Pengajuan
-            'disetujui'        => Pengajuan::where('status', 'Disetujui')->count(),
+            'disetujui'        => Pengajuan::whereIn('status', ['Selesai'])->count(),
+            
             'total_ditolak'    => Pengajuan::where('status', 'like', 'Ditolak%')
                                             ->orWhere('status', 'Dikembalikan ke Pegawai')
                                             ->count(),
-                                            
             // 4. Data Tambahan Kontrol
             'total_pegawai'    => User::where('role', '!=', 'admin')->count(),
         ];
@@ -46,15 +45,15 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // MONITORING: Pegawai yang saat ini sedang menjalani cuti
+        // MONITORING: Pegawai yang saat ini sedang menjalani cuti (Murni yang statusnya sudah 'Selesai')
         $cutiHariIni = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
-            ->where('status', 'Disetujui')
+            ->where('status', 'Selesai')
             ->whereDate('tgl_mulai', '<=', $hariIni)
             ->whereDate('tgl_selesai', '>=', $hariIni)
             ->get();
 
-        // TOTAL BULANAN: Untuk grafik/analitik bulanan Admin
-        $cutiBulanIni = Pengajuan::where('status', 'Disetujui')
+        // TOTAL BULANAN: Berdasarkan pengajuan yang sudah 'Selesai' di bulan berjalan
+        $cutiBulanIni = Pengajuan::where('status', 'Selesai')
             ->whereMonth('tgl_mulai', $bulanIni)
             ->whereYear('tgl_mulai', $tahunIni)
             ->count();

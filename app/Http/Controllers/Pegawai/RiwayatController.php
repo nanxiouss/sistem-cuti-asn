@@ -135,7 +135,7 @@ class RiwayatController extends Controller
         // ANTISIPASI KONDISI DITOLAK: Jika berkas ditolak di tengah alur, selipkan log penolakan di tumpukan paling atas
         if ($status === 'Ditolak') {
             $logs[] = [
-                'title' => 'Pengajuan Cuti Ditolak ❌',
+                'title' => 'Pengajuan Cuti Ditolak',
                 'desc' => 'Mohon maaf, pengajuan cuti Anda tidak dapat disetujui setelah melalui evaluasi pimpinan. Silakan hubungi admin kepegawaian instansi Anda untuk info lebih lanjut.',
                 'time' => $pengajuan->updated_at->format('d M Y H:i') . ' WIB',
                 'status' => 'rejected'

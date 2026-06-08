@@ -1,70 +1,81 @@
 <x-layouts.admin.app>
     <x-slot:title>Dashboard Admin - E-CUTI ESDM</x-slot:title>
 
-    {{-- HERO SECTION ADMIN (Dark Mode Style) --}}
-    <div class="bg-slate-900 rounded-[2rem] p-6 lg:p-8 mb-8 text-white shadow-lg relative overflow-hidden flex flex-col lg:flex-row gap-8 justify-between items-center">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 blur-3xl rounded-full translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
-
-        <div class="z-10 w-full lg:w-3/5">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-slate-800/80 border border-slate-700 rounded-full text-xs font-semibold text-emerald-400 mb-6">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
-            </div>
-
-            {{-- Logic Sapaan Berdasarkan Waktu --}}
-            @php
-            $hour = now()->format('H');
-            if ($hour < 11) $greeting='Pagi' ; elseif ($hour < 15) $greeting='Siang' ; elseif ($hour < 18) $greeting='Sore' ; else $greeting='Malam' ; @endphp <h1 class="text-3xl lg:text-5xl font-bold mb-4 tracking-tight">
-                Selamat {{ $greeting }},<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 to-amber-300">{{ Auth::user()->nama ?? 'Administrator' }}</span>
-                </h1>
-
-                <p class="text-slate-400 mb-8 max-w-xl text-sm lg:text-base leading-relaxed">
-                    Kelola seluruh data cuti pegawai, pantau alur birokrasi, dan verifikasi kelengkapan administratif dalam satu dashboard terpusat.
-                </p>
-
-                <div class="flex flex-wrap items-center gap-4">
-                    <a href="{{ route('admin.pengajuan.index') }}" class="px-6 py-3 bg-lime-500 hover:bg-lime-400 text-slate-900 font-bold rounded-xl transition shadow-[0_0_15px_rgba(132,204,22,0.3)] flex items-center gap-2">
-                        <i class="fas fa-clipboard-check"></i> Cek Antrean Berkas
-                    </a>
-                    <a href="#" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium rounded-xl transition flex items-center gap-2">
-                        <i class="fas fa-users"></i> Kelola Pegawai
-                    </a>
-                </div>
+    <div class="relative rounded-3xl overflow-hidden bg-slate-900 shadow-2xl shadow-slate-200/50 mb-10 -mt-2">
+        <div class="absolute inset-0">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 mix-blend-overlay"></div>
+            <img src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1600&q=80"
+                class="w-full h-full object-cover opacity-20 mix-blend-luminosity" alt="Office bg">
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900/40"></div>
         </div>
 
-        <div class="z-10 w-full lg:w-2/5">
-            <div class="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 relative backdrop-blur-sm">
-                <div class="absolute -top-3 -right-3 px-3 py-1 bg-amber-500/20 border border-amber-500/30 text-amber-400 text-[10px] font-bold rounded-lg uppercase tracking-wider">
-                    Fokus Utama
+        <div class="relative z-10 p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            <div class="lg:col-span-7 space-y-6">
+
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-semibold backdrop-blur-md cursor-default">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.8)] animate-pulse"></span>
+                    {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
                 </div>
 
-                <h3 class="text-lg font-bold text-slate-200 mb-4 flex items-center gap-2">
-                    <i class="fas fa-shield-alt text-amber-500"></i> Peran Administrator
-                </h3>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-indigo-200">{{ $sapaan ?? 'Selamat Datang' }},</span> <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 to-purple-300">
+                        {{ Auth::user()->nama ?? Auth::user()->name ?? 'Administrator' }}
+                    </span>
+                    <span class="text-white opacity-80 font-light mx-2">-</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-500">
+                        Pusat Kendali
+                    </span>
+                </h1>
 
-                <ul class="space-y-4">
-                    <li class="flex items-start gap-3">
-                        <div class="w-6 h-6 rounded-full bg-slate-700 text-slate-300 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">1</div>
-                        <div>
-                            <p class="text-sm font-bold text-slate-200">Verifikasi Administratif</p>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Pastikan seluruh berkas pengajuan lolos pemeriksaan Sub Bagian Umum sebelum diteruskan ke pimpinan.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <div class="w-6 h-6 rounded-full bg-slate-700 text-slate-300 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">2</div>
-                        <div>
-                            <p class="text-sm font-bold text-slate-200">Kawal Alur Persetujuan</p>
-                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">Pantau *Tracking Alur Cuti* di bawah untuk memastikan tidak ada dokumen yang tertahan di satu tahap.</p>
-                        </div>
-                    </li>
-                </ul>
+                <p class="text-slate-400 text-lg max-w-lg leading-relaxed">
+                    Kelola data kepegawaian, pantau pergerakan berkas, dan verifikasi persetujuan cuti secara real-time dari satu dashboard terintegrasi.
+                </p>
+
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="{{ route('admin.pengajuan.index') }}"
+                        class="px-6 py-3 bg-indigo-500 hover:bg-indigo-400 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all duration-300 ease-out transform hover:-translate-y-1">
+                        Cek Antrean Berkas
+                    </a>
+                    <a href="{{ route('admin.pemberkasan.index') }}"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 ease-out transform hover:-translate-y-1">
+                        Pemberkasan
+                    </a>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 relative hidden md:block">
+                <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl blur opacity-20"></div>
+                <div class="relative bg-slate-800/60 backdrop-blur-xl border border-white/10 p-7 rounded-3xl text-white shadow-xl">
+                    <div class="flex items-center justify-between mb-5 border-b border-white/10 pb-4">
+                        <h3 class="font-bold text-lg flex items-center gap-2">
+                            Info Sistem
+                        </h3>
+                        <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded md:uppercase tracking-wider font-bold border border-indigo-500/20">
+                            Meja Kerja
+                        </span>
+                    </div>
+                    <ul class="space-y-5">
+                        <li class="flex gap-4">
+                            <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-slate-300 shrink-0">1</div>
+                            <div>
+                                <span class="block text-sm font-semibold text-indigo-400">Verifikasi Subbag Umum</span>
+                                <p class="text-xs text-slate-400 leading-relaxed mt-1">Pastikan sisa kuota cuti tahunan pegawai dihitung dengan benar sebelum berkas diteruskan ke Kasi/Kabid.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-slate-300 shrink-0">2</div>
+                            <div>
+                                <span class="block text-sm font-semibold text-indigo-400">Pemberkasan Akhir</span>
+                                <p class="text-xs text-slate-400 leading-relaxed mt-1">Berkas yang berstatus "Selesai" harus diterbitkan nomor Surat Izin/SK agar dapat diunduh oleh pegawai terkait.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-
-    {{-- KARTU UTAMA INDIKATOR RINGKASAN --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
             <div class="flex items-center gap-4">
@@ -115,7 +126,6 @@
         </div>
     </div>
 
-    {{-- PELACAKAN PIPELINE BERKAS (MONITORING FLOWCHART) --}}
     <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm mb-8">
         <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
             <i class="fas fa-route text-indigo-500"></i> Posisi Berkas Berjalan (Tracking Alur Cuti)
@@ -130,7 +140,7 @@
                 <div class="text-xl font-bold text-slate-700">{{ $statistik['proses_kabid'] ?? 0 }} <span class="text-xs font-normal text-slate-400">Berkas</span></div>
             </div>
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-center">
-                <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Tahap 3: Kasubbag</p>
+                <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Tahap 3: Kasubbag Umum</p>
                 <div class="text-xl font-bold text-slate-700">{{ $statistik['proses_kasubbag'] ?? 0 }} <span class="text-xs font-normal text-slate-400">Berkas</span></div>
             </div>
             <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-center">
@@ -144,10 +154,8 @@
         </div>
     </div>
 
-    {{-- SPLIT GRID: MEJA KERJA ADMIN VS MONITORING REALTIME --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-        {{-- SISI KIRI: ANTRIAN BUTUH AKSI ADMIN --}}
+        
         <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-100 flex justify-between items-center">
                 <div class="flex items-center gap-2">
@@ -163,13 +171,13 @@
                     <li class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition">
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-xl bg-amber-100 flex shrink-0 items-center justify-center text-amber-600 font-bold">
-                                {{ substr($aksi->user->nama ?? 'P', 0, 1) }}
+                                {{ substr($aksi->user->nama ?? $aksi->user->name ?? 'P', 0, 1) }}
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-slate-800">{{ $aksi->user->nama ?? 'Nama Tidak Ditemukan' }}</p>
+                                <p class="text-sm font-bold text-slate-800">{{ $aksi->user->nama ?? $aksi->user->name ?? 'Nama Tidak Ditemukan' }}</p>
                                 <p class="text-xs text-slate-400 mb-1">{{ $aksi->user->pegawai->bidang->nama_bidang ?? 'Tanpa Bidang' }}</p>
                                 <p class="text-xs text-slate-600 font-medium">
-                                    Mengajukan <span class="text-indigo-600">{{ $aksi->jenisCuti->nama ?? 'Cuti' }}</span> ({{ $aksi->lama_cuti }} Hari)
+                                    Mengajukan <span class="text-indigo-600">{{ $aksi->jenisCuti->nama ?? 'Cuti' }}</span> ({{ $aksi->lama_cuti ?? 0 }} Hari)
                                 </p>
                             </div>
                         </div>
@@ -177,7 +185,6 @@
                             <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 uppercase tracking-wider">
                                 {{ $aksi->status }}
                             </span>
-                            {{-- Route diarahkan ke halaman detail verifikasi dokumen --}}
                             <a href="{{ route('admin.pengajuan.show', $aksi->id) }}" class="p-2 bg-slate-50 hover:bg-indigo-50 text-slate-400 hover:text-indigo-600 rounded-xl transition" title="Verifikasi Berkas">
                                 <i class="fas fa-chevron-right"></i>
                             </a>
@@ -194,7 +201,6 @@
             </div>
         </div>
 
-        {{-- SISI KANAN: MONITORING PEGAWAI CUTI HARI INI --}}
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-100 bg-slate-50/50">
                 <h3 class="font-bold text-slate-800 flex items-center gap-2">
@@ -210,10 +216,10 @@
                             <i class="fas fa-user-clock"></i>
                         </div>
                         <div class="overflow-hidden">
-                            <h4 class="text-sm font-bold text-slate-800 truncate">{{ $cuti->user->nama }}</h4>
+                            <h4 class="text-sm font-bold text-slate-800 truncate">{{ $cuti->user->nama ?? $cuti->user->name ?? 'Pegawai' }}</h4>
                             <p class="text-[11px] text-slate-400 truncate mb-1">{{ $cuti->user->pegawai->bidang->nama_bidang ?? 'Tanpa Bidang' }}</p>
                             <span class="inline-block px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600 font-medium">
-                                s.d {{ \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('d M Y') }}
+                                s.d {{ $cuti->tgl_selesai ? \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('d M Y') : '-' }}
                             </span>
                         </div>
                     </div>
@@ -225,8 +231,7 @@
                     Semua pegawai hadir penuh hari ini.
                 </div>
                 @endif
-
-                {{-- STATISTIK BULANAN --}}
+                
                 <div class="mt-6 pt-6 border-t border-slate-100 flex justify-between items-center text-sm">
                     <span class="text-slate-500 font-medium">Total Cuti Bulan Ini:</span>
                     <span class="px-3 py-1 rounded-full font-bold bg-indigo-50 text-indigo-600">
