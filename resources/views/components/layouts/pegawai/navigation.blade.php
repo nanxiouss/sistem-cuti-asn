@@ -31,9 +31,9 @@
                     Ajukan Cuti
                 </a>
 
-                {{-- <a href="{{ route('pegawai.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.kalender*') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('pegawai.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.kalender*') ? $activeClass : $inactiveClass }}">
                     Kalender
-                </a> --}}
+                </a>
 
                 <a href="{{ route('pegawai.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.riwayat*') ? $activeClass : $inactiveClass }}">
                     Riwayat
