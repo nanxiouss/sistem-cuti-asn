@@ -17,11 +17,12 @@ return new class extends Migration
             $table->unsignedBigInteger('atasan_id')->nullable();
             $table->foreign('atasan_id')->references('id')->on('users')->onDelete('set null');
             $table->foreignId('bidang_id')->nullable()->constrained('bidangs')->nullOnDelete();
-            $table->string('pangkat_golongan', 100)->nullable();
+            $table->foreignId('pangkat_id')->nullable()->constrained('pangkats')->nullOnDelete();
             $table->string('jabatan', 100)->nullable();
-            $table->date('tmt_kerja')->nullable();
-
+            $table->date('masa_kerja')->nullable();
             $table->integer('sisa_cuti_tahunan')->default(12);
+            $table->integer('sisa_cuti_besar')->default(90);
+            $table->integer('sisa_cuti_melahirkan')->default(90);
             $table->string('no_telepon', 20)->nullable();
 
             $table->string('foto_profil')->nullable();

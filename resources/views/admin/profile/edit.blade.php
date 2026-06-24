@@ -38,7 +38,7 @@
         </div>
         @endif
 
-        {{-- Notifikasi Error/Sukses Umum --}}
+        {{-- Notifikasi Error Global --}}
         @if($errors->any())
         <div class="mb-6 p-4 sm:p-5 bg-red-50 border border-red-200 rounded-2xl text-red-800 text-sm flex items-start gap-3 shadow-sm">
             <div class="p-1.5 bg-red-100 rounded-full shrink-0 mt-0.5">
@@ -81,22 +81,25 @@
                             </template>
                             <template x-if="!profilePreview">
                                 <div class="w-full h-full bg-slate-100 rounded-full flex items-center justify-center">
-                                    <span class="text-4xl sm:text-5xl font-bold text-slate-300">{{ substr(Auth::user()->nama, 0, 1) }}</span>
+                                    <span class="text-4xl sm:text-5xl font-bold text-slate-300">{{ Str::upper(substr(Auth::user()->nama, 0, 1)) }}</span>
                                 </div>
                             </template>
                         </div>
                     </div>
 
-                    <label class="block w-full cursor-pointer bg-lime-50 hover:bg-lime-500 text-lime-700 hover:text-white font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl border border-lime-200 hover:border-lime-500 transition-all shadow-sm">
+                    <label for="foto_profil" class="block w-full cursor-pointer bg-lime-50 hover:bg-lime-500 text-lime-700 hover:text-white font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl border border-lime-200 hover:border-lime-500 transition-all shadow-sm">
                         <span class="flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                             </svg>
                             Pilih Foto Baru
                         </span>
-                        <input type="file" name="foto_profil" class="hidden" accept="image/png, image/jpeg, image/jpg" @change="previewFile($event, 'profile')">
                     </label>
-                    <p class="text-[11px] text-slate-400 mt-3">Format: JPG, JPEG, PNG. Maks: 2MB</p>
+                    <input type="file" id="foto_profil" name="foto_profil" class="hidden" accept="image/png, image/jpeg, image/jpg" @change="previewFile($event, 'profile')">
+                    <p class="text-[11px] text-slate-400 mt-3">Format: JPG, JPEG, PNG. Maks: 5MB</p>
+                    @error('foto_profil')
+                        <p class="text-xs text-red-500 mt-1 font-semibold">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Card Upload Tanda Tangan Digital --}}
@@ -109,13 +112,13 @@
                     </h3>
                     <p class="text-xs text-slate-500 mb-5 leading-relaxed">Gunakan gambar berlatar transparan (PNG).</p>
 
-                    <div class="w-full h-32 sm:h-36 border-2 border-dashed border-slate-200 hover:border-lime-300 transition-colors rounded-2xl bg-slate-50/50 mb-5 p-4 flex items-center justify-center overflow-hidden relative">
+                    <div class="w-full h-32 sm:h-36 border-2 border-dashed border-slate-200 hover:border-lime-300 transition-colors rounded-2xl bg-white mb-5 p-4 flex items-center justify-center overflow-hidden relative">
                         <template x-if="ttdPreview">
                             <img :src="ttdPreview" class="max-h-full max-w-full object-contain mix-blend-multiply drop-shadow-sm">
                         </template>
                         <template x-if="!ttdPreview">
                             <div class="text-slate-400 text-xs flex flex-col items-center gap-2">
-                                <div class="p-2 bg-white rounded-full shadow-sm border border-slate-100">
+                                <div class="p-2 bg-slate-50 rounded-full shadow-sm border border-slate-100">
                                     <svg class="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                     </svg>
@@ -125,107 +128,138 @@
                         </template>
                     </div>
 
-                    <label class="block w-full cursor-pointer bg-slate-50 hover:bg-slate-800 text-slate-600 hover:text-white font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl border border-slate-200 transition-all shadow-sm">
+                    <label for="foto_ttd" class="block w-full cursor-pointer bg-slate-50 hover:bg-slate-800 text-slate-600 hover:text-white font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl border border-slate-200 transition-all shadow-sm">
                         <span class="flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                             </svg>
                             Unggah Gambar TTD
                         </span>
-                        <input type="file" name="foto_ttd" class="hidden" accept="image/png, image/jpeg, image/jpg" @change="previewFile($event, 'ttd')">
                     </label>
+                    <input type="file" id="foto_ttd" name="foto_ttd" class="hidden" accept="image/png, image/jpeg, image/jpg" @change="previewFile($event, 'ttd')">
+                    @error('foto_ttd')
+                        <p class="text-xs text-red-500 mt-2 font-semibold">{{ $message }}</p>
+                    @enderror
                 </div>
 
             </div>
 
-            {{-- KOLOM KANAN: Formulir Data Kontekstual (Isian Teks) --}}
+            {{-- KOLOM KANAN: Formulir Data Kontekstual --}}
             <div class="flex-1 min-w-0 w-full flex flex-col gap-6">
 
-                {{-- Card Data Utama --}}
+                {{-- Card Data Utama (Bisa Diedit) --}}
                 <div class="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200/60 p-5 sm:p-6 xl:p-8">
                     <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
                         <div class="p-2.5 bg-lime-50 rounded-xl">
                             <svg class="w-5 h-5 text-lime-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         </div>
                         <div>
-                            <h3 class="text-sm sm:text-base font-bold text-slate-800 tracking-tight">Informasi Utama Pegawai</h3>
-                            <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Isian data dasar akun dan komunikasi aktif Anda.</p>
+                            <h3 class="text-sm sm:text-base font-bold text-slate-800 tracking-tight">Informasi Akun Pegawai</h3>
+                            <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Edit nama, kontak, dan password Anda di sini.</p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                         {{-- Input Nama --}}
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-slate-700 ml-1">Nama Lengkap Pegawai <span class="text-red-500">*</span></label>
-                            <input type="text" name="nama" value="{{ old('nama', Auth::user()->nama) }}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white focus:border-lime-500 focus:ring-4 focus:ring-lime-500/10 transition-all outline-none shadow-sm" required>
+                        <div class="flex flex-col gap-1.5 md:col-span-2">
+                            <label for="nama" class="text-xs font-bold text-slate-700 ml-1">Nama Lengkap Pegawai <span class="text-red-500">*</span></label>
+                            <input type="text" id="nama" name="nama" value="{{ old('nama', Auth::user()->nama) }}" 
+                                class="w-full bg-slate-50 border @error('nama') border-red-400 focus:border-red-500 focus:ring-red-500/10 @else border-slate-200 focus:border-lime-500 focus:ring-lime-500/10 @enderror rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white transition-all outline-none shadow-sm" required>
+                            @error('nama')
+                                <span class="text-xs text-red-500 ml-1 font-medium">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         {{-- Input No Telepon --}}
                         <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-slate-700 ml-1">Nomor WhatsApp / Telepon <span class="text-red-500">*</span></label>
-                            <input type="text" name="no_telepon" value="{{ old('no_telepon', Auth::user()->pegawai->no_telepon ?? '') }}" placeholder="Contoh: 081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white focus:border-lime-500 focus:ring-4 focus:ring-lime-500/10 transition-all outline-none shadow-sm" required>
+                            <label for="no_telepon" class="text-xs font-bold text-slate-700 ml-1">Nomor WhatsApp / Telepon <span class="text-red-500">*</span></label>
+                            
+                            {{-- Memproses nomor lama agar otomatis 08 jika awalnya 62 atau +62 --}}
+                            @php
+                                $no_telepon = old('no_telepon', Auth::user()->pegawai->no_telepon ?? '');
+                                if (str_starts_with($no_telepon, '+62')) {
+                                    $no_telepon = '0' . substr($no_telepon, 3);
+                                } elseif (str_starts_with($no_telepon, '62')) {
+                                    $no_telepon = '0' . substr($no_telepon, 2);
+                                }
+                            @endphp
+
+                            <input type="text" id="no_telepon" name="no_telepon" value="{{ $no_telepon }}" placeholder="Contoh: 081234567890" 
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/^62/, '0')"
+                                class="w-full bg-slate-50 border @error('no_telepon') border-red-400 focus:border-red-500 focus:ring-red-500/10 @else border-slate-200 focus:border-lime-500 focus:ring-lime-500/10 @enderror rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white transition-all outline-none shadow-sm" required>
+                            @error('no_telepon')
+                                <span class="text-xs text-red-500 ml-1 font-medium">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         {{-- NIP (Read Only) --}}
                         <div class="flex flex-col gap-1.5 opacity-70">
-                            <label class="text-xs font-bold text-slate-600 flex items-center gap-1.5 ml-1">
-                                NIP (Nomor Induk Pegawai)
-                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                            </label>
-                            <input type="text" value="{{ Auth::user()->nip }}" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-slate-500 cursor-not-allowed select-none outline-none" readonly>
+                            <label for="nip" class="text-xs font-bold text-slate-600 flex items-center gap-1.5 ml-1">NIP (Nomor Induk Pegawai)</label>
+                            <input type="text" id="nip" value="{{ Auth::user()->nip }}" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-slate-500 cursor-not-allowed select-none outline-none" readonly>
                         </div>
+                    </div>
+                    
+                    <hr class="border-slate-100 my-6">
 
-                        {{-- Role Hak Akses (Read Only) --}}
-                        <div class="flex flex-col gap-1.5 opacity-70">
-                            <label class="text-xs font-bold text-slate-600 flex items-center gap-1.5 ml-1">
-                                Hak Akses Sistem (Role)
-                                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                            </label>
-                            <input type="text" value="{{ strtoupper(Auth::user()->role) }}" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-slate-500 cursor-not-allowed select-none outline-none" readonly>
+                    {{-- Section Ubah Password --}}
+                    <h4 class="text-sm font-bold text-slate-700 mb-4">Ubah Password (Opsional)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+                        <div class="flex flex-col gap-1.5">
+                            <label for="password" class="text-xs font-bold text-slate-700 ml-1">Password Baru</label>
+                            <input type="password" id="password" name="password" placeholder="Kosongkan jika tidak ingin diubah" 
+                                class="w-full bg-slate-50 border @error('password') border-red-400 focus:border-red-500 focus:ring-red-500/10 @else border-slate-200 focus:border-lime-500 focus:ring-lime-500/10 @enderror rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white transition-all outline-none shadow-sm">
+                            @error('password')
+                                <span class="text-xs text-red-500 ml-1 font-medium">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label for="password_confirmation" class="text-xs font-bold text-slate-700 ml-1">Konfirmasi Password Baru</label>
+                            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Ulangi password baru" 
+                                class="w-full bg-slate-50 border border-slate-200 focus:border-lime-500 focus:ring-4 focus:ring-lime-500/10 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white transition-all outline-none shadow-sm">
                         </div>
                     </div>
                 </div>
 
-                {{-- Card Data Kepegawaian --}}
-                <div class="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200/60 p-5 sm:p-6 xl:p-8">
-                    <div class="border-b border-slate-100 pb-4 mb-6 flex items-center gap-3">
-                        <div class="p-2.5 bg-blue-50 rounded-xl">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                {{-- Card Data Kepegawaian (Terkunci / Read-Only) --}}
+                <div class="bg-slate-50/70 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200/60 p-5 sm:p-6 xl:p-8">
+                    <div class="border-b border-slate-200/80 pb-4 mb-6 flex items-center gap-3">
+                        <div class="p-2.5 bg-slate-200/50 rounded-xl">
+                            <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                         </div>
                         <div>
-                            <h3 class="text-sm sm:text-base font-bold text-slate-800 tracking-tight">Struktur Kedinasan</h3>
-                            <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Lengkapi data untuk sinkronisasi surat cuti instansi.</p>
+                            <h3 class="text-sm sm:text-base font-bold text-slate-700 tracking-tight">Struktur Kedinasan (Terkunci)</h3>
+                            <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5">Data di bawah ini hanya dapat diubah oleh Admin Kepegawaian.</p>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 opacity-80 pointer-events-none">
                         {{-- Pangkat / Golongan --}}
                         <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-slate-700 ml-1">Pangkat / Golongan Ruang</label>
-                            <input type="text" name="pangkat_golongan" value="{{ old('pangkat_golongan', Auth::user()->pegawai->pangkat_golongan ?? '') }}" placeholder="Contoh: Penata / III c" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white focus:border-lime-500 focus:ring-4 focus:ring-lime-500/10 transition-all outline-none shadow-sm">
+                            <label class="text-xs font-bold text-slate-600 ml-1">Pangkat / Golongan Ruang</label>
+                            <input type="text" value="{{ Auth::user()->pegawai->pangkat->nama_pangkat ?? Auth::user()->pegawai->pangkat_golongan ?? '-' }}" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-slate-500 cursor-not-allowed outline-none select-none" readonly>
                         </div>
 
                         {{-- Nama Jabatan --}}
                         <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-slate-700 ml-1">Nama Jabatan Resmi</label>
-                            <input type="text" name="jabatan" value="{{ old('jabatan', Auth::user()->pegawai->jabatan ?? '') }}" placeholder="Contoh: Pranata Komputer Ahli Pertama" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white focus:border-lime-500 focus:ring-4 focus:ring-lime-500/10 transition-all outline-none shadow-sm">
+                            <label class="text-xs font-bold text-slate-600 ml-1">Nama Jabatan Resmi</label>
+                            <input type="text" value="{{ Auth::user()->pegawai->jabatan ?? '-' }}" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-slate-500 cursor-not-allowed outline-none select-none" readonly>
                         </div>
 
-                        {{-- Bidang (Menggantikan Unit Kerja) --}}
+                        {{-- Bidang --}}
                         <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-slate-700 ml-1">Bidang / Sub Bagian</label>
-                            <input type="text" name="bidang" value="{{ old('bidang', Auth::user()->pegawai->bidang->nama_bidang ?? Auth::user()->pegawai->bidang ?? '') }}" placeholder="Contoh: Bidang Pengelolaan Informasi" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white focus:border-lime-500 focus:ring-4 focus:ring-lime-500/10 transition-all outline-none shadow-sm">
+                            <label class="text-xs font-bold text-slate-600 ml-1">Bidang / Sub Bagian</label>
+                            <input type="text" value="{{ Auth::user()->pegawai->bidang->nama_bidang ?? Auth::user()->pegawai->bidang ?? '-' }}" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-slate-500 cursor-not-allowed outline-none select-none" readonly>
                         </div>
 
-                        {{-- TMT Kerja --}}
+                        {{-- Masa Mulai Kerja CPNS --}}
                         <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-slate-700 ml-1">TMT Kerja <span class="text-slate-400 font-normal">(Terhitung Mulai Tanggal)</span></label>
-                            <input type="date" name="tmt_kerja" value="{{ old('tmt_kerja', Auth::user()->pegawai->tmt_kerja ?? '') }}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white focus:border-lime-500 focus:ring-4 focus:ring-lime-500/10 transition-all outline-none shadow-sm">
+                            <label class="text-xs font-bold text-slate-600 ml-1">Masa Mulai Kerja CPNS</label>
+                            <input type="text" value="{{ Auth::user()->pegawai && Auth::user()->pegawai->masa_kerja ? \Carbon\Carbon::parse(Auth::user()->pegawai->masa_kerja)->translatedFormat('d F Y') : '-' }}" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-slate-500 cursor-not-allowed outline-none select-none" readonly>
                         </div>
                     </div>
                 </div>
 
-                {{-- Tombol Aksi Simpan Form (Dikeluarkan dari box agar clean) --}}
+                {{-- Tombol Aksi Simpan Form --}}
                 <div class="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 mt-2">
                     <a href="{{ route('profile.index') }}" class="w-full sm:w-auto px-6 py-2.5 text-sm font-semibold text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-all text-center">
                         Batal
@@ -243,7 +277,7 @@
 
     </div>
 
-    {{-- Style Tambahan untuk Sembunyikan Scrollbar di Breadcrumb --}}
+    {{-- Style Sembunyikan Scrollbar --}}
     <style>
         .hide-scrollbar::-webkit-scrollbar {
             display: none;

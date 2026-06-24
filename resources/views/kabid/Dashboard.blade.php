@@ -1,5 +1,5 @@
 <x-layouts.kabid.app>
-    <x-slot:title>Dashboad Kepala Bidang - E-CUTI ESDM</x-slot:title>
+    <x-slot:title>Dashboard Kepala Bidang - E-CUTI ESDM</x-slot:title>
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -15,9 +15,10 @@
                             <span class="text-xs font-semibold text-slate-300">{{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</span>
                         </div>
 
+                        {{-- PERBAIKAN: Memanggil variabel sapaan dinamis waktu dan nama user yang aman --}}
                         <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
-                            Selamat Pagi,<br>
-                            <span class="text-lime-400">{{ explode(' ', Auth::user()->nama ?? '')[0] }}</span>
+                            {{ $sapaan }},<br>
+                            <span class="text-lime-400">{{ explode(' ', $user->nama ?? $user->name ?? '')[0] }}</span>
                         </h1>
 
                         <p class="text-slate-400 text-sm md:text-base max-w-lg mb-8 leading-relaxed">
@@ -111,13 +112,13 @@
                             @forelse($pengajuanButuhAksi as $item)
                             <tr class="hover:bg-slate-50/50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <div class="font-bold text-slate-800">{{ $item->user->nama ?? 'Nama Tidak Ditemukan' }}</div>
-                                    {{-- Menggunakan nama_bidang (untuk level pegawai ini seksi/subbag) --}}
+                                    <div class="font-bold text-slate-800">{{ $item->user->nama ?? $item->user->name ?? 'Nama Tidak Ditemukan' }}</div>
                                     <div class="text-xs text-lime-600 font-semibold uppercase">{{ $item->user->pegawai->bidang->nama_bidang ?? '-' }}</div>
                                 </td>
                                 <td class="px-6 py-4">
+                                    {{-- PERBAIKAN BUG: Memanggil properti ->nama sesuai dengan nama kolom asli database --}}
                                     <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold border border-indigo-100">
-                                        {{ $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}
+                                        {{ $item->jenisCuti->nama ?? 'Cuti Tahunan' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium">
@@ -125,7 +126,6 @@
                                     {{ \Carbon\Carbon::parse($item->tgl_selesai)->translatedFormat('d M Y') }}
                                 </td>
                                 <td class="px-6 py-4 font-bold text-slate-900 text-center text-lg">
-                                    {{-- Menggunakan kolom lama_cuti langsung dari DB sesuai permintaan --}}
                                     {{ $item->lama_cuti }}
                                 </td>
                                 <td class="px-6 py-4 text-center">

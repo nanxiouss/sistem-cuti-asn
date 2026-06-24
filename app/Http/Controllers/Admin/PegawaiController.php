@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Pegawai;
 use App\Models\Bidang; 
+use App\Models\Pangkat;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,7 @@ class PegawaiController extends Controller
     // 1. TAMPILKAN DAFTAR PEGAWAI
     public function index()
     {
-        $user = User::with(['pegawai.atasan', 'pegawai.bidang'])
+        $user = User::with(['pegawai.atasan', 'pegawai.bidang', 'pegawai.pangkat'])
             ->where('role', '!=', 'admin') 
             ->orderBy('created_at', 'desc')
             ->get();
@@ -26,30 +27,32 @@ class PegawaiController extends Controller
     // 2. FORM TAMBAH PEGAWAI
     public function create()
     {
-        // PERUBAHAN: Load relasi pegawai agar field bidang_id bisa diakses langsung di Blade group
         $atasans = User::with('pegawai')
             ->whereIn('role', ['kasi', 'kabid', 'kasubbag_umum', 'sekdin', 'kadin'])
             ->get();
             
         $bidangs = Bidang::orderBy('nama_bidang', 'asc')->get();
+        $pangkats = Pangkat::orderBy('id', 'asc')->get(); 
 
-        return view('admin.pegawai.create', compact('atasans', 'bidangs'));
+        return view('admin.pegawai.create', compact('atasans', 'bidangs', 'pangkats'));
     }
 
     // 3. SIMPAN PEGAWAI BARU
     public function store(Request $request)
     {
         $request->validate([
-            'nip'               => 'required|unique:users,nip|max:30',
+            'nip'               => 'required|regex:/^[0-9]+$/|max:30|unique:users,nip',
             'nama'              => 'required|string|max:100',
             'password'          => 'required|min:6',
             'role'              => 'required|in:admin,pegawai,kasi,kabid,kasubbag_umum,sekdin,kadin', 
             'atasan_id'         => 'nullable|exists:users,id',
             'bidang_id'         => 'nullable|exists:bidangs,id', 
-            'pangkat_golongan'  => 'nullable|string|max:100',
+            'pangkat_id'        => 'nullable|exists:pangkats,id',
             'jabatan'           => 'nullable|string|max:100',
-            'tmt_kerja'         => 'nullable|date',
+            'masa_kerja'        => 'nullable|date',
             'sisa_cuti_tahunan' => 'required|integer|min:0',
+            'sisa_cuti_besar'   => 'required|integer|min:0',
+            'sisa_cuti_melahirkan'   => 'required|integer|min:0',
             'no_telepon'        => 'nullable|string|max:20',
         ]);
 
@@ -64,14 +67,16 @@ class PegawaiController extends Controller
             ]);
 
             Pegawai::create([
-                'user_id'           => $user->id,
-                'atasan_id'         => $request->atasan_id,
-                'bidang_id'         => $request->bidang_id, 
-                'pangkat_golongan'  => $request->pangkat_golongan,
-                'jabatan'           => $request->jabatan,
-                'tmt_kerja'         => $request->tmt_kerja,
-                'sisa_cuti_tahunan' => $request->sisa_cuti_tahunan,
-                'no_telepon'        => $request->no_telepon,
+                'user_id'               => $user->id,
+                'atasan_id'             => $request->atasan_id,
+                'bidang_id'             => $request->bidang_id, 
+                'pangkat_id'            => $request->pangkat_id,
+                'jabatan'               => $request->jabatan,
+                'masa_kerja'            => $request->masa_kerja,
+                'sisa_cuti_tahunan'     => $request->sisa_cuti_tahunan,
+                'sisa_cuti_besar'       => $request->sisa_cuti_besar,
+                'sisa_cuti_melahirkan'  => $request->sisa_cuti_melahirkan,
+                'no_telepon'            => $request->no_telepon,
             ]);
 
             DB::commit();
@@ -88,7 +93,7 @@ class PegawaiController extends Controller
     // 4. DETAIL PEGAWAI
     public function show($id)
     {
-        $user = User::with(['pegawai.atasan', 'pegawai.bidang'])->findOrFail($id);
+        $user = User::with(['pegawai.atasan', 'pegawai.bidang', 'pegawai.pangkat'])->findOrFail($id);
         return view('admin.pegawai.show', compact('user'));
     }
 
@@ -97,15 +102,15 @@ class PegawaiController extends Controller
     {
         $user = User::with('pegawai')->findOrFail($id);
         
-        // PERUBAHAN: Load relasi pegawai agar field bidang_id bisa diakses langsung di Blade group saat edit
         $atasans = User::with('pegawai')
             ->whereIn('role', ['kasi', 'kabid', 'kasubbag_umum', 'sekdin', 'kadin'])
             ->where('id', '!=', $id) 
             ->get();
             
         $bidangs = Bidang::orderBy('nama_bidang', 'asc')->get();
+        $pangkats = Pangkat::orderBy('id', 'asc')->get();
 
-        return view('admin.pegawai.edit', compact('user', 'atasans', 'bidangs'));
+        return view('admin.pegawai.edit', compact('user', 'atasans', 'bidangs', 'pangkats'));
     }
 
     // 6. UPDATE DATA PEGAWAI
@@ -114,16 +119,18 @@ class PegawaiController extends Controller
         $user = User::findOrFail($id);
 
         $request->validate([
-            'nip'               => 'required|max:30|unique:users,nip,' . $user->id,
+            'nip'               => 'required|regex:/^[0-9]+$/|max:20|unique:users,nip,' . $user->id,
             'nama'              => 'required|string|max:100',
             'password'          => 'nullable|min:6',
             'role'              => 'required|in:admin,pegawai,kasi,kabid,kasubbag_umum,sekdin,kadin', 
             'atasan_id'         => 'nullable|exists:users,id',
             'bidang_id'         => 'nullable|exists:bidangs,id', 
-            'pangkat_golongan'  => 'nullable|string|max:100',
+            'pangkat_id'        => 'nullable|exists:pangkats,id',
             'jabatan'           => 'nullable|string|max:100',
-            'tmt_kerja'         => 'nullable|date',
+            'masa_kerja'        => 'nullable|date',
             'sisa_cuti_tahunan' => 'required|integer|min:0',
+            'sisa_cuti_besar'   => 'required|integer|min:0',
+            'sisa_cuti_melahirkan'   => 'required|integer|min:0',
             'no_telepon'        => 'nullable|string|max:20',
         ]);
 
@@ -145,19 +152,22 @@ class PegawaiController extends Controller
             Pegawai::updateOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'atasan_id'         => $request->atasan_id,
-                    'bidang_id'         => $request->bidang_id, 
-                    'pangkat_golongan'  => $request->pangkat_golongan,
-                    'jabatan'           => $request->jabatan,
-                    'tmt_kerja'         => $request->tmt_kerja,
-                    'sisa_cuti_tahunan' => $request->sisa_cuti_tahunan,
-                    'no_telepon'        => $request->no_telepon,
+                    'atasan_id'             => $request->atasan_id,
+                    'bidang_id'             => $request->bidang_id, 
+                    'pangkat_id'            => $request->pangkat_id,
+                    'jabatan'               => $request->jabatan,
+                    'masa_kerja'            => $request->masa_kerja,
+                    'sisa_cuti_tahunan'     => $request->sisa_cuti_tahunan,
+                    'sisa_cuti_besar'       => $request->sisa_cuti_besar,
+                    'sisa_cuti_melahirkan'  => $request->sisa_cuti_melahirkan,
+                    'no_telepon'            => $request->no_telepon,
                 ]
             );
 
             DB::commit();
             return redirect()->route('admin.pegawai.index')->with('success', 'Data pegawai berhasil diperbarui!');
-        } catch (\Exception $e) {
+        } 
+        catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()
                 ->withInput($request->except('password'))

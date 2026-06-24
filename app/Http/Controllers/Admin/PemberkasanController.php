@@ -11,7 +11,6 @@ class PemberkasanController extends Controller
 {
     public function index()
     {
-        // Menampilkan pengajuan yang siap diproses (Menunggu Pemberkasan) dan yang sudah difinalisasi (Selesai)
         $pemberkasans = Pengajuan::with(['user.pegawai', 'jenisCuti'])
             ->whereIn('status', ['Menunggu Pemberkasan', 'Selesai'])
             ->latest()
@@ -22,7 +21,6 @@ class PemberkasanController extends Controller
 
     public function show($id)
     {
-        // Izinkan melihat detail data baik yang masih menunggu maupun yang sudah selesai diproses
         $pengajuan = Pengajuan::with(['user.pegawai', 'atasan.pegawai', 'jenisCuti'])
             ->whereIn('status', ['Menunggu Pemberkasan', 'Selesai'])
             ->findOrFail($id);
@@ -32,40 +30,40 @@ class PemberkasanController extends Controller
 
     public function prosesPemberkasan(Request $request, $id)
     {
-        // Validasi nomor_sk dihapus karena alur baru langsung klik Simpan & Rilis
-
         $pengajuan = Pengajuan::with(['user.pegawai', 'jenisCuti'])->findOrFail($id);
 
-        // Mencegah proses ulang jika statusnya sudah telanjur 'Selesai'
         if ($pengajuan->status === 'Selesai') {
             return redirect()->back()->with('error', 'Dokumen ini sudah dirilis sebelumnya.');
         }
 
-        // Gunakan Database Transaction agar proses update status dan pemotongan kuota aman
         DB::transaction(function () use ($pengajuan) {
             
-            // 1. Update status pengajuan langsung menjadi Selesai tanpa menginput nomor_sk
             $pengajuan->update([
                 'status' => 'Selesai' 
             ]);
 
-            // 2. LOGIKA PEMOTONGAN KUOTA CUTI:
-            // Memotong kuota hanya jika jenis cuti yang diambil adalah Cuti Tahunan
-            // Serta pastikan relasi model ke tabel pegawai tersedia
+            // LOGIKA PEMOTONGAN KUOTA CUTI SECARA DINAMIS
             if ($pengajuan->user && $pengajuan->user->pegawai) {
+                $pegawai = $pengajuan->user->pegawai;
                 $jenisCutiNama = strtolower($pengajuan->jenisCuti->nama ?? $pengajuan->jenisCuti->nama_cuti ?? '');
                 
+                // 1. Cuti Tahunan (ID = 1)
                 if (str_contains($jenisCutiNama, 'tahunan') || $pengajuan->jenis_cuti_id == 1) {
-                    $pegawai = $pengajuan->user->pegawai;
-                    
-                    // Kurangi sisa kuota cuti tahunan milik pegawai berdasarkan durasi hari lama_cuti
-                    // Catatan: Sesuaikan kembali ke 'sisa_cuti_tahunan' atau 'sisa_cuti_tahun_ini' mengikuti kolom tabel Anda
                     $pegawai->decrement('sisa_cuti_tahunan', $pengajuan->lama_cuti); 
+                } 
+                // 2. Cuti Besar (ID = 2)
+                elseif (str_contains($jenisCutiNama, 'besar') || $pengajuan->jenis_cuti_id == 2) {
+                    $pegawai->decrement('sisa_cuti_besar', $pengajuan->lama_cuti);
+                } 
+                // 3. Cuti Melahirkan (ID = 4)
+                elseif (str_contains($jenisCutiNama, 'melahirkan') || $pengajuan->jenis_cuti_id == 4) {
+                    $pegawai->decrement('sisa_cuti_melahirkan', $pengajuan->lama_cuti);
                 }
+                
+                // Catatan: Cuti Sakit, Cuti Alasan Penting, dll biasanya tidak mengurangi kuota tahunan/tetap (tidak perlu dikurangi)
             }
         });
 
-        // Mengarahkan kembali ke halaman detail berkas (show) agar admin bisa langsung menekan tombol cetak
         return redirect()->route('admin.pemberkasan.show', $id)
             ->with('success', 'Dokumen berhasil disimpan & dirilis ke pegawai. Berkas formulir cuti sekarang siap dicetak.');
     }

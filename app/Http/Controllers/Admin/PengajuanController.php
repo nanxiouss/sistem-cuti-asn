@@ -33,7 +33,7 @@ class PengajuanController extends Controller
         // Hanya bisa meneruskan jika statusnya sedang mandek di Admin Kepegawaian
         if ($pengajuan->status === 'Menunggu Verifikasi Admin') {
             $pengajuan->update([
-                'status' => 'Menunggu Kasi' // Geser alur ke Kasi / Kepala UPTD
+                'status' => 'Menunggu Kasi'
             ]);
             
             return redirect()->route('admin.pengajuan.index')

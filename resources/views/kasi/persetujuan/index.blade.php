@@ -44,7 +44,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-md text-xs font-bold border border-indigo-100">
-                                        {{ $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}
+                                        {{ $item->jenisCuti->nama ?? 'Cuti Tahunan' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm">

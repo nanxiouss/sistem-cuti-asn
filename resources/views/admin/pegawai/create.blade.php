@@ -105,7 +105,16 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">NIP Pegawai <span class="text-rose-500">*</span></label>
-                    <input type="text" name="nip" value="{{ old('nip') }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" placeholder="Contoh: 199001..." required>
+                    <input type="text" 
+                           name="nip" 
+                           value="{{ old('nip') }}" 
+                           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" 
+                           placeholder="Contoh: 199001..." 
+                           maxlength="20"
+                           pattern="[0-9]*"
+                           inputmode="numeric"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                           required>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Nama Lengkap & Gelar <span class="text-rose-500">*</span></label>
@@ -129,8 +138,8 @@
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Role Hak Akses Aplikasi <span class="text-rose-500">*</span></label>
                     <select name="role" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
                         <option value="pegawai" {{ old('role') == 'pegawai' ? 'selected' : '' }}>Pegawai / Staf Pelaksana</option>
-                        <option value="kasi" {{ old('role') == 'kasi' ? 'selected' : '' }}>Kasi / Kepala Seksi / Kasubbag TU</option>
-                        <option value="kabid" {{ old('role') == 'kabid' ? 'selected' : '' }}>Kabid / Kepala Bidang / Kepala UPTD</option>
+                        <option value="kasi" {{ old('role') == 'kasi' ? 'selected' : '' }}>Kasi / Kepala Seksi</option>
+                        <option value="kabid" {{ old('role') == 'kabid' ? 'selected' : '' }}>Kabid / Kepala Bidang</option>
                         <option value="kasubbag_umum" {{ old('role') == 'kasubbag_umum' ? 'selected' : '' }}>Kasubbag Umum & Kepegawaian</option>
                         <option value="sekdin" {{ old('role') == 'sekdin' ? 'selected' : '' }}>Sekretaris Dinas</option>
                         <option value="kadin" {{ old('role') == 'kadin' ? 'selected' : '' }}>Kepala Dinas (Kadin)</option>
@@ -138,23 +147,23 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Penempatan Kluster Bidang / Seksi Kerja</label>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Penempatan Kluster Bidang</label>
                     <select name="bidang_id" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden">
-                        <option value="">-- Tanpa Bidang Khusus (Misal: Kadin / Sekdin) --</option>
+                        <option value="">-- Tanpa Bidang Khusus  --</option>
                         @foreach($bidangs as $bidang)
                             <option value="{{ $bidang->id }}" {{ old('bidang_id') == $bidang->id ? 'selected' : '' }}>{{ $bidang->nama_bidang }}</option>
                         @endforeach
                     </select>
                 </div>
 
-                {{-- DROP DOWN ATASAN LANGSUNG MURNI BERDASARKAN BIDANG --}}
+                {{-- DROP DOWN ATASAN LANGSUNG --}}
                 <div class="w-full">
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Atasan Langsung (Untuk Alur Flowchart Verifikasi Cuti)</label>
                     <div class="w-full">
                         <select name="atasan_id" id="select-atasan" class="w-full">
                             <option value="">-- Tanpa Atasan (Tertinggi / Sistem Otomatisasi Mandiri) --</option>
                             
-                            {{-- PIMPINAN UTAMA (KADIN/SEKDIN YANG TIDAK PUNYA BIDANG ID) --}}
+                            {{-- PIMPINAN UTAMA --}}
                             <optgroup label="PIMPINAN UTAMA (TANPA BIDANG)">
                                 @foreach($atasans->where('pegawai.bidang_id', null) as $atasan)
                                     <option value="{{ $atasan->id }}" {{ old('atasan_id') == $atasan->id ? 'selected' : '' }}>
@@ -163,7 +172,7 @@
                                 @endforeach
                             </optgroup>
 
-                            {{-- GROUP BERDASARKAN NAMA BIDANG YANG TERSEDIA --}}
+                            {{-- GROUP BERDASARKAN BIDANG --}}
                             @foreach($bidangs as $bidang)
                                 <optgroup label="{{ strtoupper($bidang->nama_bidang) }}">
                                     @foreach($atasans->where('pegawai.bidang_id', $bidang->id) as $atasan)
@@ -183,27 +192,46 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-5 pt-2">
-                <div class="md:col-span-2">
+            {{-- BAGIAN YANG DIRAPIKAN --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+                <div class="w-full">
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Pangkat / Golongan Ruang</label>
-                    <input type="text" name="pangkat_golongan" value="{{ old('pangkat_golongan') }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" placeholder="Contoh: Penata - III/c">
+                    <select name="pangkat_id" id="select-pangkat" class="w-full">
+                        <option value="">-- Pilih Pangkat & Golongan Ruang --</option>
+                        @foreach($pangkats as $pangkat)
+                            <option value="{{ $pangkat->id }}" {{ old('pangkat_id') == $pangkat->id ? 'selected' : '' }}>
+                                {{ $pangkat->nama_lengkap }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">TMT Mulai Kerja</label>
-                    <input type="date" name="tmt_kerja" value="{{ old('tmt_kerja') }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden text-slate-500">
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Masa Mulai Kerja CPNS</label>
+                    <input type="date" name="masa_kerja" value="{{ old('masa_kerja') }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden text-slate-500">
+                </div>
+            </div>
+            
+            {{-- BLOK KUOTA CUTI PEGAWAI --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Sisa Cuti Tahunan <span class="text-rose-500">*</span></label>
+                    <input type="number" name="sisa_cuti_tahunan" value="{{ old('sisa_cuti_tahunan', 12) }}" min="0" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Kuota Sisa Cuti Tahunan <span class="text-rose-500">*</span></label>
-                    <input type="number" name="sisa_cuti_tahunan" value="{{ old('sisa_cuti_tahunan', 12) }}" min="0" max="30" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Kuota Cuti Besar <span class="text-rose-500">*</span></label>
+                    <input type="number" name="sisa_cuti_besar" value="{{ old('sisa_cuti_besar', 90) }}" min="0" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Kuota Cuti Melahirkan <span class="text-rose-500">*</span></label>
+                    <input type="number" name="sisa_cuti_melahirkan" value="{{ old('sisa_cuti_melahirkan', 90) }}" min="0" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Nomor Telepon / WhatsApp Aktif</label>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Nomor Telepon / WhatsApp Utama</label>
                     <div class="relative flex items-center">
-                        <span class="absolute left-4 text-sm font-semibold text-slate-400 pointer-events-none">+62</span>
-                        <input type="text" name="no_telepon" value="{{ old('no_telepon') }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-14 pr-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" placeholder="8123456789">
+                        <input type="text" name="no_telepon" value="{{ old('no_telepon') }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" placeholder="Contoh: 08123456789">
                     </div>
                 </div>
             </div>
@@ -220,9 +248,25 @@
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var element = document.getElementById('select-atasan');
-            if (element) {
-                new TomSelect(element, {
+            var elementAtasan = document.getElementById('select-atasan');
+            if (elementAtasan) {
+                new TomSelect(elementAtasan, {
+                    create: false,
+                    controlInput: '<input>',
+                    render: {
+                        option: function(data, escape) {
+                            return '<div class="option">' + escape(data.text) + '</div>';
+                        },
+                        item: function(data, escape) {
+                            return '<div class="item">' + escape(data.text) + '</div>';
+                        }
+                    }
+                });
+            }
+
+            var elementPangkat = document.getElementById('select-pangkat');
+            if (elementPangkat) {
+                new TomSelect(elementPangkat, {
                     create: false,
                     controlInput: '<input>',
                     render: {

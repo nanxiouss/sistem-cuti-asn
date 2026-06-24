@@ -13,12 +13,14 @@ class Pegawai extends Model
     protected $fillable = [
         'user_id',
         'atasan_id',
-        'bidang_id', // 1. Ditambahkan agar bisa disimpan oleh Admin
-        'pangkat_golongan',
+        'bidang_id', 
+        'pangkat_id',
         'jabatan',
-        'tmt_kerja',
+        'masa_kerja',
         'sisa_cuti_tahunan',
-        'no_telepon', // 2. Disamakan dengan nama kolom di migration Anda
+        'sisa_cuti_besar',
+        'sisa_cuti_melahirkan',
+        'no_telepon', 
         'foto_profil', 
         'foto_ttd'
     ];
@@ -33,6 +35,11 @@ class Pegawai extends Model
         return $this->belongsTo(Bidang::class, 'bidang_id');
     }
 
+    public function pangkat()
+    {
+        return $this->belongsTo(Pangkat::class, 'pangkat_id');
+    }
+
     public function atasan()
     {
         return $this->belongsTo(User::class, 'atasan_id');
@@ -45,14 +52,14 @@ class Pegawai extends Model
 
     public function getMasaKerjaTahunAttribute()
     {
-        if (!$this->tmt_kerja) return 0;
-        return Carbon::parse($this->tmt_kerja)->diffInYears(now());
+        if (!$this->masa_kerja) return 0;
+        return Carbon::parse($this->masa_kerja)->diffInYears(now());
     }
 
     public function getMasaKerjaBulanAttribute()
     {
-        if(!$this->tmt_kerja) return 0;
+        if(!$this->masa_kerja) return 0;
         $tahun = $this->masa_kerja_tahun;
-        return Carbon::parse($this->tmt_kerja)->addYears($tahun)->diffInMonths(now());
+        return Carbon::parse($this->masa_kerja)->addYears($tahun)->diffInMonths(now());
     }
 }

@@ -14,7 +14,7 @@ class PersetujuanController extends Controller
     {
         // Kadin memproses berkas masuk yang sudah di-acc Sekdin
         $pengajuan = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
-            ->where('status', 'Menunggu Kadin') // Sesuai lemparan dari Sekdin
+            ->where('status', 'Menunggu Kadin') 
             ->latest()
             ->get();
 

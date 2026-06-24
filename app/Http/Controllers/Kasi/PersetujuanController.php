@@ -57,7 +57,7 @@ class PersetujuanController extends Controller
             return redirect()->route('kasi.persetujuan.index')->with('error', 'Berkas sudah diproses di tahapan lain.');
         }
 
-        // JIKA DISETUJUI (Proses TTD Digital Gambar)
+        // JIKA DISETUJUI (Proses TTD Digital Gambar/QR)
         if ($request->status === 'Disetujui') {
             
             // 1. Verifikasi Password Akun Kasi
@@ -74,10 +74,11 @@ class PersetujuanController extends Controller
                     ->withInput();
             }
 
-            // 3. Update Status Alur Berjalan ke Kabid
+            // 3. Update Status Alur Berjalan ke Kabid & Catat ID Kasi
             $pengajuan->status = 'Menunggu Kabid'; 
+            $pengajuan->id_atasan = Auth::user()->id;
             
-            // 4. Salin foto TTD Kasi & Catat Waktu Riil Persetujuan
+            // 4. Salin foto TTD/QR Kasi & Catat Waktu Riil Persetujuan
             $pengajuan->ttd_kasi = Auth::user()->pegawai->foto_ttd;
             $pengajuan->tgl_ttd_kasi = now();
             
@@ -85,7 +86,8 @@ class PersetujuanController extends Controller
             
         } else {
             // JIKA DITOLAK
-            $pengajuan->status = 'Ditolak Kasi'; 
+            $pengajuan->status = 'Ditolak'; 
+            $pengajuan->id_atasan = Auth::user()->id; 
             $pesan = 'Berkas pengajuan cuti telah ditolak.';
         }
         

@@ -85,10 +85,10 @@
             <tr>
                 <td class="border border-black px-2 py-0.5">3. Jabatan</td>
                 <td class="border border-black px-2 py-0.5">{{ $pengajuan->user->pegawai->jabatan ?? '-' }}</td>
-                <td class="border border-black px-2 py-0.5">4. Masa Kerja</td>
+                <td class="border border-black px-2 py-0.5">4. Masa Kerja CPNS</td>
                 <td class="border border-black px-2 py-0.5 font-sans font-bold">
-                    @if(!empty($pengajuan->user->pegawai->tmt_kerja))
-                        {{ floor(\Carbon\Carbon::parse($pengajuan->user->pegawai->tmt_kerja)->diffInYears(\Carbon\Carbon::now())) }} Tahun
+                    @if(!empty($pengajuan->user->pegawai->masa_kerja))
+                        {{ floor(\Carbon\Carbon::parse($pengajuan->user->pegawai->masa_kerja)->diffInYears(\Carbon\Carbon::now())) }} Tahun
                     @else
                         -
                     @endif

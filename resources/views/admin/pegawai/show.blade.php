@@ -31,13 +31,21 @@
 
             <div class="w-full border-t border-slate-100 pt-6 grid grid-cols-2 gap-4">
                 <div class="bg-slate-50 p-3 rounded-2xl text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wide mb-1">Sisa Cuti</p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wide mb-1">Sisa Cuti Tahunan</p>
                     <p class="text-lg font-bold text-slate-700">{{ $user->pegawai->sisa_cuti_tahunan ?? 0 }} <span class="text-xs font-normal text-slate-400">Hari</span></p>
                 </div>
                 <div class="bg-slate-50 p-3 rounded-2xl text-center">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wide mb-1">TMT Kerja</p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wide mb-1">Sisa Cuti Besar</p>
+                    <p class="text-lg font-bold text-slate-700">{{ $user->pegawai->sisa_cuti_besar ?? 0 }} <span class="text-xs font-normal text-slate-400">Hari</span></p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-2xl text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wide mb-1">Sisa Cuti Melahirkan</p>
+                    <p class="text-lg font-bold text-slate-700">{{ $user->pegawai->sisa_cuti_melahirkan ?? 0 }} <span class="text-xs font-normal text-slate-400">Hari</span></p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-2xl text-center">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wide mb-1">Masa Kerja CPNS</p>
                     <p class="text-sm font-bold text-slate-700 mt-1">
-                        {{ $user->pegawai->tmt_kerja ? \Carbon\Carbon::parse($user->pegawai->tmt_kerja)->translatedFormat('M Y') : '-' }}
+                        {{ $user->pegawai?->masa_kerja ? \Carbon\Carbon::parse($user->pegawai->masa_kerja)->translatedFormat('M Y') : '-' }}
                     </p>
                 </div>
             </div>
@@ -66,16 +74,23 @@
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Kluster Penempatan Bidang Kerja</p>
                     <p class="text-sm font-semibold text-indigo-600">{{ $user->pegawai->bidang->nama_bidang ?? 'Instansi Utama / Tanpa Bidang' }}</p>
                 </div>
+                
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Pangkat / Golongan</p>
-                    <p class="text-sm font-semibold text-slate-800">{{ $user->pegawai->pangkat_golongan ?? '-' }}</p>
+                    <p class="text-sm font-semibold text-slate-800">
+                        @if($user->pegawai?->pangkat)
+                            {{ $user->pegawai->pangkat->nama_pangkat }} ({{ $user->pegawai->pangkat->golongan }}/{{ $user->pegawai->pangkat->ruang }})
+                        @else
+                            <span class="text-slate-400 italic">-</span>
+                        @endif
+                    </p>
                 </div>
+                
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Atasan Penanggung Jawab Cuti</p>
                     <p class="text-sm font-semibold text-slate-700">
                         @if($user->pegawai?->atasan)
                             <span class="text-slate-800 font-bold">{{ $user->pegawai->atasan->nama }}</span> 
-                            {{-- PERUBAHAN: Mengganti fungsi helper palsu dengan fungsi PHP bawaan strtoupper --}}
                             <span class="text-xs text-slate-400">({{ strtoupper($user->pegawai->atasan->role) }})</span>
                         @else
                             <span class="text-slate-400 italic">Tidak terikat atasan (Otomatisasi Mandiri)</span>
@@ -83,20 +98,28 @@
                     </p>
                 </div>
                 <div>
-                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tanggal Mulai Tugas (TMT)</p>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tanggal Mulai Kerja CPNS</p>
                     <p class="text-sm font-semibold text-slate-800">
-                        {{ $user->pegawai->tmt_kerja ? \Carbon\Carbon::parse($user->pegawai->tmt_kerja)->translatedFormat('d F Y') : '-' }}
+                        {{ $user->pegawai?->masa_kerja ? \Carbon\Carbon::parse($user->pegawai->masa_kerja)->translatedFormat('d F Y') : '-' }}
                     </p>
                 </div>
                 <div>
-                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nomor Kontak Kontak HP/WA</p>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nomor Kontak HP/WA</p>
                     <p class="text-sm font-semibold text-slate-800">
                         @if($user->pegawai?->no_telepon)
-                            <a href="https://wa.me/{{ $user->pegawai->no_telepon }}" target="_blank" class="text-emerald-600 hover:underline flex items-center gap-1">
-                                <i class="fab fa-whatsapp"></i> {{ $user->pegawai->no_telepon }}
+                            @php
+                                $nomorWa = preg_replace('/[^0-9]/', '', $user->pegawai->no_telepon);
+                                if (str_starts_with($nomorWa, '0')) {
+                                    $nomorWa = '62' . substr($nomorWa, 1);
+                                } elseif (!str_starts_with($nomorWa, '62')) {
+                                    $nomorWa = '62' . $nomorWa;
+                                }
+                            @endphp
+                            <a href="https://wa.me/{{ $nomorWa }}" target="_blank" class="text-emerald-600 hover:underline flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> +62 {{ preg_replace('/^62|^0/', '', $user->pegawai->no_telepon) }}
                             </a>
                         @else
-                            -
+                            <span class="text-slate-400 italic">-</span>
                         @endif
                     </p>
                 </div>

@@ -29,7 +29,6 @@
             width: 100% !important;
         }
         .ts-wrapper .ts-control input:focus {
-            ring: none !important;
             box-shadow: none !important;
             outline: none !important;
         }
@@ -103,15 +102,23 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">NIP Pegawai <span class="text-rose-500">*</span></label>
-                    <input type="text" name="nip" value="{{ old('nip', $user->nip) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
+                    <input type="text" 
+                           name="nip" 
+                           value="{{ old('nip', $user->nip) }}" 
+                           class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none" 
+                           maxlength="20"
+                           pattern="[0-9]*"
+                           inputmode="numeric"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                           required>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Nama Lengkap & Gelar <span class="text-rose-500">*</span></label>
-                    <input type="text" name="nama" value="{{ old('nama', $user->nama) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
+                    <input type="text" name="nama" value="{{ old('nama', $user->nama) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none" required>
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Ganti Password</label>
-                    <input type="password" name="password" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" placeholder="Kosongkan jika tidak diubah">
+                    <input type="password" name="password" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none" placeholder="Kosongkan jika tidak diubah">
                 </div>
             </div>
         </div>
@@ -125,7 +132,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Role Hak Akses Aplikasi <span class="text-rose-500">*</span></label>
-                    <select name="role" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
+                    <select name="role" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none" required>
                         <option value="pegawai" {{ old('role', $user->role) == 'pegawai' ? 'selected' : '' }}>Pegawai / Staf Pelaksana</option>
                         <option value="kasi" {{ old('role', $user->role) == 'kasi' ? 'selected' : '' }}>Kasi / Kepala Seksi / Kasubbag TU</option>
                         <option value="kabid" {{ old('role', $user->role) == 'kabid' ? 'selected' : '' }}>Kabid / Kepala Bidang / Kepala UPTD</option>
@@ -137,7 +144,7 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Penempatan Kluster Bidang / Seksi Kerja</label>
-                    <select name="bidang_id" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden">
+                    <select name="bidang_id" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none">
                         <option value="">-- Tanpa Bidang Khusus (Misal: Kadin / Sekdin) --</option>
                         @foreach($bidangs as $bidang)
                             <option value="{{ $bidang->id }}" {{ old('bidang_id', $user->pegawai?->bidang_id) == $bidang->id ? 'selected' : '' }}>{{ $bidang->nama_bidang }}</option>
@@ -145,54 +152,64 @@
                     </select>
                 </div>
 
-                {{-- DROP DOWN ATASAN LANGSUNG MURNI BERDASARKAN BIDANG --}}
                 <div class="w-full">
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Atasan Langsung</label>
-                    <div class="w-full">
-                        <select name="atasan_id" id="select-atasan" class="w-full">
-                            <option value="">-- Tanpa Atasan (Tertinggi / Sistem Otomatisasi Mandiri) --</option>
-                            
-                            {{-- PIMPINAN UTAMA (KADIN/SEKDIN YANG TIDAK PUNYA BIDANG ID) --}}
-                            <optgroup label="PIMPINAN UTAMA (TANPA BIDANG)">
-                                @foreach($atasans->where('pegawai.bidang_id', null) as $atasan)
+                    <select name="atasan_id" id="select-atasan" class="w-full outline-none">
+                        <option value="">-- Tanpa Atasan (Tertinggi / Sistem Otomatisasi Mandiri) --</option>
+                        
+                        <optgroup label="PIMPINAN UTAMA (TANPA BIDANG)">
+                            @foreach($atasans->where('pegawai.bidang_id', null) as $atasan)
+                                <option value="{{ $atasan->id }}" {{ old('atasan_id', $user->pegawai?->atasan_id) == $atasan->id ? 'selected' : '' }}>
+                                    {{ $atasan->nama }} ({{ strtoupper($atasan->role) }}{{ $atasan->pegawai?->jabatan ? ' - ' . $atasan->pegawai->jabatan : '' }})
+                                </option>
+                            @endforeach
+                        </optgroup>
+
+                        @foreach($bidangs as $bidang)
+                            <optgroup label="{{ strtoupper($bidang->nama_bidang) }}">
+                                @foreach($atasans->where('pegawai.bidang_id', $bidang->id) as $atasan)
                                     <option value="{{ $atasan->id }}" {{ old('atasan_id', $user->pegawai?->atasan_id) == $atasan->id ? 'selected' : '' }}>
-                                        {{ $atasan->nama }} ({{ strtoupper($atasan->role) }}{{ $atasan->pegawai?->jabatan ? ' - ' . $atasan->pegawai->jabatan : '' }})
+                                        {{ $atasan->nama }} (NIP. {{ $atasan->nip }}{{ $atasan->pegawai?->jabatan ? ' - ' . $atasan->pegawai->jabatan : '' }})
                                     </option>
                                 @endforeach
                             </optgroup>
-
-                            {{-- GROUP BERDASARKAN NAMA BIDANG YANG TERSEDIA --}}
-                            @foreach($bidangs as $bidang)
-                                <optgroup label="{{ strtoupper($bidang->nama_bidang) }}">
-                                    @foreach($atasans->where('pegawai.bidang_id', $bidang->id) as $atasan)
-                                        <option value="{{ $atasan->id }}" {{ old('atasan_id', $user->pegawai?->atasan_id) == $atasan->id ? 'selected' : '' }}>
-                                            {{ $atasan->nama }} (NIP. {{ $atasan->nip }}{{ $atasan->pegawai?->jabatan ? ' - ' . $atasan->pegawai->jabatan : '' }})
-                                        </option>
-                                    @endforeach
-                                </optgroup>
-                            @endforeach
-                        </select>
-                    </div>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Nama Jabatan Struktural / Fungsional</label>
-                    <input type="text" name="jabatan" value="{{ old('jabatan', $user->pegawai?->jabatan) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden">
+                    <input type="text" name="jabatan" value="{{ old('jabatan', $user->pegawai?->jabatan) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none">
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-5 pt-2">
                 <div class="md:col-span-2">
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Pangkat / Golongan Ruang</label>
-                    <input type="text" name="pangkat_golongan" value="{{ old('pangkat_golongan', $user->pegawai?->pangkat_golongan) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden">
+                    <select name="pangkat_id" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none">
+                        <option value="">-- Pilih Pangkat / Golongan --</option>
+                        @foreach($pangkats as $pangkat)
+                            <option value="{{ $pangkat->id }}" {{ old('pangkat_id', $user->pegawai?->pangkat_id) == $pangkat->id ? 'selected' : '' }}>
+                                {{ $pangkat->nama_pangkat }} ({{ $pangkat->golongan }}/{{ $pangkat->ruang }})
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">TMT Mulai Kerja</label>
-                    <input type="date" name="tmt_kerja" value="{{ old('tmt_kerja', $user->pegawai?->tmt_kerja) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden text-slate-500">
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Masa Mulai Kerja CPNS</label>
+                    <input type="date" name="masa_kerja" value="{{ old('masa_kerja', $user->pegawai?->masa_kerja) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none text-slate-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Kuota Sisa Cuti Tahunan <span class="text-rose-500">*</span></label>
-                    <input type="number" name="sisa_cuti_tahunan" value="{{ old('sisa_cuti_tahunan', $user->pegawai?->sisa_cuti_tahunan ?? 0) }}" min="0" max="30" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" required>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Sisa Cuti Tahunan <span class="text-rose-500">*</span></label>
+                    <input type="number" name="sisa_cuti_tahunan" value="{{ old('sisa_cuti_tahunan', $user->pegawai?->sisa_cuti_tahunan ?? 0) }}" min="0" max="12" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Sisa Cuti Besar <span class="text-rose-500">*</span></label>
+                    <input type="number" name="sisa_cuti_besar" value="{{ old('sisa_cuti_besar', $user->pegawai?->sisa_cuti_besar ?? 0) }}" min="0" max="90" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Sisa Cuti Melahirkan <span class="text-rose-500">*</span></label>
+                    <input type="number" name="sisa_cuti_melahirkan" value="{{ old('sisa_cuti_melahirkan', $user->pegawai?->sisa_cuti_melahirkan ?? 0) }}" min="0" max="90" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none" required>
                 </div>
             </div>
 
@@ -200,8 +217,7 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Nomor Telepon / WhatsApp Utama</label>
                     <div class="relative flex items-center">
-                        <span class="absolute left-4 text-sm font-semibold text-slate-400 pointer-events-none">+62</span>
-                        <input type="text" name="no_telepon" value="{{ old('no_telepon', $user->pegawai?->no_telepon) }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 pl-14 pr-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-hidden" placeholder="8123456789">
+                        <input type="text" name="no_telepon" value="{{ old('no_telepon', $user->pegawai?->no_telepon ? preg_replace('/^(62|0)?/', '0', $user->pegawai->no_telepon) : '') }}" class="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-sm text-slate-800 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition outline-none" placeholder="Contoh: 08123456789">
                     </div>
                 </div>
             </div>

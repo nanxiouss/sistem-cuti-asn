@@ -4,7 +4,7 @@
         {{-- Breadcrumb Dinamis --}}
         <nav class="flex mb-6 text-xs sm:text-sm text-slate-500 font-medium overflow-x-auto hide-scrollbar whitespace-nowrap pb-2">
             <ol class="flex items-center space-x-2">
-                <li><a href="{{ route('kabid.dashboard') }}" class="hover:text-lime-600 transition-colors">Home</a></li>
+                <li><a href="{{ route('admin.dashboard') }}" class="hover:text-lime-600 transition-colors">Home</a></li>
                 <li><span class="mx-2 text-slate-400">/</span></li>
                 <li><a href="{{ route('profile.index') }}" class="hover:text-lime-600 transition-colors">Profil Saya</a></li>
                 <li><span class="mx-2 text-slate-400">/</span></li>
@@ -64,7 +64,7 @@
 
                     <div class="border-t border-slate-100 bg-slate-50 p-3 sm:p-4">
                         <nav class="flex flex-col gap-1.5">
-                            <a href="{{ route('kabid.dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl text-slate-600 hover:bg-white hover:text-lime-600 hover:shadow-sm transition-all border border-transparent hover:border-slate-200">
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl text-slate-600 hover:bg-white hover:text-lime-600 hover:shadow-sm transition-all border border-transparent hover:border-slate-200">
                                 <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                                 </svg>
@@ -93,7 +93,6 @@
                 {{-- TAB 1: DATA UTAMA --}}
                 <div x-show="activeTab === 'Data Utama'" class="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 p-1 sm:p-2">
                     <div class="flex flex-col">
-                        {{-- PERBAIKAN: flex-col di mobile, flex-row di desktop --}}
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors rounded-t-2xl gap-2 sm:gap-0">
                             <div class="flex items-center gap-3">
                                 <div class="p-2 bg-slate-100 rounded-lg text-slate-500 shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>
@@ -113,7 +112,14 @@
                                 <div class="p-2 bg-slate-100 rounded-lg text-slate-500 shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></div>
                                 <span class="text-sm font-semibold text-slate-600">No. Telepon Aktif</span>
                             </div>
-                            <span class="text-sm font-bold text-slate-900 sm:text-right pl-11 sm:pl-0">{{ Auth::user()->pegawai->no_telepon ?? '-' }}</span>
+                            {{-- PENYESUAIAN FORMAT: Langsung menampilkan angka dengan awalan 08 sesuai database --}}
+                            <span class="text-sm font-bold text-slate-900 sm:text-right pl-11 sm:pl-0">
+                                @if(Auth::user()->pegawai?->no_telepon)
+                                    {{ preg_replace('/^(62|0)?/', '0', Auth::user()->pegawai->no_telepon) }}
+                                @else
+                                    -
+                                @endif
+                            </span>
                         </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors gap-2 sm:gap-0">
                             <div class="flex items-center gap-3">
@@ -146,15 +152,17 @@
                                 <div class="p-2 bg-slate-100 rounded-lg text-slate-500 shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg></div>
                                 <span class="text-sm font-semibold text-slate-600">Pangkat / Golongan Ruang</span>
                             </div>
-                            <span class="text-sm font-bold text-slate-900 sm:text-right pl-11 sm:pl-0">{{ Auth::user()->pegawai->pangkat_golongan ?? 'Belum Diisi' }}</span>
+                            <span class="text-sm font-bold text-slate-900 sm:text-right pl-11 sm:pl-0">
+                                {{ Auth::user()->pegawai->pangkat?->nama_pangkat ?? 'Belum Diisi' }}
+                            </span>
                         </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 hover:bg-slate-50 transition-colors rounded-b-2xl gap-2 sm:gap-0">
                             <div class="flex items-center gap-3">
                                 <div class="p-2 bg-slate-100 rounded-lg text-slate-500 shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
-                                <span class="text-sm font-semibold text-slate-600">TMT Kerja <span class="hidden sm:inline">(Terhitung Mulai Tanggal)</span></span>
+                                <span class="text-sm font-semibold text-slate-600">Masa Mulai Kerja CPNS<span class="hidden sm:inline">(Terhitung Mulai Tanggal)</span></span>
                             </div>
                             <span class="text-sm font-bold text-slate-900 sm:text-right pl-11 sm:pl-0">
-                                {{ Auth::user()->pegawai->tmt_kerja ? \Carbon\Carbon::parse(Auth::user()->pegawai->tmt_kerja)->translatedFormat('d F Y') : 'Belum Diisi' }}
+                                {{ Auth::user()->pegawai->masa_kerja ? \Carbon\Carbon::parse(Auth::user()->pegawai->masa_kerja)->translatedFormat('d F Y') : 'Belum Diisi' }}
                             </span>
                         </div>
                     </div>

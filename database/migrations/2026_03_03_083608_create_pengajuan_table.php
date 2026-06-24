@@ -19,7 +19,6 @@ return new class extends Migration
 
             $table->text('alasan');
             $table->date('tgl_mulai');
-            // HAPUS ->after('tgl_mulai') di sini karena tidak perlu untuk Schema::create
             $table->date('tgl_selesai')->nullable();
             $table->integer('lama_cuti');
             $table->text('alamat_cuti');

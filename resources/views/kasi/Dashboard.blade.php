@@ -109,7 +109,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <span class="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-md text-xs font-bold border border-indigo-100">
-                                            {{ $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}
+                                            {{ $item->jenisCuti->nama ?? 'Cuti Tahunan' }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-sm">
@@ -117,7 +117,7 @@
                                         {{ \Carbon\Carbon::parse($item->tgl_selesai)->translatedFormat('d M Y') }}
                                     </td>
                                     <td class="px-6 py-4 font-semibold text-slate-800">
-                                        {{ \Carbon\Carbon::parse($item->tgl_mulai)->diffInDays(\Carbon\Carbon::parse($item->tgl_selesai)) + 1 }} Hari
+                                        {{ $item->lama_cuti }} Hari
                                     </td>
                                     <td class="px-6 py-4 text-center">
                                         <a href="{{ route('kasi.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">

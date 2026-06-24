@@ -1,5 +1,5 @@
 <x-layouts.pegawai.app>
-    <x-slot:title>Dashboard Pegawai E-CUTI ESDM</x-slot:title>
+    <x-slot:title>Dashboard Pelaksana E-CUTI ESDM</x-slot:title>
 
     <div class="pt-24 pb-12 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -45,9 +45,9 @@
                             class="px-6 py-3 bg-lime-500 hover:bg-lime-400 text-slate-900 rounded-xl font-bold shadow-lg shadow-lime-500/30 transition-all duration-300 ease-out transform hover:-translate-y-1">
                             Ajukan Cuti Baru
                         </a>
-                        <a href="{{ route('pegawai.kalender.index') }}"
+                        <a href="{{ route('pegawai.riwayat.index') }}"
                             class="inline-flex items-center justify-center px-6 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-medium backdrop-blur-md transition-all duration-300 ease-out transform hover:-translate-y-1">
-                            Lihat Kalender
+                            Lihat Riwayat Cuti
                         </a>
                     </div>
                 </div>

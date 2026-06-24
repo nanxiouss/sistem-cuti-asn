@@ -17,9 +17,9 @@ class PegawaiSeeder extends Seeder
                 'user_id' => $admin->id,
                 'atasan_id' => null,
                 'bidang_id' => 1,
-                'pangkat_golongan' => 'Penata Muda / III.a',
+                'pangkat_id' => 6,
                 'jabatan' => 'Analis Kepegawaian',
-                'tmt_kerja' => '2020-04-05',
+                'masa_kerja' => '2020-04-05',
                 'sisa_cuti_tahunan' => 12
             ]);
         }

@@ -40,8 +40,8 @@
                 <thead>
                     <tr class="bg-slate-50/50">
                         <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Pegawai</th>
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Jabatan / Bidang</th>
-                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">TMT Kerja</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Jabatan / Pangkat / Bidang</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Masa Mulai Kerja CPNS</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Sisa Cuti</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role Akses</th>
                         <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Aksi</th>
@@ -63,13 +63,14 @@
                         </td>
                         <td class="px-6 py-4">
                             <p class="text-sm font-medium text-slate-700">{{ $u->pegawai->jabatan ?? '-' }}</p>
+                            <p class="text-[11px] text-slate-500 font-medium mb-1">{{ $u->pegawai->pangkat->nama_lengkap ?? 'Pangkat Belum Diatur' }}</p>
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wide">
                                 {{ $u->pegawai->bidang->nama_bidang ?? 'Tanpa Bidang/Instansi Utama' }}
                             </p>
                         </td>
                         <td class="px-6 py-4">
                             <p class="text-sm text-slate-600">
-                                {{ $u->pegawai->tmt_kerja ? \Carbon\Carbon::parse($u->pegawai->tmt_kerja)->translatedFormat('d M Y') : '-' }}
+                                {{ $u->pegawai->masa_kerja ? \Carbon\Carbon::parse($u->pegawai->masa_kerja)->translatedFormat('d M Y') : '-' }}
                             </p>
                         </td>
                         <td class="px-6 py-4 text-center">
@@ -95,7 +96,6 @@
                             </span>
                         </td>
                         <td class="px-6 py-4">
-                            {{-- PERUBAHAN: Bagian Aksi Menjadi Tombol Teks --}}
                             <div class="flex justify-center items-center gap-2">
                                 <a href="{{ route('admin.pegawai.show', $u->id) }}" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 rounded-lg text-xs font-bold transition">
                                     Detail

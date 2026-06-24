@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -25,7 +26,6 @@ class ProfileController extends Controller
             $roleFolder = 'kasumum';
         }
         
-        // Mengarahkan ke folder view sesuai role user yang sedang login (lowercase)
         return view("{$roleFolder}.profile.index", [
             'user' => $user,
         ]);
@@ -55,34 +55,32 @@ class ProfileController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $user = $request->user();
-
-        // Eager load atau ambil data relasi pegawai milik user saat ini
         $pegawai = $user->pegawai;
 
-        // 1. Validasi gabungan antara data User dan data Pegawai
+        // 1. Validasi: Mengubah batas maksimal foto & ttd menjadi 5MB (5120 KB)
         $request->validate([
-            'nama'             => 'required|string|max:100',
-            'no_telepon'       => 'required|string|max:20',
-            'pangkat_golongan' => 'nullable|string|max:100',
-            'jabatan'          => 'nullable|string|max:100',
-            'unit_kerja'       => 'nullable|string|max:100',
-            'tmt_kerja'        => 'nullable|date',
-            'foto_profil'      => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'foto_ttd'         => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'nama'         => 'required|string|max:100',
+            'no_telepon'   => 'required|string|max:20',
+            'foto_profil'  => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'foto_ttd'     => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'password'     => 'nullable|string|min:8|confirmed', 
         ]);
 
-        // 2. Update data nama pada tabel 'users'
-        $user->update([
-            'nama' => $request->nama
-        ]);
+        // Format Nomor Telepon agar selalu disimpan dengan awalan '0'
+        $noTelepon = preg_replace('/[^0-9]/', '', $request->no_telepon);
+        $noTelepon = preg_replace('/^62|^0/', '', $noTelepon);
+        $noTelepon = '0' . $noTelepon;
+
+        // 2. Update data pada tabel 'users' 
+        $user->nama = $request->nama;
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
 
         // 3. Siapkan array data untuk disimpan ke tabel 'pegawais'
         $dataPegawai = [
-            'no_telepon'       => $request->no_telepon,
-            'pangkat_golongan' => $request->pangkat_golongan,
-            'jabatan'          => $request->jabatan,
-            'unit_kerja'       => $request->unit_kerja,
-            'tmt_kerja'        => $request->tmt_kerja,
+            'no_telepon' => $noTelepon,
         ];
 
         // 4. Proses Upload Foto Profil jika ada file baru
@@ -93,15 +91,35 @@ class ProfileController extends Controller
             $dataPegawai['foto_profil'] = $request->file('foto_profil')->store('profil', 'public');
         }
 
-        // 5. Proses Upload Foto Tanda Tangan jika ada file baru
+        // 5. Proses Upload & Generate QR Code Tanda Tangan
         if ($request->hasFile('foto_ttd')) {
+            // Hapus file QR / TTD lama jika ada
             if ($pegawai && $pegawai->foto_ttd) {
                 Storage::disk('public')->delete($pegawai->foto_ttd);
             }
-            $dataPegawai['foto_ttd'] = $request->file('foto_ttd')->store('ttd', 'public');
+
+            // Simpan gambar TTD asli yang diupload user ke folder terpisah
+            $ttdAsliPath = $request->file('foto_ttd')->store('ttd_asli', 'public');
+
+            // Siapkan konten/isi dari QR Code.
+            $qrContent = asset('storage/' . $ttdAsliPath);
+
+            // Generate QR Code menjadi bentuk string SVG
+            $qrSvg = \SimpleSoftwareIO\QrCode\Facades\QrCode::size(300)
+                        ->margin(1)
+                        ->generate($qrContent);
+
+            // Tentukan nama file QR Code baru
+            $qrFileName = 'ttd/qr_' . $user->id . '_' . time() . '.svg';
+
+            // Simpan file QR Code tersebut ke storage public
+            Storage::disk('public')->put($qrFileName, $qrSvg);
+
+            // Masukkan path QR Code ke array untuk disimpan di database
+            $dataPegawai['foto_ttd'] = $qrFileName;
         }
 
-        // 6. Jalankan updateOrCreate agar jika data di tabel pegawais belum ada, otomatis dibuatkan
+        // 6. Jalankan updateOrCreate
         $user->pegawai()->updateOrCreate(
             ['user_id' => $user->id],
             $dataPegawai
@@ -122,7 +140,6 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
-
         $user->delete();
 
         $request->session()->invalidate();

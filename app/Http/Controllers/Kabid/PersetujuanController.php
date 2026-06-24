@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Kabid;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
+use App\Models\Bidang; // Panggil Model Bidang untuk pencarian parent_id
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,11 +16,21 @@ class PersetujuanController extends Controller
         $user = Auth::user();
         $bidangIdKabid = $user->pegawai->bidang_id ?? null;
 
+        // --- PERBAIKAN LOGIKA: Ambil ID Bidang Induk & Seluruh Seksi di bawahnya ---
+        $daftarBidangBawahan = [];
+        if ($bidangIdKabid) {
+            $daftarBidangBawahan = Bidang::where('id', $bidangIdKabid)
+                ->orWhere('parent_id', $bidangIdKabid)
+                ->pluck('id')
+                ->toArray(); // Menghasilkan array ID kelompok bidang, misal: [5, 6, 7, 8]
+        }
+
         $pengajuan = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
             ->where('status', 'Menunggu Kabid')
-            ->when($bidangIdKabid, function ($query) use ($bidangIdKabid) {
-                $query->whereHas('user.pegawai', function ($q) use ($bidangIdKabid) {
-                    $q->where('bidang_id', $bidangIdKabid);
+            ->when(!empty($daftarBidangBawahan), function ($query) use ($daftarBidangBawahan) {
+                $query->whereHas('user.pegawai', function ($q) use ($daftarBidangBawahan) {
+                    // Menggunakan whereIn agar mencakup semua staff dari sub-seksi pecahan
+                    $q->whereIn('bidang_id', $daftarBidangBawahan);
                 });
             })
             ->latest()
@@ -42,8 +53,6 @@ class PersetujuanController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validasi input disamakan gayanya dengan Kasi
-        // Perhatikan form Kabid di View memakai name="catatan_kabid"
         $request->validate([
             'status' => 'required|in:Disetujui,Ditolak', 
             'catatan_kabid' => 'required_if:status,Ditolak|nullable|string|max:500',
@@ -80,7 +89,7 @@ class PersetujuanController extends Controller
             // 3. Update Status Alur Berjalan ke Kasubbag Umum
             $pengajuan->status = 'Menunggu Kasubbag Umum'; 
             
-            // 4. Salin foto TTD Kabid & Catat Waktu Riil Persetujuan (Penambahan yang diminta)
+            // 4. Salin foto TTD Kabid & Catat Waktu Riil Persetujuan
             $pengajuan->ttd_kabid = Auth::user()->pegawai->foto_ttd;
             $pengajuan->tgl_ttd_kabid = now();
             

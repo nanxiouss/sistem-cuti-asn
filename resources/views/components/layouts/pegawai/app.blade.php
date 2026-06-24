@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? 'Dashboard Pegawai' }} - E-CUTI ESDM</title>
+    <title>{{ $title ?? 'Dashboard Pelaksana' }} - E-CUTI ESDM</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -73,8 +73,8 @@
     <footer class="bg-white border-t border-slate-200 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-                <p>&copy; {{ date('Y') }} Dinas Energi Dan Sumber Daya Mineral</p>
-                <span>Sistem Informasi Kepegawaian Beta</span>
+                <p>&copy; {{  date('Y') }} Dinas Energi Dan Sumber Daya Mineral</p>
+                <span class="font-bold text-lime-600">Panel Pelaksana</span>
             </div>
         </div>
     </footer>

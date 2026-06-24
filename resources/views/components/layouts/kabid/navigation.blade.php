@@ -26,6 +26,9 @@
                 <a href="{{ route('kabid.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kabid.persetujuan*') ? $activeClass : $inactiveClass }}">
                     Persetujuan Cuti
                 </a>
+                <a href="{{ route('kabid.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kabid.riwayat*') ? $activeClass : $inactiveClass }}">
+                    Riwayat
+                </a>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">

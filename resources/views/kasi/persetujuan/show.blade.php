@@ -32,20 +32,31 @@
                 {{-- KONTEN SEBELAH KIRI (Ambil 2 Kolom) --}}
                 <div class="md:col-span-2 space-y-6">
                     
-                    {{-- Informasi Pegawai --}}
+                    {{-- Informasi Pegawai (Ditambahkan Foto Profil) --}}
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <h3 class="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
                             <i class="fas fa-user-circle text-lime-500"></i> Informasi Pegawai
                         </h3>
+                        
+                        <div class="flex items-center gap-5 mb-5 border-b border-slate-100 pb-5">
+                            {{-- Container Foto Profil --}}
+                            <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0 border-2 border-white shadow-sm">
+                                @if($pengajuan->user->pegawai && $pengajuan->user->pegawai->foto_profil)
+                                    <img src="{{ asset('storage/' . $pengajuan->user->pegawai->foto_profil) }}" alt="Foto Profil" class="w-full h-full object-cover">
+                                @else
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($pengajuan->user->nama ?? 'User') }}&background=E2E8F0&color=475569" alt="Default Profil" class="w-full h-full object-cover">
+                                @endif
+                            </div>
+                            
+                            {{-- Info Utama --}}
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-800">{{ $pengajuan->user->nama ?? '-' }}</h4>
+                                <p class="text-sm text-slate-500 font-medium">NIP. {{ $pengajuan->user->pegawai->nip ?? $pengajuan->user->nip ?? '-' }}</p>
+                            </div>
+                        </div>
+
+                        {{-- Info Tambahan Bidang & Jabatan --}}
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Nama Lengkap</p>
-                                <p class="font-medium text-slate-800">{{ $pengajuan->user->nama ?? '-' }}</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">NIP / NIK</p>
-                                <p class="font-medium text-slate-800">{{ $pengajuan->user->pegawai->nip ?? $pengajuan->user->nip ?? '-' }}</p>
-                            </div>
                             <div>
                                 <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Bidang / Seksi</p>
                                 <p class="font-medium text-slate-800">{{ $pengajuan->user->pegawai->bidang->nama_bidang ?? '-' }}</p>
@@ -67,7 +78,8 @@
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-sm font-semibold text-slate-600">Jenis Cuti</span>
                                 <span class="px-3 py-1 bg-indigo-100 text-indigo-700 font-bold rounded-lg text-sm">
-                                    {{ $pengajuan->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}
+                                    {{-- Hilangkan fallback 'Cuti Tahunan' agar selalu dinamis sesuai relasi DB --}}
+                                    {{ $pengajuan->jenisCuti->nama ?? $pengajuan->jenisCuti->nama_cuti ?? '-' }}
                                 </span>
                             </div>
                             <div class="flex justify-between items-center">
@@ -111,7 +123,7 @@
                         @endif
                     </div>
 
-                    {{-- Komponen Tracking TTD Pegawai (Pemohon) - SEKARANG ADA DI DALAM BLOK KIRI --}}
+                    {{-- Komponen Tracking TTD Pegawai (Pemohon) --}}
                     <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
@@ -131,20 +143,16 @@
                             {{-- Area Spesimen TTD Gambar Asli + Badge Aplikasi --}}
                             <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
                                 @if(!empty($pengajuan->user->ttd))
-                                    <img src="{{ asset('storage/' . $pengajuan->user->ttd) }}" alt="Tanda Tangan Pegawai" class="h-12 object-contain mix-blend-multiply max-w-[120px]">
+                                    <img src="{{ asset('storage/' . $pengajuan->user->ttd) }}" alt="Tanda Tangan Pegawai" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
                                 @elseif(!empty($pengajuan->ttd_pegawai))
-                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" alt="Tanda Tangan Pegawai" class="h-12 object-contain mix-blend-multiply max-w-[120px]">
+                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" alt="Tanda Tangan Pegawai" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
                                 @else
                                     <span class="text-[10px] text-slate-400 italic mr-1">(Belum ada spesimen TTD)</span>
                                 @endif
-
-                                <div class="px-2.5 py-1 bg-blue-600 text-white font-black text-xs italic rounded tracking-wide shadow-sm select-none uppercase transform -rotate-1">
-                                    cutinya'
-                                </div>
                             </div>
                         </div>
                     </div>
-                </div> {{-- <-- PENUTUP BLOK SEBELAH KIRI PINDAH KE SINI --}}
+                </div> 
 
                 {{-- KONTEN SEBELAH KANAN (Panel Konfirmasi Aksi) --}}
                 <div class="space-y-6">

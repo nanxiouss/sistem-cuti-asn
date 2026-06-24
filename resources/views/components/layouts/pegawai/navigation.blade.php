@@ -9,7 +9,7 @@
 
                     <div class="leading-tight border-l-2 border-slate-200 pl-4">
                         <span class="text-xl font-extrabold tracking-tighter text-slate-800 block">E-CUTI</span>
-                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">PANEL Pegawai</p>
+                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em]">PANEL Pelaksana</p>
                     </div>
                 </a>
             </div>
@@ -31,9 +31,9 @@
                     Ajukan Cuti
                 </a>
 
-                <a href="{{ route('pegawai.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.kalender*') ? $activeClass : $inactiveClass }}">
+                {{-- <a href="{{ route('pegawai.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.kalender*') ? $activeClass : $inactiveClass }}">
                     Kalender
-                </a>
+                </a> --}}
 
                 <a href="{{ route('pegawai.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('pegawai.riwayat*') ? $activeClass : $inactiveClass }}">
                     Riwayat
@@ -73,7 +73,7 @@
                                 {{ Auth::user()->nama }}
                             </span>
                             <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-lime-50 text-lime-600 tracking-wider uppercase border border-lime-100 mt-1">
-                                {{ Auth::user()->jabatan ?? 'Pegawai' }}
+                                {{ Auth::user()->jabatan ?? 'Pelaksana' }}
                             </span>
                         </div>
 

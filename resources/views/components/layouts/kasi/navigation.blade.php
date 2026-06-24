@@ -26,9 +26,9 @@
                 <a href="{{ route('kasi.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.persetujuan*') ? $activeClass : $inactiveClass }}">
                     Persetujuan Cuti
                 </a>
-                {{-- <a href="{{ route('#') }}" class="{{ navClass }} {{ request()->routeIs('kasi.riwayat') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('kasi.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.riwayat') ? $activeClass : $inactiveClass }}">
                     Riwayat
-                </a> --}}
+                </a>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">

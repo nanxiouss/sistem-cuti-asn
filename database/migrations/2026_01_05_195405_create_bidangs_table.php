@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('bidangs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('parent_id')
+                  ->nullable()
+                  ->constrained('bidangs')
+                  ->onDelete('cascade');
             $table->string('nama_bidang', 200);
             $table->timestamps();
         });
