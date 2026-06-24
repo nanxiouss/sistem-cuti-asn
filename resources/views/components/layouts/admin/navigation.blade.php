@@ -15,11 +15,10 @@
 
             <div class="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-sm p-1 rounded-full border border-white/40 shadow-sm self-center">
                 @php
-                $navClass = "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group overflow-hidden";
+                $navClass = "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group overflow-hidden";
                 $activeClass = "bg-slate-900 text-white shadow-md";
                 $inactiveClass = "text-slate-600 hover:text-lime-500 hover:bg-white";
                 @endphp
-
                 <a href="{{ route('admin.dashboard') }}" class="{{ $navClass }} {{ request()->routeIs('admin.dashboard') ? $activeClass : $inactiveClass }}">
                     Dashboard
                 </a>
@@ -31,6 +30,9 @@
                 </a>
                 <a href="{{ route('admin.pemberkasan.index') }}" class="{{ $navClass }} {{ request()->routeIs('admin.pemberkasan*') ? $activeClass : $inactiveClass }}">
                     Pemberkasan
+                </a>
+                <a href="{{ route('admin.laporan.index') }}" class="{{ $navClass }} {{ request()->routeIs('admin.laporan*') ? $activeClass : $inactiveClass }}">
+                    Laporan
                 </a>
             </div>
 

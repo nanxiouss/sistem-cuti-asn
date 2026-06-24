@@ -15,136 +15,247 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {{-- Grid Statistik Utama --}}
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                
-                {{-- Card 1: Antrean Berkas Kadin --}}
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center justify-between transition-all hover:shadow-md">
-                    <div class="space-y-1">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Antrian Persetujuan</span>
-                        <h3 class="text-3xl font-black text-slate-800 tracking-tight">{{ $statistik['menunggu_aksi'] }}</h3>
-                        <p class="text-[11px] text-amber-600 font-medium flex items-center gap-1 pt-1">
-                            <i class="fas fa-clock"></i> Menunggu acc Kadin
+            {{-- HERO BANNER PREMIUM ALA ADMIN --}}
+            <div class="relative rounded-3xl overflow-hidden bg-slate-900 shadow-2xl shadow-slate-200/50 mb-10 -mt-2">
+                <div class="absolute inset-0">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/20 mix-blend-overlay"></div>
+                    <img src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1600&q=80"
+                        class="w-full h-full object-cover opacity-10 mix-blend-luminosity" alt="Office bg">
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/50"></div>
+                </div>
+
+                <div class="relative z-10 p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-400/20 text-indigo-300 text-xs font-semibold backdrop-blur-md cursor-default">
+                            <span class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.8)] animate-pulse"></span>
+                            {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+                        </div>
+
+                        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-300">{{ $sapaan ?? 'Selamat Datang' }},</span> <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-300">
+                                {{ $user->nama ?? $user->name ?? 'Kepala Dinas' }}
+                            </span>
+                        </h1>
+
+                        <p class="text-slate-400 text-base md:text-lg max-w-lg leading-relaxed">
+                            Hari ini status kehadiran Bapak/Ibu tercatat sebagai 
+                            @if($is_cuti)
+                                <span class="text-amber-400 font-extrabold underline decoration-wavy decoration-amber-400/50">Sedang Cuti</span>.
+                            @else
+                                <span class="text-indigo-400 font-extrabold inline-flex items-center gap-1.5">
+                                    Hadir Kerja 
+                                    <span class="relative flex h-2 w-2">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                                    </span>
+                                </span>.
+                            @endif
+                            Pantau pergerakan berkas dan berikan persetujuan akhir secara real-time.
                         </p>
+
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <a href="{{ route('kadin.persetujuan.index') }}"
+                                class="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/30 transition-all duration-300 ease-out transform hover:-translate-y-1">
+                                Cek Antrean Berkas
+                            </a>
+                        </div>
                     </div>
-                    <div class="w-14 h-14 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center text-xl shadow-inner border border-amber-100/50">
-                        <i class="fas fa-file-signature"></i>
+
+                    {{-- SIDE PANEL INFO SISTEM / MEJA KERJA --}}
+                    <div class="lg:col-span-5 relative hidden md:block">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl blur opacity-10"></div>
+                        <div class="relative bg-slate-800/60 backdrop-blur-xl border border-white/10 p-7 rounded-3xl text-white shadow-xl">
+                            <div class="flex items-center justify-between mb-5 border-b border-white/10 pb-4">
+                                <h3 class="font-bold text-lg flex items-center gap-2">
+                                    <i class="fas fa-info-circle text-indigo-400"></i> Meja Persetujuan
+                                </h3>
+                                <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded md:uppercase tracking-wider font-bold border border-indigo-500/20">
+                                    SOP KADIN
+                                </span>
+                            </div>
+                            <ul class="space-y-5">
+                                <li class="flex gap-4">
+                                    <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">1</div>
+                                    <div>
+                                        <span class="block text-sm font-semibold text-slate-200">Persetujuan Final</span>
+                                        <p class="text-xs text-slate-400 leading-relaxed mt-1">Berikan keputusan (Setuju/Tolak) pada berkas cuti yang telah diparaf oleh Sekretaris Dinas.</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-4">
+                                    <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">2</div>
+                                    <div>
+                                        <span class="block text-sm font-semibold text-slate-200">Monitoring Instansi</span>
+                                        <p class="text-xs text-slate-400 leading-relaxed mt-1">Pantau jumlah pegawai yang sedang cuti secara global untuk memastikan pelayanan publik tetap optimal.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- GRID STATISTIK UTAMA --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {{-- Card 1: Antrean Berkas --}}
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Antrian Persetujuan</p>
+                            <h3 class="text-3xl font-black text-slate-800 tracking-tight mt-1">{{ $statistik['menunggu_aksi'] }}</h3>
+                            <p class="text-[11px] text-amber-600 font-medium flex items-center gap-1 pt-2">
+                                <i class="fas fa-clock"></i> Menunggu acc Kadin
+                            </p>
+                        </div>
+                        <div class="w-14 h-14 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center text-xl shadow-inner border border-amber-100/50">
+                            <i class="fas fa-file-signature"></i>
+                        </div>
                     </div>
                 </div>
 
                 {{-- Card 2: Pegawai Cuti Hari Ini --}}
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center justify-between transition-all hover:shadow-md">
-                    <div class="space-y-1">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Cuti Hari Ini</span>
-                        <h3 class="text-3xl font-black text-slate-800 tracking-tight">{{ $statistik['pegawai_cuti'] }}</h3>
-                        <p class="text-[11px] text-emerald-600 font-medium flex items-center gap-1 pt-1">
-                            <i class="fas fa-user-check"></i> Pegawai sedang tidak ngantor
-                        </p>
-                    </div>
-                    <div class="w-14 h-14 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center text-xl shadow-inner border border-emerald-100/50">
-                        <i class="fas fa-user-clock"></i>
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Cuti Hari Ini</p>
+                            <h3 class="text-3xl font-black text-slate-800 tracking-tight mt-1">{{ $statistik['pegawai_cuti'] }}</h3>
+                            <p class="text-[11px] text-emerald-600 font-medium flex items-center gap-1 pt-2">
+                                <i class="fas fa-user-check"></i> Pegawai sedang tidak ngantor
+                            </p>
+                        </div>
+                        <div class="w-14 h-14 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center text-xl shadow-inner border border-emerald-100/50">
+                            <i class="fas fa-user-clock"></i>
+                        </div>
                     </div>
                 </div>
 
                 {{-- Card 3: Disetujui Bulan Ini --}}
-                <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center justify-between transition-all hover:shadow-md">
-                    <div class="space-y-1">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block">Disetujui Bulan Ini</span>
-                        <h3 class="text-3xl font-black text-slate-800 tracking-tight">{{ $statistik['disetujui_bulan_ini'] }}</h3>
-                        <p class="text-[11px] text-indigo-600 font-medium flex items-center gap-1 pt-1">
-                            <i class="fas fa-calendar-check"></i> Total akumulasi instansi
-                        </p>
-                    </div>
-                    <div class="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center text-xl shadow-inner border border-indigo-100/50">
-                        <i class="fas fa-file-invoice"></i>
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm transition-all hover:shadow-md">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Disetujui Bulan Ini</p>
+                            <h3 class="text-3xl font-black text-slate-800 tracking-tight mt-1">{{ $statistik['disetujui_bulan_ini'] }}</h3>
+                            <p class="text-[11px] text-indigo-600 font-medium flex items-center gap-1 pt-2">
+                                <i class="fas fa-calendar-check"></i> Total akumulasi instansi
+                            </p>
+                        </div>
+                        <div class="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center text-xl shadow-inner border border-indigo-100/50">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
-            {{-- Tabel Antrian Utama (Lintas Bidang) --}}
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50">
-                    <div>
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fas fa-list text-amber-500"></i> Berkas Masuk Perlu Validasi Akhir
-                        </h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Daftar pengajuan yang telah diparaf oleh Sekretaris Dinas.</p>
+            {{-- STRUKTUR DUA KOLOM: MEJA KERJA UTAMA & DETAIL SIDEBAR --}}
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                {{-- KOLOM KIRI: DAFTAR ANTRIAN MASUK --}}
+                <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                            <h3 class="font-bold text-slate-800">Menunggu Tindakan (Meja Kerja Kadin)</h3>
+                        </div>
+                        <a href="{{ route('kadin.persetujuan.index') }}" class="text-indigo-600 text-sm font-bold hover:text-indigo-700 transition">Lihat Semua</a>
                     </div>
-                    <a href="{{ route('kadin.persetujuan.index') }}" class="px-4 py-2 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm">
-                        Lihat Semua Berkas
-                    </a>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-400 text-[10px] uppercase font-bold tracking-widest border-b border-slate-100">
-                                <th class="py-4 px-6">Pegawai / Pemohon</th>
-                                <th class="py-4 px-6">Asal Bidang</th>
-                                <th class="py-4 px-6">Jenis & Durasi Cuti</th>
-                                <th class="py-4 px-6">Tanggal Masuk</th>
-                                <th class="py-4 px-6 text-center">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 text-sm">
-                            @forelse($pengajuanButuhAksi as $item)
-                                <tr class="hover:bg-slate-50/80 transition-colors">
-                                    {{-- Nama & NIP --}}
-                                    <td class="py-4 px-6">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs shadow-inner">
+                    
+                    <div class="p-0">
+                        @if(isset($pengajuanButuhAksi) && $pengajuanButuhAksi->count() > 0)
+                            <ul class="divide-y divide-slate-100">
+                                @foreach($pengajuanButuhAksi as $item)
+                                    <li class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-11 h-11 rounded-xl bg-slate-100 flex shrink-0 items-center justify-center text-slate-700 font-black shadow-inner border border-slate-200/40">
                                                 {{ strtoupper(substr($item->user->nama ?? 'P', 0, 2)) }}
                                             </div>
                                             <div>
-                                                <p class="font-bold text-slate-800 leading-tight">{{ $item->user->nama ?? '-' }}</p>
-                                                <p class="text-[11px] text-slate-400 mt-0.5">NIP. {{ $item->user->nip ?? '-' }}</p>
+                                                <p class="text-sm font-bold text-slate-800 leading-snug">{{ $item->user->nama ?? '-' }}</p>
+                                                <p class="text-[11px] text-slate-400 mb-1">NIP. {{ $item->user->nip ?? '-' }}</p>
+                                                
+                                                <div class="flex flex-wrap items-center gap-2 mt-1">
+                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100/30">
+                                                        <i class="fas fa-layer-group text-[9px] opacity-70"></i>
+                                                        {{ $item->user->pegawai->bidang->nama_bidang ?? 'Umum / Global' }}
+                                                    </span>
+                                                    <span class="text-xs text-slate-600 font-medium">
+                                                        Mengajukan <span class="text-emerald-600 font-bold">{{ $item->jenisCuti->nama ?? $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}</span>
+                                                    </span>
+                                                </div>
+                                                <p class="text-[11px] text-slate-400 font-medium mt-1">
+                                                    <i class="far fa-calendar-alt text-[10px]"></i> 
+                                                    {{ \Carbon\Carbon::parse($item->tgl_mulai)->translatedFormat('d M') }} - {{ \Carbon\Carbon::parse($item->tgl_selesai)->translatedFormat('d M Y') }} 
+                                                    <span class="text-indigo-600 font-bold">({{ $item->lama_cuti }} Hari)</span>
+                                                </p>
                                             </div>
                                         </div>
-                                    </td>
-                                    {{-- Badge Asal Bidang Kerja --}}
-                                    <td class="py-4 px-6">
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100/50">
-                                            <i class="fas fa-layer-group text-[10px] opacity-70"></i>
-                                            {{ $item->user->pegawai->bidang->nama_bidang ?? 'Umum / Global' }}
-                                        </span>
-                                    </td>
-                                    {{-- Detail Jenis Cuti --}}
-                                    <td class="py-4 px-6">
-                                        <p class="font-semibold text-slate-700 leading-tight">{{ $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}</p>
-                                        <p class="text-xs text-slate-400 mt-0.5 font-medium">
-                                            {{ \Carbon\Carbon::parse($item->tgl_mulai)->translatedFormat('d M') }} - {{ \Carbon\Carbon::parse($item->tgl_selesai)->translatedFormat('d M Y') }} 
-                                            <span class="text-indigo-600 font-bold">({{ $item->lama_cuti }} Hari)</span>
-                                        </p>
-                                    </td>
-                                    {{-- Tanggal Submit Form --}}
-                                    <td class="py-4 px-6 text-slate-500 font-medium text-xs">
-                                        {{ $item->created_at ? $item->created_at->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
-                                    </td>
-                                    {{-- Tombol Aksi Persetujuan Akhir --}}
-                                    <td class="py-4 px-6 text-center">
-                                        <a href="{{ route('kadin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm shadow-indigo-600/10">
-                                            <i class="fas fa-check-double text-[10px]"></i> Tinjau
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="py-12 px-6 text-center">
-                                        <div class="flex flex-col items-center justify-center gap-2 opacity-50">
-                                            <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 text-lg">
-                                                <i class="fas fa-folder-open"></i>
-                                            </div>
-                                            <p class="text-xs font-bold text-slate-500">Tidak ada berkas pengajuan baru yang perlu divalidasi.</p>
+                                        
+                                        <div class="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 pt-3 sm:pt-0">
+                                            <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">
+                                                Masuk: {{ $item->created_at ? $item->created_at->translatedFormat('d M Y') : '-' }}
+                                            </span>
+                                            <a href="{{ route('kadin.persetujuan.show', $item->id) }}" 
+                                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm shadow-indigo-600/20">
+                                                <i class="fas fa-check-double text-[10px]"></i> Tinjau
+                                            </a>
                                         </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <div class="py-16 text-center">
+                                <div class="w-16 h-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
+                                    <i class="fas fa-folder-open text-xl opacity-60"></i>
+                                </div>
+                                <p class="text-slate-500 text-sm font-bold">Meja bersih! Belum ada berkas antrian baru dari Sekretaris Dinas.</p>
+                                <p class="text-xs text-slate-400 mt-0.5">Semua berkas masuk telah selesai Anda proses.</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
+
+                {{-- KOLOM KANAN: RINGKASAN MONITORING CUTI --}}
+                <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden h-fit">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fas fa-calendar-day text-emerald-500"></i> Sedang Cuti (Hari Ini)
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        @if(isset($cutiHariIni) && $cutiHariIni->count() > 0)
+                            <div class="space-y-4">
+                                @foreach($cutiHariIni as $cuti)
+                                    <div class="p-4 rounded-2xl border border-slate-100 bg-white shadow-xs flex items-start gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 text-xs">
+                                            <i class="fas fa-user-clock"></i>
+                                        </div>
+                                        <div class="overflow-hidden">
+                                            <h4 class="text-sm font-bold text-slate-800 truncate">{{ $cuti->user->nama ?? $cuti->user->name ?? 'Pegawai' }}</h4>
+                                            <p class="text-[11px] text-slate-400 truncate mb-1">{{ $cuti->user->pegawai->bidang->nama_bidang ?? 'Tanpa Bidang' }}</p>
+                                            <span class="inline-block px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600 font-medium">
+                                                s.d {{ $cuti->tgl_selesai ? \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('d M Y') : '-' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="py-12 text-center text-slate-400 text-sm italic">
+                                <i class="fas fa-user-check block text-3xl text-slate-200 mb-2"></i>
+                                Hari ini semua pegawai terdata hadir penuh di instansi.
+                            </div>
+                        @endif
+                        
+                        <div class="mt-6 pt-6 border-t border-slate-100 flex justify-between items-center text-sm">
+                            <span class="text-slate-500 font-medium">Total Cuti Bulan Ini:</span>
+                            <span class="px-3 py-1 rounded-full font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                {{ $statistik['disetujui_bulan_ini'] }} Pegawai
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>

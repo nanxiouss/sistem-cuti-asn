@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
-use Illuminate\Support\Facades\DB;
-
+use App\Models\User;
+use Illuminate\Support\Facades\DB; 
 class PemberkasanController extends Controller
 {
     public function index()
@@ -21,11 +21,26 @@ class PemberkasanController extends Controller
 
     public function show($id)
     {
-        $pengajuan = Pengajuan::with(['user.pegawai', 'atasan.pegawai', 'jenisCuti'])
-            ->whereIn('status', ['Menunggu Pemberkasan', 'Selesai'])
-            ->findOrFail($id);
+        // 1. Ambil data pengajuan beserta relasi berantai ke atas
+        $pengajuan = Pengajuan::with([
+            'user.pegawai.bidang',
+            'atasan.pegawai.bidang',
+            'atasan.pegawai.atasan.pegawai.bidang' // Mengambil Kabid lewat atasannya Kasi
+        ])->findOrFail($id);
 
-        return view('admin.pemberkasan.show', compact('pengajuan'));
+        // 2. Definisikan Kasi (Atasan langsung pemohon)
+        $kasi = $pengajuan->atasan;
+
+        // 3. Ambil Kabid secara dinamis (Atasannya si Kasi)
+        $kabid = ($kasi && $kasi->pegawai) ? $kasi->pegawai->atasan : null;
+
+        // 4. Ambil Kepala Dinas berdasarkan nama jabatan
+        $kadin = User::whereHas('pegawai', function ($query) {
+            $query->where('jabatan', 'LIKE', '%Kepala Dinas%');
+        })->first();
+
+        // 5. Lempar semua variabel ke view bkn / cetak
+        return view('admin.pemberkasan.show', compact('pengajuan', 'kasi', 'kabid', 'kadin'));
     }
 
     public function prosesPemberkasan(Request $request, $id)

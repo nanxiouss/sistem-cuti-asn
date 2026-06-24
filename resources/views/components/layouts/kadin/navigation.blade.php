@@ -26,6 +26,9 @@
                 <a href="{{ route('kadin.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kadin.persetujuan*') ? $activeClass : $inactiveClass }}">
                     Persetujuan Cuti
                 </a>
+                <a href="{{ route('kadin.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kadin.riwayat*') ? $activeClass : $inactiveClass }}">
+                    Riwayat
+                </a>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">

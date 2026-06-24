@@ -18,7 +18,7 @@
                         <select name="status" id="status" class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-xl focus:ring-lime-500 focus:border-lime-500 p-3 transition-all">
                             <option value="">Semua Berkas Terproses</option>
                             <option value="Diproses" {{ request('status') == 'Diproses' ? 'selected' : '' }}>Sedang Diproses Atasan Tingkat Atas</option>
-                            <option value="Disetujui" {{ request('status') == 'Disetujui' ? 'selected' : '' }}>Disetujui (Selesai/Final)</option>
+                            <option value="Selesai" {{ request('status') == 'Selesai' ? 'selected' : '' }}>Disetujui (Selesai/Final)</option>
                             <option value="Ditolak" {{ request('status') == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                         </select>
                     </div>

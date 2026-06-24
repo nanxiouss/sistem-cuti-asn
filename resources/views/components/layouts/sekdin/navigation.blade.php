@@ -26,9 +26,9 @@
                 <a href="{{ route('sekdin.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('sekdin.persetujuan*') ? $activeClass : $inactiveClass }}">
                     Persetujuan Cuti
                 </a>
-                {{-- <a href="{{ route('#') }}" class="{{ navClass }} {{ request()->routeIs('kasi.riwayat') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('sekdin.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('sekdin.riwayat') ? $activeClass : $inactiveClass }}">
                     Riwayat
-                </a> --}}
+                </a>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">

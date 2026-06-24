@@ -26,6 +26,9 @@
                 <a href="{{ route('kasumum.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.persetujuan*') ? $activeClass : $inactiveClass }}">
                     Persetujuan Cuti
                 </a>
+                <a href="{{ route('kasumum.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.riwayat*') ? $activeClass : $inactiveClass }}">
+                    Riwayat
+                </a>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">

@@ -35,13 +35,11 @@ class PersetujuanController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validasi input tindakan Kadin
+        // Validasi input tindakan Kadin (Catatan Kadin dihapus)
         $request->validate([
-            'status' => 'required|in:Disetujui,Ditolak', 
-            'catatan_kadin' => 'required_if:status,Ditolak|nullable|string|max:500',
+            'status'              => 'required|in:Disetujui,Ditolak', 
             'password_verifikasi' => 'required_if:status,Disetujui|nullable|string'
         ], [
-            'catatan_kadin.required_if' => 'Alasan penolakan (catatan) wajib diisi jika Anda menolak pengajuan ini.',
             'password_verifikasi.required_if' => 'Password verifikasi wajib diisi untuk menyetujui dan menandatangani berkas.'
         ]);
 
@@ -73,7 +71,7 @@ class PersetujuanController extends Controller
             $pengajuan->status = 'Menunggu Pemberkasan'; 
             
             // 4. Salin foto TTD Kadin & Catat Waktu Riil Persetujuan
-            $pengajuan->ttd_kadin = Auth::user()->pegawai->foto_ttd;
+            $pengajuan->ttd_kadin     = Auth::user()->pegawai->foto_ttd;
             $pengajuan->tgl_ttd_kadin = now();
             
             $pesan = 'Berkas pengajuan cuti berhasil disetujui, ditandatangani, dan diteruskan ke Admin untuk penomoran berkas!';
@@ -84,7 +82,7 @@ class PersetujuanController extends Controller
             $pesan = 'Berkas pengajuan cuti telah ditolak dan dikembalikan.';
         }
         
-        $pengajuan->catatan_kadin = $request->catatan_kadin; 
+        // Proses simpan data (Tanpa menyimpan catatan_kadin)
         $pengajuan->save();
 
         return redirect()->route('kadin.persetujuan.index')->with('success', $pesan);

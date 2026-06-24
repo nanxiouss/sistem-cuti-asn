@@ -32,8 +32,8 @@
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
                     <h3 class="font-bold text-slate-800 text-base flex items-center gap-2.5">
-                        <i class="fas fa-folder-open text-red-500 text-lg"></i> 
-                        Meja Kerja Kepala Dinas <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-xs rounded-md font-extrabold">{{ $pengajuan->count() }}</span>
+                        <i class="fas fa-folder-open text-amber-500 text-lg"></i> 
+                        Antrean Berkas Masuk <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-xs rounded-md font-extrabold">{{ $pengajuan->count() }}</span>
                     </h3>
                 </div>
 
@@ -63,7 +63,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold border border-indigo-100/70">
-                                        {{ $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}
+                                        {{ $item->jenisCuti->nama ?? 'Cuti Tahunan' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium text-slate-600">
@@ -75,7 +75,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <a href="{{ route('kadin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all shadow-sm">
-                                        Tinjau Berkas Kadin <i class="fas fa-chevron-right text-[10px] text-red-400"></i>
+                                        Tinjau Berkas <i class="fas fa-chevron-right text-[10px] text-amber-400"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -84,8 +84,8 @@
                                 <td colspan="6" class="px-6 py-16 text-center text-slate-400">
                                     <div class="flex flex-col items-center justify-center gap-3">
                                         <i class="fas fa-circle-check text-5xl text-slate-200"></i>
-                                        <p class="font-medium text-slate-700">Semua berkas meja Kepala Dinas selesai diproses</p>
-                                        <p class="text-xs text-slate-400">Tidak ada pengajuan baru yang tertahan di meja Kadin.</p>
+                                        <p class="font-medium text-slate-700">Semua berkas meja Kadin selesai diproses</p>
+                                        <p class="text-xs text-slate-400">Tidak ada pengajuan baru yang tertahan di meja Kepala Dinas.</p>
                                     </div>
                                 </td>
                             </tr>

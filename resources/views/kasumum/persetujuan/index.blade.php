@@ -63,7 +63,8 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold border border-indigo-100/70">
-                                        {{ $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}
+                                        {{-- FIX: Menggunakan 'nama' atau alternatif 'nama_cuti' tanpa hardcoded buta --}}
+                                        {{ $item->jenisCuti->nama ?? $item->jenisCuti->nama_cuti ?? 'Cuti Tidak Diketahui' }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium text-slate-600">

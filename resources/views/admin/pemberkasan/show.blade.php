@@ -1,5 +1,4 @@
 <x-layouts.admin.app>
-    <!-- Header Page & Tombol Kembali -->
     <div class="mb-6 flex items-center justify-between no-print">
         <div>
             <h2 class="text-2xl font-bold text-slate-800">Pemberkasan Surat Cuti</h2>
@@ -10,7 +9,7 @@
         </a>
     </div>
 
-    {{-- Kondisi 1: JIKA STATUS BELUM SELESAI (Tampilkan Tombol Simpan & Rilis) --}}
+    {{-- Kondisi 1: JIKA STATUS BELUM SELESAI --}}
     @if($pengajuan->status !== 'Selesai')
     <div class="mb-6 p-6 bg-white rounded-2xl border border-amber-200 shadow-sm bg-gradient-to-r from-amber-50/40 to-transparent no-print">
         <h3 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-2">
@@ -28,11 +27,11 @@
         </form>
     </div>
     
-    {{-- Kondisi 2: JIKA STATUS SUDAH SELESAI (Tampilkan Tombol Cetak) --}}
+    {{-- Kondisi 2: JIKA STATUS SUDAH SELESAI --}}
     @else
     <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center justify-between no-print">
         <div class="text-sm">
-            <strong>Status Selesai:</strong> Surat cuti ini telah difinalisasi dan dirilis. Pegawai saat ini sudah dapat melihat dan mencetak dokumen ini secara mandiri melalui berkas mereka.
+            <strong>Status Selesai:</strong> Surat cuti ini telah difinalisasi dan dirilis. Pegawai saat ini sudah dapat mencetak dokumen ini.
         </div>
         <button onclick="window.print()" class="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition flex items-center gap-1.5 shadow-md">
             Cetak Formulir Cuti
@@ -43,50 +42,54 @@
     {{-- ========================================================================= --}}
     {{-- KANVAS PREVIEW FORMULIR BKN (MENYERUPAI KERTAS DOKUMEN ASLI) --}}
     {{-- ========================================================================= --}}
-    <div class="bg-white p-8 md:p-12 shadow-sm border border-slate-200 rounded-2xl mx-auto print:shadow-none print:border-none print:p-0 font-serif text-[11px] text-black leading-relaxed max-w-[800px] antialiased">
+    <div class="bg-white p-8 md:p-10 shadow-sm border border-slate-200 mx-auto print:shadow-none print:border-none print:p-0 font-sans text-black leading-snug max-w-[800px] antialiased text-[11px]">
         
-        <!-- Header Dokumen Lampiran BKN -->
-        <div class="flex justify-end mb-4 text-right font-sans text-[9px] tracking-tight uppercase">
-            <div>
-                <p class="font-bold">Anak Lampiran 1.b</p>
-                <p>Peraturan Badan Kepegawaian Negara</p>
-                <p>Republik Indonesia</p>
-                <p>Nomor 24 Tahun 2017</p>
-                <p>Tentang Tata Cara Pemberian Cuti Pegawai Negeri Sipil</p>
+        <div class="flex items-center justify-center border-b-[3px] border-black pb-3 mb-4">
+            <div class="w-20">
+                {{-- Ganti src ini dengan logo Pemprov Sumsel yang Anda miliki --}}
+                <img src="{{ asset('images/logosumsel.png') }}" alt="Logo Sumsel" class="w-16 h-auto opacity-80 mix-blend-multiply">
             </div>
-        </div>
+            <div class="text-center flex-1 px-4">
+                <h1 class="text-[14px] font-bold tracking-wide uppercase">PEMERINTAH PROVINSI SUMATERA SELATAN</h1>
+                <h2 class="text-[16px] font-extrabold uppercase mt-0.5">DINAS ENERGI DAN SUMBER DAYA MINERAL</h2>
+                <p class="text-[10px] mt-1">Jalan Angkatan 45 Nomor 2440 Palembang Provinsi Sumatera Selatan</p>
+                <p class="text-[10px]">Telepon (0711) 379040 Pos-el : desdm.sumselprov@gmail.com</p>
+                <p class="text-[10px]">Laman : www.desdm.sumselprov.go.id</p>
+            </div>
+            <div class="w-16"></div> </div>
 
-        <!-- Tujuan Surat -->
-        <div class="flex justify-end mb-4 font-sans text-[10px]">
-            <div class="w-1/2 text-left space-y-0.5">
+        <div class="flex justify-end mb-4">
+            <div class="w-1/2 text-right pr-4">
                 <p>Palembang, {{ \Carbon\Carbon::parse($pengajuan->updated_at)->translatedFormat('d F Y') }}</p>
-                <p>Kepada Yth.</p>
-                <p class="font-bold">Kepala Dinas Energi dan Sumber Daya Mineral</p>
-                <p>Provinsi Sumatera Selatan</p>
-                <p>di - Palembang</p>
             </div>
         </div>
+        <div class="mb-4 space-y-0.5 w-1/2">
+            <p>Yth. Kepala Dinas Energi dan Sumber Daya Mineral</p>
+            <p>Provinsi Sumatera Selatan</p>
+            <p>di-</p>
+            <p class="pl-4">Palembang</p>
+        </div>
 
-        <h1 class="text-center font-bold text-xs tracking-wide mb-4 uppercase font-sans">
-            Formulir Permintaan dan Pemberian Cuti
-        </h1>
+        <div class="text-center mb-4">
+            <h3 class="font-bold text-[12px] underline uppercase">FORMULIR PERMINTAAN DAN PEMBERIAN CUTI</h3>
+            <p class="text-[11px]">Nomor : 800.1.11.3 / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / DESDM / {{ \Carbon\Carbon::now()->year }}</p>
+        </div>
 
-        <!-- I. DATA PEGAWAI -->
-        <table class="w-full border-collapse border border-black mb-2 text-[10px]">
-            <tr class="bg-slate-100 font-sans font-bold text-[9px]">
-                <td colspan="4" class="border border-black px-2 py-0.5">I. DATA PEGAWAI</td>
+        <table class="w-full border-collapse border border-black mb-1.5">
+            <tr>
+                <td colspan="4" class="border border-black px-2 py-0.5 bg-slate-100 font-bold">I. DATA PEGAWAI</td>
             </tr>
             <tr>
-                <td class="border border-black px-2 py-0.5 w-24">1. Nama</td>
-                <td class="border border-black px-2 py-0.5 w-1/3 font-sans font-bold uppercase">{{ $pengajuan->user->nama ?? '-' }}</td>
-                <td class="border border-black px-2 py-0.5 w-24">2. NIP</td>
-                <td class="border border-black px-2 py-0.5 font-mono">{{ $pengajuan->user->nip ?? '-' }}</td>
+                <td class="border border-black px-2 py-0.5 w-[15%]">Nama</td>
+                <td class="border border-black px-2 py-0.5 w-[35%]">{{ $pengajuan->user->nama ?? '-' }}</td>
+                <td class="border border-black px-2 py-0.5 w-[15%]">NIP</td>
+                <td class="border border-black px-2 py-0.5 w-[35%]">{{ $pengajuan->user->pegawai->nip ?? $pengajuan->user->nip ?? '-' }}</td>
             </tr>
             <tr>
-                <td class="border border-black px-2 py-0.5">3. Jabatan</td>
+                <td class="border border-black px-2 py-0.5">Jabatan</td>
                 <td class="border border-black px-2 py-0.5">{{ $pengajuan->user->pegawai->jabatan ?? '-' }}</td>
-                <td class="border border-black px-2 py-0.5">4. Masa Kerja CPNS</td>
-                <td class="border border-black px-2 py-0.5 font-sans font-bold">
+                <td class="border border-black px-2 py-0.5">Masa Kerja</td>
+                <td class="border border-black px-2 py-0.5">
                     @if(!empty($pengajuan->user->pegawai->masa_kerja))
                         {{ floor(\Carbon\Carbon::parse($pengajuan->user->pegawai->masa_kerja)->diffInYears(\Carbon\Carbon::now())) }} Tahun
                     @else
@@ -95,238 +98,263 @@
                 </td>
             </tr>
             <tr>
-                <td class="border border-black px-2 py-0.5">5. Unit Kerja</td>
-                <td colspan="3" class="border border-black px-2 py-0.5">Dinas Energi dan Sumber Daya Mineral Provinsi Sumatera Selatan</td>
+                <td class="border border-black px-2 py-0.5">Unit Kerja</td>
+                <td colspan="3" class="border border-black px-2 py-0.5">Dinas Energi dan Sumber Daya Mineral Prov. Sumsel</td>
             </tr>
         </table>
 
-        <!-- II. JENIS CUTI YANG DIAMBIL -->
-        <table class="w-full border-collapse border border-black mb-2 text-center text-[10px]">
-            <tr class="bg-slate-100 font-sans font-bold text-left text-[9px]">
-                <td colspan="4" class="border border-black px-2 py-0.5">II. JENIS CUTI YANG DIAMBIL**</td>
+        <table class="w-full border-collapse border border-black mb-1.5">
+            <tr>
+                <td colspan="4" class="border border-black px-2 py-0.5 bg-slate-100 font-bold">II. JENIS CUTI YANG DIAMBIL **</td>
             </tr>
             <tr>
-                <td class="border border-black px-2 py-0.5 text-left w-2/5">1. Cuti Tahunan</td>
-                <td class="border border-black px-2 py-0.5 w-12 font-bold text-xs">{{ $pengajuan->jenis_cuti_id == 1 ? '✓' : '' }}</td>
-                <td class="border border-black px-2 py-0.5 text-left w-2/5">2. Cuti Besar</td>
-                <td class="border border-black px-2 py-0.5 w-12 font-bold text-xs">{{ $pengajuan->jenis_cuti_id == 2 ? '✓' : '' }}</td>
+                <td class="border border-black px-2 py-0.5 w-[40%]">1. Cuti Tahunan</td>
+                <td class="border border-black px-2 py-0.5 text-center w-[10%] font-bold">{{ $pengajuan->jenis_cuti_id == 1 ? '√' : '' }}</td>
+                <td class="border border-black px-2 py-0.5 w-[40%]">4. Cuti Melahirkan</td>
+                <td class="border border-black px-2 py-0.5 text-center w-[10%] font-bold">{{ $pengajuan->jenis_cuti_id == 4 ? '√' : '' }}</td>
             </tr>
             <tr>
-                <td class="border border-black px-2 py-0.5 text-left">3. Cuti Sakit</td>
-                <td class="border border-black px-2 py-0.5 font-bold text-xs">{{ $pengajuan->jenis_cuti_id == 3 ? '✓' : '' }}</td>
-                <td class="border border-black px-2 py-0.5 text-left">4. Cuti Melahirkan</td>
-                <td class="border border-black px-2 py-0.5 font-bold text-xs">{{ $pengajuan->jenis_cuti_id == 4 ? '✓' : '' }}</td>
+                <td class="border border-black px-2 py-0.5">2. Cuti Besar</td>
+                <td class="border border-black px-2 py-0.5 text-center font-bold">{{ $pengajuan->jenis_cuti_id == 2 ? '√' : '' }}</td>
+                <td class="border border-black px-2 py-0.5">5. Cuti Alasan Penting</td>
+                <td class="border border-black px-2 py-0.5 text-center font-bold">{{ $pengajuan->jenis_cuti_id == 5 ? '√' : '' }}</td>
             </tr>
             <tr>
-                <td class="border border-black px-2 py-0.5 text-left">5. Cuti Karena Alasan Penting</td>
-                <td class="border border-black px-2 py-0.5 font-bold text-xs">{{ $pengajuan->jenis_cuti_id == 5 ? '✓' : '' }}</td>
-                <td class="border border-black px-2 py-0.5 text-left">6. Cuti di Luar Tanggungan Negara</td>
-                <td class="border border-black px-2 py-0.5 font-bold text-xs">{{ $pengajuan->jenis_cuti_id == 6 ? '✓' : '' }}</td>
+                <td class="border border-black px-2 py-0.5">3. Cuti Sakit</td>
+                <td class="border border-black px-2 py-0.5 text-center font-bold">{{ $pengajuan->jenis_cuti_id == 3 ? '√' : '' }}</td>
+                <td class="border border-black px-2 py-0.5">6. Cuti di Luar Tanggungan Negara</td>
+                <td class="border border-black px-2 py-0.5 text-center font-bold">{{ $pengajuan->jenis_cuti_id == 6 ? '√' : '' }}</td>
             </tr>
         </table>
 
-        <!-- III. ALASAN CUTI -->
-        <table class="w-full border-collapse border border-black mb-2 text-[10px]">
-            <tr class="bg-slate-100 font-sans font-bold text-[9px]">
-                <td class="border border-black px-2 py-0.5">III. ALASAN CUTI</td>
+        <table class="w-full border-collapse border border-black mb-1.5">
+            <tr>
+                <td class="border border-black px-2 py-0.5 bg-slate-100 font-bold">III. ALASAN CUTI</td>
             </tr>
             <tr>
-                <td class="border border-black px-2 py-2 italic text-slate-800">{{ $pengajuan->alasan }}</td>
+                <td class="border border-black px-2 py-1 min-h-[30px]">{{ $pengajuan->alasan }}</td>
             </tr>
         </table>
 
-        <!-- IV. LAMANYA CUTI -->
-        <table class="w-full border-collapse border border-black mb-2 text-[10px]">
-            <tr class="bg-slate-100 font-sans font-bold text-[9px]">
-                <td colspan="6" class="border border-black px-2 py-0.5">IV. LAMANYA CUTI</td>
+        <table class="w-full border-collapse border border-black mb-1.5">
+            <tr>
+                <td class="border border-black px-2 py-0.5 bg-slate-100 font-bold">IV. LAMANYA CUTI</td>
             </tr>
             <tr>
-                <td class="border border-black px-2 py-0.5 w-16">Selama</td>
-                <td class="border border-black px-2 py-0.5 font-bold w-32 text-center bg-slate-50">{{ $pengajuan->lama_cuti }} Hari Kerja</td>
-                <td class="border border-black px-2 py-0.5 w-24 text-center">Mulai Tanggal</td>
-                <td class="border border-black px-2 py-0.5 text-center font-sans font-semibold">{{ \Carbon\Carbon::parse($pengajuan->tgl_mulai)->translatedFormat('d F Y') }}</td>
-                <td class="border border-black px-2 py-0.5 w-8 text-center">s/d</td>
-                <td class="border border-black px-2 py-0.5 text-center font-sans font-semibold">{{ \Carbon\Carbon::parse($pengajuan->tgl_selesai)->translatedFormat('d F Y') }}</td>
-            </tr>
-        </table>
-
-        <!-- V. CATATAN CUTI & PARAF VALIDASI BIROKRASI -->
-        <table class="w-full border-collapse border border-black mb-2 text-[9px]">
-            <tr class="bg-slate-100 font-sans font-bold">
-                <td colspan="5" class="border border-black px-2 py-0.5">V. CATATAN CUTI***</td>
-            </tr>
-            <tr class="font-sans font-semibold text-center">
-                <td colspan="3" class="border border-black px-2 py-0.5 w-1/2 bg-slate-50/50">1. DETAIL KUOTA CUTI TAHUNAN</td>
-                <td colspan="2" class="border border-black px-2 py-0.5 text-left bg-slate-50/50">2. PARAF VALIDASI KASUBBAG UMUM & KASI</td>
-            </tr>
-            <tr class="text-center text-[8px]">
-                <td class="border border-black px-1 py-0.5 w-12">Tahun</td>
-                <td class="border border-black px-1 py-0.5 w-12">Sisa Kuota</td>
-                <td class="border border-black px-1 py-0.5">Keterangan Administrasi</td>
-                <td class="border border-black px-2 py-0.5 text-left" valign="top">
-                    <strong>Kasubbag Umum & Kasi:</strong><br>
-                    <span class="text-[7px] text-slate-500 block">Catatan: {{ $pengajuan->catatan_kasubbag ?? '-' }}</span>
-                    {{-- TTD DIGITAL KASUBBAG --}}
-                    @if($pengajuan->ttd_kasubbag)
-                    <div class="my-1 flex justify-start">
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-8 object-contain mix-blend-multiply" alt="TTD Kasubbag">
-                    </div>
-                    @endif
+                <td class="border border-black px-2 py-1">
+                    {{ $pengajuan->lama_cuti }} hari kerja terhitung mulai tanggal {{ \Carbon\Carbon::parse($pengajuan->tgl_mulai)->translatedFormat('d F Y') }} s.d {{ \Carbon\Carbon::parse($pengajuan->tgl_selesai)->translatedFormat('d F Y') }}
                 </td>
-                <td class="border border-black px-2 py-0.5 text-left" valign="top">
-                    <strong>Kasi Check:</strong><br>
-                    <span class="text-[7px] text-slate-500 block">{{ $pengajuan->catatan_kasi ?? '-' }}</span>
-                    {{-- TTD DIGITAL KASI --}}
-                    @if($pengajuan->ttd_kasi)
-                    <div class="my-1 flex justify-start">
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" class="h-8 object-contain mix-blend-multiply" alt="TTD Kasi">
-                    </div>
-                    @endif
-                </td>
+            </tr>
+        </table>
+
+        <table class="w-full border-collapse border border-black mb-1.5">
+            <tr>
+                <td colspan="5" class="border border-black px-2 py-0.5 bg-slate-100 font-bold">V. CATATAN CUTI ***</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="border border-black px-2 py-0.5 w-[45%]">1. CUTI TAHUNAN</td>
+                <td class="border border-black px-2 py-0.5 w-[45%]">2. CUTI BESAR</td>
+                <td class="border border-black px-2 py-0.5 text-center w-[10%] font-bold">{{ $pengajuan->jenis_cuti_id == 2 ? '√' : '' }}</td>
             </tr>
             <tr class="text-center">
-                <td>N-2 (2024)</td>
-                <td class="border-l border-r border-black font-bold text-slate-500">0 Hari</td>
-                <td class="border-r border-black text-left px-2 text-[8px] text-slate-400">Hangus (Sistem)</td>
-                <td colspan="2" class="border-t border-black bg-slate-50/30 text-left px-2 font-sans text-[8px]">
-                    <strong>3. CATATAN PERTIMBANGAN SEKRETARIS DINAS (SEKDIN):</strong><br>
-                    <span class="italic text-slate-700">"{{ $pengajuan->catatan_sekdin ?? 'Disetujui untuk diteruskan.' }}"</span>
-                    {{-- TTD DIGITAL SEKDIN --}}
-                    @if($pengajuan->ttd_sekdin)
-                    <div class="my-1 flex justify-end">
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-8 object-contain mix-blend-multiply" alt="TTD Sekdin">
-                    </div>
-                    @endif
-                </td>
+                <td class="border border-black px-1 py-0.5 w-[15%]">Tahun</td>
+                <td class="border border-black px-1 py-0.5 w-[10%]">Sisa</td>
+                <td class="border border-black px-1 py-0.5 w-[20%]">Keterangan</td>
+                <td class="border border-black px-2 py-0.5 text-left">3. CUTI SAKIT</td>
+                <td class="border border-black px-2 py-0.5 font-bold">{{ $pengajuan->jenis_cuti_id == 3 ? '√' : '' }}</td>
             </tr>
             <tr class="text-center">
-                <td class="border-t border-black">N-1 (2025)</td>
-                <td class="border border-black font-bold text-slate-500">0 Hari</td>
-                <td class="border-t border-black text-left px-2 text-[8px]">Tidak Ada Sisa</td>
-                <td colspan="2" class="border-t border-black text-right px-2 font-sans text-[8px]">
-                    <span class="font-bold underline block">SEKRETARIS DINAS</span>
-                    <span class="text-[7px] text-slate-400 block">Tanggal TTD: {{ $pengajuan->tgl_ttd_sekdin ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_sekdin)->translatedFormat('d/m/Y') : '-' }}</span>
-                </td>
+                <td class="border border-black px-1 py-0.5">N-2</td>
+                <td class="border border-black px-1 py-0.5">-</td>
+                <td class="border border-black px-1 py-0.5"></td>
+                <td class="border border-black px-2 py-0.5 text-left">4. CUTI MELAHIRKAN</td>
+                <td class="border border-black px-2 py-0.5 font-bold">{{ $pengajuan->jenis_cuti_id == 4 ? '√' : '' }}</td>
             </tr>
-            <tr class="text-center font-bold">
-                <td class="border-t border-black">N (2026)</td>
-                <td class="border border-black text-blue-600">{{ $pengajuan->user->pegawai->sisa_cuti_tahun_ini ?? 12 }} Hari</td>
-                <td class="border-t border-black font-normal text-left px-2 text-[8px]">Diambil Sesuai SK: {{ $pengajuan->lama_cuti }} Hari</td>
-                <td colspan="2" class="border-t border-black bg-slate-50/50 text-left px-2 font-sans text-[8px]">
-                    <strong>Admin Verifikator:</strong> <span class="text-slate-600">{{ $pengajuan->catatan_admin ?? 'Berkas Valid' }}</span>
-                </td>
+            <tr class="text-center">
+                <td class="border border-black px-1 py-0.5">N-1</td>
+                <td class="border border-black px-1 py-0.5">6</td>
+                <td class="border border-black px-1 py-0.5"></td>
+                <td class="border border-black px-2 py-0.5 text-left">5. CUTI ALASAN PENTING</td>
+                <td class="border border-black px-2 py-0.5 font-bold">{{ $pengajuan->jenis_cuti_id == 5 ? '√' : '' }}</td>
+            </tr>
+            <tr class="text-center">
+                <td class="border border-black px-1 py-0.5">N</td>
+                <td class="border border-black px-1 py-0.5">12</td>
+                <td class="border border-black px-1 py-0.5"></td>
+                <td class="border border-black px-2 py-0.5 text-left">6. CUTI DILUAR TANGGUNGAN NEGARA</td>
+                <td class="border border-black px-2 py-0.5 font-bold">{{ $pengajuan->jenis_cuti_id == 6 ? '√' : '' }}</td>
             </tr>
         </table>
 
-        <!-- VI. ALAMAT SELAMA MENJALANKAN CUTI (TTD PEGAWAI ASLI) -->
-        <table class="w-full border-collapse border border-black mb-2 text-[10px]">
-            <tr class="bg-slate-100 font-sans font-bold text-[9px]">
-                <td colspan="2" class="border border-black px-2 py-1">VI. ALAMAT SELAMA MENJALANKAN CUTI</td>
+        <table class="w-full border-collapse border border-black mb-1.5 table-fixed">
+            <tr>
+                <td colspan="3" class="border border-black px-2 py-0.5 bg-slate-100 font-bold">VI. ALAMAT SELAMA MENJALANKAN CUTI</td>
             </tr>
             <tr>
-                <td class="border border-black px-3 py-3 w-3/5 align-top italic">
+                <td colspan="2" class="border border-black px-2 py-1 align-top w-[70%]">
                     {{ $pengajuan->alamat_cuti }}
                 </td>
-                <td class="border border-black px-3 py-2 w-2/5 align-top">
-                    <div class="flex flex-col justify-between h-full space-y-2">
-                        <div>
-                            <span class="font-bold">TELP/HP:</span> {{ $pengajuan->no_telepon }}
-                        </div>
-                        <div class="text-center font-sans text-[9px]">
-                            <p class="mb-1">Hormat saya,</p>
-                            
-                            {{-- TTD DIGITAL PEGAWAI DARI DATA TABEL PENGAJUAN --}}
-                            <div class="flex justify-center my-1">
-                                @if($pengajuan->ttd_pegawai)
-                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-10 object-contain mix-blend-multiply" alt="TTD Pegawai">
-                                @else
-                                    <div class="h-10 flex items-center justify-center text-[8px] text-slate-400 italic">[Belum TTD]</div>
-                                @endif
-                            </div>
-
-                            <p class="font-bold underline uppercase">{{ $pengajuan->user->nama ?? '-' }}</p>
-                            <p class="text-[8px] font-mono">NIP. {{ $pengajuan->user->nip ?? '-' }}</p>
-                        </div>
+                <td class="border border-black px-2 py-1 align-top w-[30%]">
+                    Telp: {{ $pengajuan->no_telepon }}
+                </td>
+            </tr>
+            <tr class="h-24">
+                <td class="border border-black px-2 py-1 align-top text-justify w-[35%] relative">
+                    <p class="text-[10px] italic text-slate-700 underline mb-1">
+                        Catatan Kasi {{ $pengajuan->atasan->pegawai->bidang->nama_bidang ?? 'Sekretariat' }} :
+                    </p>
+                    <div class="handwriting text-blue-800 text-[13px] leading-tight">
+                        {{ $pengajuan->catatan_kasi ?? 'Sebelum cuti selesaikan pekerjaan' }}
                     </div>
+                </td>
+                <td class="border border-black px-2 py-1 align-top text-justify w-[35%] relative">
+                    <p class="text-[10px] italic text-slate-700 underline mb-1">
+                        Catatan Kabid {{ $kabid->pegawai->bidang->nama_bidang ?? '' }} :</p>
+                    <div class="handwriting text-blue-800 text-[13px] leading-tight mt-2">
+                        {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
+                    </div>
+                    @if($pengajuan->ttd_kabid)
+                        <div class="place-items-end mx-3">
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kabid">
+                            <p class="text-[10px] italic text-slate-700 underline my-1 mx-3"> 
+                                {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kabid)) }}
+                            </p>
+                        </div>
+                    @endif
+                </td>
+                <td class="border border-black px-2 py-1 align-top w-[30%] text-center">
+                    <p class="text-left mb-1 mx-2">Hormat saya,</p>
+                    <div class="h-20 flex justify-normal my-2  mx-2 relative">
+                        @if($pengajuan->ttd_pegawai)
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-20 object-contain mix-blend-multiply" alt="TTD Pegawai">
+                        @else
+                            <span class="text-[10px] text-slate-400 italic">[Belum TTD]</span>
+                        @endif
+                    </div>
+                    <p class="font-bold flex justify-normal mx-2 underline uppercase">{{ $pengajuan->user->nama ?? '-' }}</p>
+                    <p class="text-[10px] flex justify-normal mx-2">NIP. {{ $pengajuan->user->pegawai->nip ?? $pengajuan->user->nip ?? '-' }}</p>
                 </td>
             </tr>
         </table>
 
-        <!-- VII. PERTIMBANGAN ATASAN LANGSUNG (KABID) -->
-        <table class="w-full border-collapse border border-black mb-2 text-[10px]">
-            <tr class="bg-slate-100 font-sans font-bold text-[9px]">
-                <td colspan="4" class="border border-black px-2 py-0.5">VII. PERTIMBANGAN ATASAN LANGSUNG (KABID)**</td>
-            </tr>
-            <tr class="text-center font-sans font-semibold text-[9px]">
-                <td class="border border-black px-2 py-0.5 w-1/4 bg-slate-50 font-bold text-slate-900">✓ DISETUJUI</td>
-                <td class="border border-black px-2 py-0.5 w-1/4 text-slate-300">PERUBAHAN****</td>
-                <td class="border border-black px-2 py-0.5 w-1/4 text-slate-300">DITANGGUHKAN****</td>
-                <td class="border border-black px-2 py-0.5 w-1/4 text-slate-300">TIDAK DISETUJUI****</td>
-            </tr>
+        <table class="w-full border-collapse border border-black mb-1.5 table-fixed">
             <tr>
-                <td colspan="4" class="border border-black p-3 flex justify-between items-center">
-                    <div class="text-left font-sans text-[8px] text-slate-600 max-w-md italic">
-                        "Catatan Kabid: {{ $pengajuan->catatan_kabid ?? 'Tidak ada catatan tambahan.' }}"
-                    </div>
-                    <div class="text-center font-sans w-64 text-[9px]">
-                        <p class="text-[8px] text-emerald-700 italic mb-1">✓ Ditandatangani Elektronik</p>
-                        
-                        {{-- TTD DIGITAL KABID --}}
-                        <div class="flex justify-center my-1">
-                            @if($pengajuan->ttd_kabid)
-                                <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-10 object-contain mix-blend-multiply" alt="TTD Kabid">
-                            @else
-                                <div class="h-10 flex items-center justify-center text-[8px] text-slate-400 italic">[Belum TTD Kabid]</div>
-                            @endif
+                <td colspan="4" class="border border-black px-2 py-0.5 bg-slate-100 font-bold">VII. PERTIMBANGAN ATASAN LANGSUNG **</td>
+            </tr>
+            <tr class="text-center">
+                <td class="border border-black px-2 py-0.5 w-[25%]">DISETUJUI</td>
+                <td class="border border-black px-2 py-0.5 w-[25%]">PERUBAHAN ****</td>
+                <td class="border border-black px-2 py-0.5 w-[25%]">DITANGGUHKAN ****</td>
+                <td class="border border-black px-2 py-0.5 w-[25%]">TIDAK DISETUJUI ****</td>
+            </tr>
+            <tr class="text-center font-bold">
+                <td class="border border-black px-2 py-0.5">√</td>
+                <td class="border border-black px-2 py-0.5"></td>
+                <td class="border border-black px-2 py-0.5"></td>
+                <td class="border border-black px-2 py-0.5"></td>
+            </tr>
+            <tr class="h-24">
+                <td colspan="3" class="border border-black px-2 py-1 align-top relative">
+                    <p class="text-[10px] italic text-slate-700 underline mb-1">Catatan Kasubbag. Umkep:</p>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div class="handwriting text-blue-800 text-[14px] ml-4 flex-1">
+                            {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
                         </div>
-
-                        <p class="font-bold underline uppercase">SUPERVISOR / KABID</p>
-                        <span class="text-[7px] text-slate-400 block">Tanggal: {{ $pengajuan->tgl_ttd_kabid ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kabid)->translatedFormat('d/m/Y') : '-' }}</span>
+                        @if($pengajuan->ttd_kasubbag)
+                        <div class="place-items-end my-2 mx-2">
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag Umum">
+                            <p class="text-[10px] italic text-slate-700 underline my-1 mx-2"> 
+                                {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kasubbag_umum)) }}
+                            </p>
+                        </div>
+                        @endif
                     </div>
+                </td>
+                <td class="border border-black px-2 py-1 align-top text-justify relative">
+                    <p class="text-left text-[10px] my-2 mx-2">Kasi {{ $pengajuan->atasan->pegawai->bidang->nama_bidang }},</p>
+                    <div class="h-20 flex justify-normal my-2  mx-2 relative">
+                        @if($pengajuan->ttd_kasi)
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" class="h-20 object-contain mix-blend-multiply" alt="TTD Kasi">
+                        @else
+                            <span class="text-[10px] text-slate-400 italic">[Belum TTD]</span>
+                        @endif
+                    </div>
+                    <p class="font-bold underline uppercase mx-2">{{ $pengajuan->atasan->nama ?? 'Erwansyah Wahyudi, ST., MM' }}</p>
+                    <p class="text-[10px] mx-2">
+                        NIP. {{ $pengajuan->atasan->nip ?? '197409102009021001' }}
+                    </p>
                 </td>
             </tr>
         </table>
 
-        <!-- VIII. KEPUTUSAN PEJABAT YANG BERWENANG MEMBERIKAN CUTI (KEPALA DINAS) -->
-        <table class="w-full border-collapse border border-black text-[10px]">
-            <tr class="bg-slate-100 font-sans font-bold text-[9px]">
-                <td colspan="4" class="border border-black px-2 py-0.5">VIII. KEPUTUSAN PEJABAT YANG BERWENANG MEMBERIKAN CUTI (KEPALA DINAS)**</td>
-            </tr>
-            <tr class="text-center font-sans font-semibold text-[9px]">
-                <td class="border border-black px-2 py-0.5 w-1/4 bg-slate-50 font-bold text-slate-900">✓ DISETUJUI</td>
-                <td class="border border-black px-2 py-0.5 w-1/4 text-slate-300">PERUBAHAN****</td>
-                <td class="border border-black px-2 py-0.5 w-1/4 text-slate-300">DITANGGUHKAN****</td>
-                <td class="border border-black px-2 py-0.5 w-1/4 text-slate-300">TIDAK DISETUJUI****</td>
-            </tr>
+        <table class="w-full border-collapse border border-black mb-1.5 table-fixed">
             <tr>
-                <td colspan="4" class="border border-black p-3 flex justify-between items-center">
-                    <div class="text-left font-sans text-[8px] text-slate-600 max-w-md italic">
-                        "Catatan Kadin: {{ $pengajuan->catatan_kadin ?? 'Disetujui sepenuhnya.' }}"
-                    </div>
-                    <div class="text-center font-sans w-64 text-[9px]">
-                        <p class="text-[8px] text-emerald-700 italic mb-1">✓ Disahakan & Disetujui Kadin</p>
-                        
-                        {{-- TTD DIGITAL KEPALA DINAS (KADIN) --}}
-                        <div class="flex justify-center my-1">
-                            @if($pengajuan->ttd_kadin)
-                                <img src="{{ asset('storage/' . $pengajuan->ttd_kadin) }}" class="h-10 object-contain mix-blend-multiply" alt="TTD Kadin">
-                            @else
-                                <div class="h-10 flex items-center justify-center text-[8px] text-slate-400 italic">[Belum TTD Kadin]</div>
-                            @endif
+                <td colspan="4" class="border border-black px-2 py-0.5 bg-slate-100 font-bold">VIII. KEPUTUSAN PEJABAT YANG BERWENANG MEMBERIKAN CUTI **</td>
+            </tr>
+            <tr class="text-center">
+                <td class="border border-black px-2 py-0.5 w-[25%]">DISETUJUI</td>
+                <td class="border border-black px-2 py-0.5 w-[25%]">PERUBAHAN ****</td>
+                <td class="border border-black px-2 py-0.5 w-[25%]">DITANGGUHKAN ****</td>
+                <td class="border border-black px-2 py-0.5 w-[25%]">TIDAK DISETUJUI ****</td>
+            </tr>
+            <tr class="text-center font-bold">
+                <td class="border border-black px-2 py-0.5">√</td>
+                <td class="border border-black px-2 py-0.5"></td>
+                <td class="border border-black px-2 py-0.5"></td>
+                <td class="border border-black px-2 py-0.5"></td>
+            </tr>
+            <tr class="h-28">
+                <td colspan="3" class="border border-black px-2 py-1 align-top relative">
+                    <p class="text-[10px] italic text-slate-700 underline mb-1">Catatan Sekretaris Dinas:</p>
+                    <div class="flex items-center gap-4 mt-2">
+                        <div class="handwriting text-blue-800 text-[14px] ml-4 flex-1">
+                            {{ $pengajuan->catatan_sekdin ?? 'Disetujui untuk diterbitkan' }}
                         </div>
-
-                        <p class="font-bold underline uppercase">KEPALA DINAS ESDM PROV. SUMSEL</p>
-                        <span class="text-[7px] text-slate-400 block">Tanggal: {{ $pengajuan->tgl_ttd_kadin ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kadin)->translatedFormat('d/m/Y') : '-' }}</span>
+                        @if($pengajuan->ttd_sekdin)
+                        <div class="place-items-end my-2 mx-2">
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Sekdin">
+                            <p class="text-[10px] italic text-slate-700 underline my-1 mx-2"> 
+                                {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_sekdin)) }}
+                            </p>
+                        </div>
+                        @endif
                     </div>
+                </td>
+                <td class="border border-black px-2 py-1 align-top justify-normal relative">
+                    <p class="text-left mb-1 mx-2">Kepala Dinas,</p>
+                    <div class="h-20 flex justify-normal my-2 mx-2 relative">
+                        @if($pengajuan->ttd_kadin)
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_kadin) }}" class="h-20 object-contain mix-blend-multiply opacity-95" alt="TTD Kadin">
+                        @else
+                            <span class="text-[10px] text-slate-400 italic">[Belum TTD Kadin]</span>
+                        @endif
+                    </div>
+                    <p class="font-bold flex justify-normal mx-2 underline uppercase">{{ $kadin->nama ?? '1' }}</p>
+                    <p class="text-[10px] flex justify-normal mx-2">NIP. {{ $kadin->nip ?? '197212151999031005' }}</p>
                 </td>
             </tr>
         </table>
+
+        <div class="mt-2 text-[10px]">
+            <p>Tembusan Yth:</p>
+            <p>- Kepala Badan Kepegawaian Daerah Provinsi Sumatera Selatan.</p>
+        </div>
 
     </div>
 
-    {{-- CSS Kustom Khusus Mode Cetak (Print) --}}
+    {{-- CSS Kustom Khusus Mode Cetak (Print) & Font Tulisan Tangan --}}
     <style>
+        /* Font Tulisan Tangan Google agar lebih natural */
+        @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap');
+        
+        .handwriting {
+            font-family: 'Kalam', cursive;
+        }
+
         @media print {
+            body {
+                background: white;
+            }
             body * {
                 visibility: hidden;
             }
@@ -342,14 +370,19 @@
             .print\:p-0 {
                 padding: 0 !important;
             }
-            div.font-serif, div.font-serif * {
+            /* Menampilkan spesifik area cetak */
+            div.font-sans, div.font-sans * {
                 visibility: visible;
             }
-            div.font-serif {
+            div.font-sans {
                 position: absolute;
                 left: 0;
                 top: 0;
                 width: 100%;
+            }
+            /* Hilangkan warna background abu-abu/slate tabel saat dicetak supaya murni putih spt kertas asli */
+            table td.bg-slate-100, table td.bg-slate-50 {
+                background-color: transparent !important;
             }
         }
     </style>

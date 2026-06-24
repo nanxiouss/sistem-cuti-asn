@@ -72,7 +72,7 @@ class PersetujuanController extends Controller
             // 3. Update Status Alur Berjalan ke Sekdin sesuai Flowchart
             $pengajuan->status = 'Menunggu Sekdin'; 
             
-            // 4. Salin foto TTD Kasubbag & Catat Waktu Riil Persetujuan
+            // 4. Salin foto TTD Kasubbag & Catat Waktu Riil Persetujuan (Cocok dengan kolom 21 & 26 di DB)
             $pengajuan->ttd_kasubbag = Auth::user()->pegawai->foto_ttd;
             $pengajuan->tgl_ttd_kasubbag_umum = now();
             

@@ -14,7 +14,7 @@ class PersetujuanController extends Controller
     {
         // Sekdin memproses berkas masuk yang sudah di-acc Kasubbag Umum
         $pengajuan = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
-            ->where('status', 'Menunggu Sekdin') // Sesuai lemparan dari Kasumum
+            ->where('status', 'Menunggu Sekdin')
             ->latest()
             ->get();
 
@@ -37,11 +37,11 @@ class PersetujuanController extends Controller
     {
         // Validasi input tindakan Sekdin
         $request->validate([
-            'status' => 'required|in:Disetujui,Ditolak', 
-            'catatan_sekdin' => 'required_if:status,Ditolak|nullable|string|max:500',
+            'status'              => 'required|in:Disetujui,Ditolak', 
+            'catatan_sekdin'      => 'required_if:status,Ditolak|nullable|string|max:500',
             'password_verifikasi' => 'required_if:status,Disetujui|nullable|string'
         ], [
-            'catatan_sekdin.required_if' => 'Alasan penolakan (catatan) wajib diisi jika Anda menolak pengajuan ini.',
+            'catatan_sekdin.required_if'      => 'Alasan penolakan (catatan) wajib diisi jika Anda menolak pengajuan ini.',
             'password_verifikasi.required_if' => 'Password verifikasi wajib diisi untuk menyetujui dan menandatangani berkas.'
         ]);
 
@@ -69,11 +69,12 @@ class PersetujuanController extends Controller
                     ->withInput();
             }
 
-            // 3. Update Status Alur Berjalan ke Kepala Dinas (Kadis)
+            // 3. Update Status Alur Berjalan ke Kepala Dinas sesuai Flowchart
+            // Catatan: Pastikan string 'Menunggu Kadin' atau 'Menunggu Kadis' sesuai dengan enum/aturan di database Anda.
             $pengajuan->status = 'Menunggu Kadin'; 
             
             // 4. Salin foto TTD Sekdin & Catat Waktu Riil Persetujuan
-            $pengajuan->ttd_sekdin = Auth::user()->pegawai->foto_ttd;
+            $pengajuan->ttd_sekdin     = Auth::user()->pegawai->foto_ttd;
             $pengajuan->tgl_ttd_sekdin = now();
             
             $pesan = 'Berkas pengajuan cuti berhasil disetujui, ditandatangani, dan diteruskan ke Kepala Dinas!';
@@ -84,6 +85,7 @@ class PersetujuanController extends Controller
             $pesan = 'Berkas pengajuan cuti telah ditolak dan dikembalikan.';
         }
         
+        // Simpan catatan (bisa berisi alasan penolakan jika ditolak, atau null jika disetujui)
         $pengajuan->catatan_sekdin = $request->catatan_sekdin; 
         $pengajuan->save();
 

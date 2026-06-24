@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PegawaiController as AdminPegawaiController;
 use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
 use App\Http\Controllers\Admin\PemberkasanController as AdminPemberkasanController;
+use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 
 use App\Http\Controllers\Kasi\DashboardController as KasiDashboardController;
 use App\Http\Controllers\Kasi\PersetujuanController as KasiPersetujuanController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\Kasi\RiwayatController as KasiRiwayatController;
 
 use App\Http\Controllers\Kasumum\DashboardController as KasumumDashboardController;
 use App\Http\Controllers\Kasumum\PersetujuanController as KasumumPersetujuanController;
+use App\Http\Controllers\Kasumum\RiwayatController as KasumumRiwayatController;
 
 use App\Http\Controllers\Kabid\DashboardController as KabidDashboardController;
 use App\Http\Controllers\Kabid\PersetujuanController as KabidPersetujuanController;
@@ -28,9 +30,11 @@ use App\Http\Controllers\Kabid\RiwayatController as KabidRiwayatController;
 
 use App\Http\Controllers\Sekdin\DashboardController as SekdinDashboardController;
 use App\Http\Controllers\Sekdin\PersetujuanController as SekdinPersetujuanController;
+use App\Http\Controllers\Sekdin\RiwayatController as SekdinRiwayatController;
 
 use App\Http\Controllers\Kadin\DashboardController as KadinDashboardController;
 use App\Http\Controllers\Kadin\PersetujuanController as KadinPersetujuanController;
+use App\Http\Controllers\Kadin\RiwayatController as KadinRiwayatController;
 
 // Halaman Depan / Landing Page
 Route::get('/', function () {
@@ -104,6 +108,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pemberkasan', [AdminPemberkasanController::class, 'index'])->name('pemberkasan.index');
         Route::get('/pemberkasan/{id}', [AdminPemberkasanController::class, 'show'])->name('pemberkasan.show');
         Route::post('/pemberkasan/{id}/proses', [AdminPemberkasanController::class, 'prosesPemberkasan'])->name('pemberkasan.proses');
+
+        Route::get('/laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/excel', [AdminLaporanController::class, 'exportExcel'])->name('laporan.excel');
     });
 
     // 4. Ruang Lingkup: KASI
@@ -132,6 +139,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/persetujuan', [KasumumPersetujuanController::class, 'index'])->name('persetujuan.index');
         Route::get('/persetujuan/{id}', [KasumumPersetujuanController::class, 'show'])->name('persetujuan.show');
         Route::put('/persetujuan/{id}', [KasumumPersetujuanController::class, 'update'])->name('persetujuan.update');
+        Route::get('riwayat', [KasumumRiwayatController::class, 'index'])->name('riwayat.index');
+        Route::get('riwayat/{id}', [KasumumRiwayatController::class, 'show'])->name('riwayat.show');
     });
 
     // 6. Ruang Lingkup: SEKDIN
@@ -140,6 +149,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/persetujuan', [SekdinPersetujuanController::class, 'index'])->name('persetujuan.index');
         Route::get('/persetujuan/{id}', [SekdinPersetujuanController::class, 'show'])->name('persetujuan.show');
         Route::put('/persetujuan/{id}', [SekdinPersetujuanController::class, 'update'])->name('persetujuan.update');
+        Route::get('riwayat', [SekdinRiwayatController::class, 'index'])->name('riwayat.index');
+        Route::get('riwayat/{id}', [SekdinRiwayatController::class, 'show'])->name('riwayat.show');
     });
 
     // 7. Ruang Lingkup: KADIN
@@ -148,6 +159,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/persetujuan', [KadinPersetujuanController::class, 'index'])->name('persetujuan.index');
         Route::get('/persetujuan/{id}', [KadinPersetujuanController::class, 'show'])->name('persetujuan.show');
         Route::put('/persetujuan/{id}', [KadinPersetujuanController::class, 'update'])->name('persetujuan.update');
+        Route::get('riwayat', [KadinRiwayatController::class, 'index'])->name('riwayat.index');
+        Route::get('riwayat/{id}', [KadinRiwayatController::class, 'show'])->name('riwayat.show');
     });
 
     // 8. Manajemen Profil Pengguna Mandiri (Universal)
