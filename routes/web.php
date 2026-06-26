@@ -82,6 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pengajuan/store', [PegawaiPengajuanController::class, 'store'])->name('pengajuan.store');
         Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('/riwayat/{pengajuan}', [RiwayatController::class, 'show'])->name('riwayat.show');
+        Route::get('/riwayat/{id}/cetak', [RiwayatController::class, 'cetak'])->name('riwayat.cetak');
         Route::get('/kalender', [KalenderController::class, 'index'])->name('kalender.index');
         Route::get('/regulasi', [RegulasiController::class, 'index'])->name('regulasi.index');
     });

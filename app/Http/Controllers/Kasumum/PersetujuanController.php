@@ -75,6 +75,9 @@ class PersetujuanController extends Controller
             // 4. Salin foto TTD Kasubbag & Catat Waktu Riil Persetujuan (Cocok dengan kolom 21 & 26 di DB)
             $pengajuan->ttd_kasubbag = Auth::user()->pegawai->foto_ttd;
             $pengajuan->tgl_ttd_kasubbag_umum = now();
+            $pengajuan->nama_kasubbag = Auth::user()->nama;
+            $pengajuan->nip_kasubbag = Auth::user()->nip;
+            $pengajuan->jabatan_kasubbag = Auth::user()->pegawai->bidang->nama_bidang;
             
             $pesan = 'Berkas pengajuan cuti berhasil disetujui, ditandatangani, dan diteruskan ke Sekretaris Dinas (Sekdin)!';
             

@@ -76,7 +76,10 @@ class PersetujuanController extends Controller
             // 4. Salin foto TTD Sekdin & Catat Waktu Riil Persetujuan
             $pengajuan->ttd_sekdin     = Auth::user()->pegawai->foto_ttd;
             $pengajuan->tgl_ttd_sekdin = now();
-            
+            $pengajuan->nama_sekdin = Auth::user()->nama;
+            $pengajuan->nip_sekdin = Auth::user()->nip;
+            $pengajuan->jabatan_sekdin = Auth::user()->pegawai->bidang->nama_bidang;
+                        
             $pesan = 'Berkas pengajuan cuti berhasil disetujui, ditandatangani, dan diteruskan ke Kepala Dinas!';
             
         } else {

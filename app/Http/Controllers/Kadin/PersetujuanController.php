@@ -73,6 +73,9 @@ class PersetujuanController extends Controller
             // 4. Salin foto TTD Kadin & Catat Waktu Riil Persetujuan
             $pengajuan->ttd_kadin     = Auth::user()->pegawai->foto_ttd;
             $pengajuan->tgl_ttd_kadin = now();
+            $pengajuan->nama_kadin = Auth::user()->nama;
+            $pengajuan->nip_kadin = Auth::user()->nip;
+            $pengajuan->jabatan_kadin = Auth::user()->pegawai->jabatan;
             
             $pesan = 'Berkas pengajuan cuti berhasil disetujui, ditandatangani, dan diteruskan ke Admin untuk penomoran berkas!';
             

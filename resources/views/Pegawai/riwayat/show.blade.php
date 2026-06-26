@@ -73,6 +73,20 @@
                         <p class="text-xs text-slate-700 font-medium">{{ $pengajuan->catatan_kabid ?? 'Belum ada catatan atau pertimbangan.' }}</p>
                     </div>
                 </div>
+
+                @if($pengajuan->status === 'Selesai')
+                    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center justify-between">
+                        <div class="text-sm">
+                            <strong>Surat Cuti Siap Dicetak:</strong> Dokumen formulir permintaan cuti Anda telah disetujui penuh oleh pimpinan dan difinalisasi oleh Admin.
+                        </div>
+                        <a href="{{ route('pegawai.riwayat.cetak', $pengajuan->id) }}" target="_blank" class="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition flex items-center gap-1.5 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            </svg>
+                            Buka Lembar Cetak
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 

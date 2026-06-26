@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pegawai;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengajuan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -146,5 +147,66 @@ class RiwayatController extends Controller
         $tracingLogs = array_reverse($logs);
 
         return view('pegawai.riwayat.show', compact('pengajuan', 'tracingLogs'));
+    }
+
+    public function cetak($id)
+    {
+        // 1. Ambil data pengajuan beserta relasi
+        $pengajuan = Pengajuan::with([
+            'user.pegawai.bidang',
+            'atasan.pegawai.bidang',
+            'atasan.pegawai.atasan.pegawai.bidang'
+        ])
+        ->where('user_id', Auth::id())
+        ->findOrFail($id);
+
+        if (
+            $pengajuan->status == 'Selesai' &&
+            !is_null($pengajuan->snapshot_sisa_n)
+        ) {
+        
+            $sisa_n = $pengajuan->snapshot_sisa_n;
+            $sisa_n1 = $pengajuan->snapshot_sisa_n1;
+            $sisa_n2 = $pengajuan->snapshot_sisa_n2;
+        
+        } else {
+        
+            $sisa_total = $pengajuan->user->pegawai->sisa_cuti_tahunan ?? 0;
+        
+            $sisa_n = min($sisa_total, 12);
+        
+            $sisa_n1 = max(
+                min($sisa_total - $sisa_n, 6),
+                0
+            );
+        
+            $sisa_n2 = max(
+                $sisa_total - $sisa_n - $sisa_n1,
+                0
+            );
+        }
+
+        // Kasi
+        $kasi = $pengajuan->atasan;
+
+        // Kabid
+        $kabid = ($kasi && $kasi->pegawai)
+            ? $kasi->pegawai->atasan
+            : null;
+
+        // Kepala Dinas
+        $kadin = User::whereHas('pegawai', function ($query) {
+            $query->where('jabatan', 'LIKE', '%Kepala Dinas%');
+        })->first();
+
+        return view('pegawai.riwayat.cetak', compact(
+            'pengajuan',
+            'kasi',
+            'kabid',
+            'kadin',
+            'sisa_n',
+            'sisa_n1',
+            'sisa_n2'
+        ));
     }
 }

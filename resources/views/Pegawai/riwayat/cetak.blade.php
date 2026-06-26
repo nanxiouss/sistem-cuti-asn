@@ -1,43 +1,18 @@
-<x-layouts.admin.app>
+<x-layouts.pegawai.app>
     <div class="mb-6 flex items-center justify-between no-print">
         <div>
-            <h2 class="text-2xl font-bold text-slate-800">Pemberkasan Surat Cuti</h2>
-            <p class="text-slate-500 text-sm">Formulir BKN otomatis selesai di-generate. Rilis dokumen agar dapat dicetak oleh pegawai.</p>
+            <h2 class="text-2xl font-bold text-slate-800">Cetak Formulir Cuti</h2>
+            <p class="text-slate-500 text-sm">Dokumen resmi instansi berdasarkan format baku BKN.</p>
         </div>
-        <a href="{{ route('admin.pemberkasan.index') }}" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition shadow-sm text-sm">
-            &larr; Kembali
-        </a>
-    </div>
-
-    {{-- Kondisi 1: JIKA STATUS BELUM SELESAI --}}
-    @if($pengajuan->status !== 'Selesai')
-    <div class="mb-6 p-6 bg-white rounded-2xl border border-amber-200 shadow-sm bg-gradient-to-r from-amber-50/40 to-transparent no-print">
-        <h3 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-2">
-            Finalisasi & Rilis Dokumen
-        </h3>
-        <p class="text-sm text-slate-600 mb-4">
-            Seluruh draf penilaian birokrasi dan tanda tangan kedinasan telah terisi otomatis di bawah. Klik tombol di bawah untuk merilis dokumen ini ke akun pegawai dan mengubah status menjadi <strong>Selesai</strong>.
-        </p>
-        
-        <form action="{{ route('admin.pemberkasan.proses', $pengajuan->id) }}" method="POST">
-            @csrf
-            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition text-sm flex items-center gap-2">
-                Simpan & Rilis ke Pegawai
+        <div class="flex gap-2">
+            <a href="{{ route('pegawai.riwayat.index') }}" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition shadow-sm text-sm">
+                &larr; Kembali ke Riwayat
+            </a>
+            <button onclick="window.print()" class="px-5 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition flex items-center gap-1.5 shadow-md">
+                Cetak Dokumen Sekarang
             </button>
-        </form>
-    </div>
-    
-    {{-- Kondisi 2: JIKA STATUS SUDAH SELESAI --}}
-    @else
-    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center justify-between no-print">
-        <div class="text-sm">
-            <strong>Status Selesai:</strong> Surat cuti ini telah difinalisasi dan dirilis. Pegawai saat ini sudah dapat mencetak dokumen ini.
         </div>
-        <button onclick="window.print()" class="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition flex items-center gap-1.5 shadow-md">
-            Cetak Formulir Cuti
-        </button>
     </div>
-    @endif
 
     {{-- ========================================================================= --}}
     {{-- KANVAS PREVIEW FORMULIR BKN (MENYERUPAI KERTAS DOKUMEN ASLI) --}}
@@ -46,7 +21,6 @@
         
         <div class="flex items-center justify-center border-b-[3px] border-black pb-3 mb-4">
             <div class="w-20">
-                {{-- Ganti src ini dengan logo Pemprov Sumsel yang Anda miliki --}}
                 <img src="{{ asset('images/logosumsel.png') }}" alt="Logo Sumsel" class="w-16 h-auto opacity-80 mix-blend-multiply">
             </div>
             <div class="text-center flex-1 px-4">
@@ -56,7 +30,8 @@
                 <p class="text-[10px]">Telepon (0711) 379040 Pos-el : desdm.sumselprov@gmail.com</p>
                 <p class="text-[10px]">Laman : www.desdm.sumselprov.go.id</p>
             </div>
-            <div class="w-16"></div> </div>
+            <div class="w-16"></div>
+        </div>
 
         <div class="flex justify-end mb-4">
             <div class="w-1/2 text-right pr-4">
@@ -87,7 +62,7 @@
             </tr>
             <tr>
                 <td class="border border-black px-2 py-0.5">Jabatan</td>
-                <td class="border border-black px-2 py-0.5">{{ $pengajuan->jabatan_pegawai ?? $pengajuan->user->pegawai->jabatan ?? '-' }}</td>
+                <td class="border border-black px-2 py-0.5">{{ $pengajuan->user->pegawai->jabatan ?? '-' }}</td>
                 <td class="border border-black px-2 py-0.5">Masa Kerja</td>
                 <td class="border border-black px-2 py-0.5">
                     @if(!empty($pengajuan->user->pegawai->masa_kerja))
@@ -341,12 +316,20 @@
             <p>Tembusan Yth:</p>
             <p>- Kepala Badan Kepegawaian Daerah Provinsi Sumatera Selatan.</p>
         </div>
-
     </div>
+
+    {{-- Script untuk memicu dialog print browser secara otomatis ketika tab dibuka --}}
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // Memberikan sedikit jeda waktu agar font Google ter-load dengan sempurna
+            setTimeout(() => {
+                window.print();
+            }, 800);
+        });
+    </script>
 
     {{-- CSS Kustom Khusus Mode Cetak (Print) & Font Tulisan Tangan --}}
     <style>
-        /* Font Tulisan Tangan Google agar lebih natural */
         @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap');
         
         .handwriting {
@@ -372,7 +355,6 @@
             .print\:p-0 {
                 padding: 0 !important;
             }
-            /* Menampilkan spesifik area cetak */
             div.font-sans, div.font-sans * {
                 visibility: visible;
             }
@@ -382,10 +364,9 @@
                 top: 0;
                 width: 100%;
             }
-            /* Hilangkan warna background abu-abu/slate tabel saat dicetak supaya murni putih spt kertas asli */
             table td.bg-slate-100, table td.bg-slate-50 {
                 background-color: transparent !important;
             }
         }
     </style>
-</x-layouts.admin.app>
+</x-layouts.pegawai.app>

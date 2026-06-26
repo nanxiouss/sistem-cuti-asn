@@ -47,6 +47,9 @@ return new class extends Migration
 
             // DEFAULT STATUS SESUAI FLOWCHART: Lari ke Penelaah Teknis (Admin) dulu
             $table->string('status')->default('Menunggu Verifikasi Admin');
+            $table->unsignedTinyInteger('snapshot_sisa_n')->nullable();
+            $table->unsignedTinyInteger('snapshot_sisa_n1')->nullable();
+            $table->unsignedTinyInteger('snapshot_sisa_n2')->nullable();
 
             $table->timestamps();
         });

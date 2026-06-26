@@ -59,7 +59,6 @@ class ProfileController extends Controller
 
         // 1. Validasi: Mengubah batas maksimal foto & ttd menjadi 5MB (5120 KB)
         $request->validate([
-            'nama'         => 'required|string|max:100',
             'no_telepon'   => 'required|string|max:20',
             'foto_profil'  => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
             'foto_ttd'     => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
@@ -72,7 +71,6 @@ class ProfileController extends Controller
         $noTelepon = '0' . $noTelepon;
 
         // 2. Update data pada tabel 'users' 
-        $user->nama = $request->nama;
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
