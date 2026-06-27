@@ -29,6 +29,9 @@
                 <a href="{{ route('kasi.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.riwayat') ? $activeClass : $inactiveClass }}">
                     Riwayat
                 </a>
+                <a href="{{ route('kasi.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.kalender') ? $activeClass : $inactiveClass }}">
+                    Kalender
+                </a>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">
