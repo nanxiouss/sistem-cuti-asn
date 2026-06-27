@@ -161,13 +161,10 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                         {{-- Input Nama --}}
-                        <div class="flex flex-col gap-1.5 md:col-span-2">
-                            <label for="nama" class="text-xs font-bold text-slate-700 ml-1">Nama Lengkap Pegawai <span class="text-red-500">*</span></label>
-                            <input type="text" id="nama" name="nama" value="{{ old('nama', Auth::user()->nama) }}" 
-                                class="w-full bg-slate-50 border @error('nama') border-red-400 focus:border-red-500 focus:ring-red-500/10 @else border-slate-200 focus:border-lime-500 focus:ring-lime-500/10 @enderror rounded-xl px-4 py-2.5 sm:py-3 text-sm font-semibold text-slate-800 focus:bg-white transition-all outline-none shadow-sm" required>
-                            @error('nama')
-                                <span class="text-xs text-red-500 ml-1 font-medium">{{ $message }}</span>
-                            @enderror
+                        <div class="flex flex-col gap-1.5 md:col-span-2 opacity-70">
+                            <label for="nama" class="text-xs font-bold text-slate-700 ml-1">Nama Lengkap Pegawai </label>
+                            <input type="text" id="nama" name="nama" value="{{ Auth::user()->nama }}" 
+                            class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm font-bold text-slate-500 cursor-not-allowed select-none outline-none" readonly>
                         </div>
 
                         {{-- Input No Telepon --}}
