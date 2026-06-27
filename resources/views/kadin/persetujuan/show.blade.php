@@ -12,59 +12,59 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             {{-- Alert Error Validasi Internal Form --}}
             @if ($errors->any())
-                <div class="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-sm font-medium shadow-sm">
-                    <div class="font-bold mb-1 flex items-center gap-2">
-                        <i class="fas fa-exclamation-triangle"></i> Gagal Memproses Berkas:
-                    </div>
-                    <ul class="list-disc list-inside text-xs space-y-0.5 opacity-90">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+            <div class="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-sm font-medium shadow-sm">
+                <div class="font-bold mb-1 flex items-center gap-2">
+                    <i class="fas fa-exclamation-triangle"></i> Gagal Memproses Berkas:
                 </div>
+                <ul class="list-disc list-inside text-xs space-y-0.5 opacity-90">
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
+
                 {{-- KONTEN SEBELAH KIRI (Detail Informasi Berkas) --}}
                 <div class="md:col-span-2 space-y-6">
-                    
+
                     {{-- Informasi Pegawai --}}
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                         <h3 class="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
                             <i class="fas fa-user-circle text-lime-500"></i> Informasi Pegawai
                         </h3>
-                        
+
                         <div class="flex items-center gap-5 mb-5 border-b border-slate-100 pb-5">
                             {{-- Container Foto Profil --}}
                             <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0 border-2 border-white shadow-sm">
                                 @if($pengajuan->user->pegawai && $pengajuan->user->pegawai->foto_profil)
-                                    <img src="{{ asset('storage/' . $pengajuan->user->pegawai->foto_profil) }}" alt="Foto Profil" class="w-full h-full object-cover">
+                                <img src="{{ asset('storage/' . $pengajuan->user->pegawai->foto_profil) }}" alt="Foto Profil" class="w-full h-full object-cover">
                                 @else
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($pengajuan->user->nama ?? 'User') }}&background=E2E8F0&color=475569" alt="Default Profil" class="w-full h-full object-cover">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($pengajuan->user->nama ?? 'User') }}&background=E2E8F0&color=475569" alt="Default Profil" class="w-full h-full object-cover">
                                 @endif
                             </div>
-                            
+
                             {{-- Info Utama --}}
                             <div>
                                 <h4 class="text-lg font-bold text-slate-800">{{ $pengajuan->user->nama ?? '-' }}</h4>
-                                <p class="text-sm text-slate-500 font-medium">NIP/NIK. {{ $pengajuan->user->pegawai->nip ?? $pengajuan->user->nip ?? '-' }}</p>
+                                <p class="text-sm text-slate-500 font-medium">NIP. {{ $pengajuan->user->pegawai->nip ?? $pengajuan->user->nip ?? '-' }}</p>
                             </div>
                         </div>
 
                         {{-- Info Tambahan Bidang & Jabatan --}}
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                             <div>
-                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Asal Bidang</p>
+                                <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Bidang</p>
                                 <p class="font-medium text-slate-800">
                                     @if($pengajuan->user->pegawai->bidang?->parent)
-                                        {{ $pengajuan->user->pegawai->bidang->nama_bidang }} 
-                                        <span class="text-slate-400 font-normal">({{ $pengajuan->user->pegawai->bidang->parent->nama_bidang }})</span>
+                                    {{ $pengajuan->user->pegawai->bidang->nama_bidang }}
+                                    <span class="text-slate-400 font-normal">({{ $pengajuan->user->pegawai->bidang->parent->nama_bidang }})</span>
                                     @else
-                                        {{ $pengajuan->user->pegawai->bidang->nama_bidang ?? '-' }}
+                                    {{ $pengajuan->user->pegawai->bidang->nama_bidang ?? '-' }}
                                     @endif
                                 </p>
                             </div>
@@ -80,7 +80,7 @@
                         <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
                             <i class="fas fa-file-alt text-lime-500"></i> Detail Pengajuan Cuti
                         </h3>
-                        
+
                         <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-5">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-sm font-semibold text-slate-600">Jenis Cuti</span>
@@ -91,7 +91,7 @@
                             <div class="flex justify-between items-center">
                                 <span class="text-sm font-semibold text-slate-600">Tanggal Pelaksanaan</span>
                                 <span class="font-medium text-slate-800 text-sm">
-                                    {{ \Carbon\Carbon::parse($pengajuan->tgl_mulai)->translatedFormat('d M Y') }} s/d 
+                                    {{ \Carbon\Carbon::parse($pengajuan->tgl_mulai)->translatedFormat('d M Y') }} s/d
                                     {{ \Carbon\Carbon::parse($pengajuan->tgl_selesai)->translatedFormat('d M Y') }}
                                     <span class="text-indigo-600 font-semibold">({{ $pengajuan->lama_cuti }} Hari Kerja)</span>
                                 </span>
@@ -130,148 +130,274 @@
                     </div>
 
                     {{-- Tracking Riwayat TTD Validasi Berkas Sebelum Kadin --}}
-                    
-                    {{-- 1. TTD Pemohon / Pegawai --}}
-                    <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full {{ !empty($pengajuan->ttd_pegawai) ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400' }} flex items-center justify-center shrink-0">
-                                <i class="fas {{ !empty($pengajuan->ttd_pegawai) ? 'fa-check-double' : 'fa-clock' }} text-lg"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-base font-bold text-slate-900 tracking-tight">1. Tanda Tangan Pemohon</h4>
-                                <p class="text-xs text-slate-500 mt-0.5 font-medium">Status Berkas: Sudah Valid / Diajukan</p>
-                            </div>
+
+                    <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm transition-all hover:shadow-md">
+
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-slate-800">
+                                <i class="fas fa-tasks text-emerald-500 mr-2"></i>
+                                Status Verifikasi Tanda Tangan
+                            </h3>
+
+                            <span class="text-xs text-slate-400 font-semibold uppercase">
+                                Tracking Approval
+                            </span>
                         </div>
-                        
-                        <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Pemohon</span>
-                            <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
-                                @if(!empty($pengajuan->ttd_pegawai))
-                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" alt="Tanda Tangan Pegawai" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
-                                @else
+
+                        {{-- ====================== PEGAWAI ====================== --}}
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-5 border-b border-slate-200">
+
+                            <div class="flex items-center gap-4">
+
+                                <div class="relative flex items-center justify-center w-10 h-10">
+                                    <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
+                                    <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-slate-800">
+                                        {{ !empty($pengajuan->ttd_pegawai) ? 'Tanda Tangan Pegawai Valid' : 'Menunggu Tanda Tangan Pegawai' }}
+                                    </h4>
+
+                                    <p class="text-xs text-slate-500 mt-1">
+                                        Diajukan :
+                                        {{ $pengajuan->created_at ? \Carbon\Carbon::parse($pengajuan->created_at)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="text-center mt-4 sm:mt-0">
+                                <span class="text-[10px] font-bold uppercase text-slate-400">
+                                    Spesimen TTD
+                                </span>
+
+                                <div class="mt-2">
+                                    @if(!empty($pengajuan->ttd_pegawai))
+                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-24 object-contain mix-blend-multiply">
+                                    @else
                                     <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- 2. Persetujuan Kabid --}}
-                    <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full {{ !empty($pengajuan->ttd_kabid) ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400' }} flex items-center justify-center shrink-0">
-                                <i class="fas {{ !empty($pengajuan->ttd_kabid) ? 'fa-check-double' : 'fa-clock' }} text-lg"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-base font-bold text-slate-900 tracking-tight">2. Persetujuan Kabid</h4>
-                                <p class="text-xs text-slate-500 mt-0.5 font-medium">
-                                    @if($pengajuan->tgl_ttd_kabid)
-                                        Disetujui pada: {{ \Carbon\Carbon::parse($pengajuan->tgl_ttd_kabid)->translatedFormat('d M Y H:i') }} WIB
-                                    @else
-                                        Status: Disetujui
                                     @endif
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {{-- ====================== KASI ====================== --}}
+                        <div class="py-5 border-b border-slate-200">
+
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+
+                                <div class="flex items-center gap-4">
+
+                                    <div class="relative flex items-center justify-center w-10 h-10">
+                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
+                                        <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                    </div>
+
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">
+                                            {{ !empty($pengajuan->ttd_kasi) ? 'Tanda Tangan Kasi Valid' : 'Menunggu Tanda Tangan Kasi' }}
+                                        </h4>
+
+                                        <p class="text-xs text-slate-500 mt-1">
+                                            Disetujui :
+                                            {{ $pengajuan->tgl_ttd_kasi ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasi)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="text-center mt-4 sm:mt-0">
+                                    <span class="text-[10px] font-bold uppercase text-slate-400">
+                                        Spesimen TTD
+                                    </span>
+
+                                    <div class="mt-2">
+                                        @if(!empty($pengajuan->ttd_kasi))
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" class="h-24 object-contain mix-blend-multiply">
+                                        @else
+                                        <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
+                                        @endif
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            @if($pengajuan->catatan_kasi)
+                            <div class="mt-4 ml-14 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                <p class="text-xs font-bold text-slate-500 mb-1">
+                                    <i class="fas fa-comment-alt mr-1"></i>
+                                    Catatan Kasi
+                                </p>
+
+                                <p class="text-sm text-slate-700 leading-relaxed break-words">
+                                    {{ $pengajuan->catatan_kasi }}
                                 </p>
                             </div>
-                        </div>
-                        
-                        <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Kabid</span>
-                            <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
-                                @if(!empty($pengajuan->ttd_kabid))
-                                    <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" alt="Tanda Tangan Kabid" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
-                                @else
-                                    <span class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold">Sistem</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
+                            @endif
 
-                    @if($pengajuan->catatan_kabid)
-                    <div class="p-4 bg-amber-50/60 border border-amber-100 rounded-2xl text-xs text-amber-900 shadow-sm">
-                        <span class="font-bold flex items-center gap-1 mb-1"><i class="fas fa-comment-dots text-amber-500"></i> Catatan Kabid:</span>
-                        <p class="italic">"{{ $pengajuan->catatan_kabid }}"</p>
-                    </div>
-                    @endif
+                        </div>
 
-                    {{-- 3. Persetujuan Kasubbag Umum --}}
-                    <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full {{ !empty($pengajuan->ttd_kasubbag) ?? !empty($pengajuan->ttd_kasumum) ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400' }} flex items-center justify-center shrink-0">
-                                <i class="fas {{ !empty($pengajuan->ttd_kasubbag) ?? !empty($pengajuan->ttd_kasumum) ? 'fa-check-double' : 'fa-clock' }} text-lg"></i>
+                        {{-- ====================== KABID ====================== --}}
+                        <div class="py-5">
+
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+
+                                <div class="flex items-center gap-4">
+
+                                    <div class="relative flex items-center justify-center w-10 h-10">
+                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
+                                        <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                    </div>
+
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">
+                                            {{ !empty($pengajuan->ttd_kabid) ? 'Tanda Tangan Kabid Valid' : 'Menunggu Tanda Tangan Kabid' }}
+                                        </h4>
+
+                                        <p class="text-xs text-slate-500 mt-1">
+                                            Disetujui :
+                                            {{ $pengajuan->tgl_ttd_kabid ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kabid)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="text-center mt-4 sm:mt-0">
+                                    <span class="text-[10px] font-bold uppercase text-slate-400">
+                                        Spesimen TTD
+                                    </span>
+
+                                    <div class="mt-2">
+                                        @if(!empty($pengajuan->ttd_kabid))
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-24 object-contain mix-blend-multiply">
+                                        @else
+                                        <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-base font-bold text-slate-900 tracking-tight">3. Validasi Kasubbag Umum</h4>
-                                <p class="text-xs text-slate-500 mt-0.5 font-medium">
-                                    @if($pengajuan->tgl_ttd_kasubbag)
-                                        Valid pada: {{ \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasubbag)->translatedFormat('d M Y H:i') }} WIB
-                                    @elseif($pengajuan->tgl_ttd_kasumum)
-                                        Valid pada: {{ \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasumum)->translatedFormat('d M Y H:i') }} WIB
-                                    @else
-                                        Status: Valid / Diteruskan
-                                    @endif
+                            @if($pengajuan->catatan_kabid)
+                            <div class="mt-4 ml-14 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                <p class="text-xs font-bold text-slate-500 mb-1">
+                                    <i class="fas fa-comment-alt mr-1"></i>
+                                    Catatan Kabid
+                                </p>
+
+                                <p class="text-sm text-slate-700 leading-relaxed break-words">
+                                    {{ $pengajuan->catatan_kabid }}
                                 </p>
                             </div>
+                            @endif
                         </div>
-                        
-                        <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Kasubbag</span>
-                            <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
-                                @if(!empty($pengajuan->ttd_kasubbag))
-                                    <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" alt="Tanda Tangan Kasubbag" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
-                                @elseif(!empty($pengajuan->ttd_kasumum))
-                                    <img src="{{ asset('storage/' . $pengajuan->ttd_kasumum) }}" alt="Tanda Tangan Kasubbag" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
-                                @else
-                                    <span class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold">Sistem</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
 
-                    @php 
-                        $catatanKasubbag = $pengajuan->catatan_kasubbag ?? $pengajuan->catatan_kasumum; 
-                    @endphp
-                    @if($catatanKasubbag)
-                    <div class="p-4 bg-amber-50/60 border border-amber-100 rounded-2xl text-xs text-amber-900 shadow-sm">
-                        <span class="font-bold flex items-center gap-1 mb-1"><i class="fas fa-comment-dots text-amber-500"></i> Catatan Kasubbag Umum:</span>
-                        <p class="italic">"{{ $catatanKasubbag }}"</p>
-                    </div>
-                    @endif
+                        {{-- ====================== KASUBBAG UMUM & KEPEGAWAIAN ====================== --}}
+                        <div class="py-5">
 
-                    {{-- 4. Persetujuan Sekretaris Dinas (Sekdin) --}}
-                    <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full {{ !empty($pengajuan->ttd_sekdin) ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400' }} flex items-center justify-center shrink-0">
-                                <i class="fas {{ !empty($pengajuan->ttd_sekdin) ? 'fa-check-double' : 'fa-clock' }} text-lg"></i>
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+
+                                <div class="flex items-center gap-4">
+
+                                    <div class="relative flex items-center justify-center w-10 h-10">
+                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
+                                        <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                    </div>
+
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">
+                                            {{ !empty($pengajuan->ttd_kasubbag) ? 'Tanda Tangan Kasubbag Umum & Kepegawaian Valid' : 'Menunggu Tanda Tangan Kasubbag Umum & Kepegawaian' }}
+                                        </h4>
+
+                                        <p class="text-xs text-slate-500 mt-1">
+                                            Disetujui :
+                                            {{ $pengajuan->tgl_ttd_kasubbag_umum ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasubbag_umum)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="text-center mt-4 sm:mt-0">
+                                    <span class="text-[10px] font-bold uppercase text-slate-400">
+                                        Spesimen TTD
+                                    </span>
+
+                                    <div class="mt-2">
+                                        @if(!empty($pengajuan->ttd_kasubbag))
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-24 object-contain mix-blend-multiply">
+                                        @else
+                                        <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-base font-bold text-slate-900 tracking-tight">4. Persetujuan Sekretaris Dinas</h4>
-                                <p class="text-xs text-slate-500 mt-0.5 font-medium">
-                                    @if($pengajuan->tgl_ttd_sekdin)
-                                        Disetujui pada: {{ \Carbon\Carbon::parse($pengajuan->tgl_ttd_sekdin)->translatedFormat('d M Y H:i') }} WIB
-                                    @else
-                                        Status: Disetujui
-                                    @endif
+                            @if($pengajuan->catatan_kasubbag)
+                            <div class="mt-4 ml-14 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                <p class="text-xs font-bold text-slate-500 mb-1">
+                                    <i class="fas fa-comment-alt mr-1"></i>
+                                    Catatan Kasubbag Umum & Kepegawaian
+                                </p>
+
+                                <p class="text-sm text-slate-700 leading-relaxed break-words">
+                                    {{ $pengajuan->catatan_kasubbag }}
                                 </p>
                             </div>
+                            @endif
                         </div>
-                        
-                        <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Sekdin</span>
-                            <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
-                                @if(!empty($pengajuan->ttd_sekdin))
-                                    <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" alt="Tanda Tangan Sekdin" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
-                                @else
-                                    <span class="text-[10px] text-amber-600 bg-amber-50 px-2 py-0.5 rounded font-bold">Sistem</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
 
-                    @if($pengajuan->catatan_sekdin)
-                    <div class="p-4 bg-amber-50/60 border border-amber-100 rounded-2xl text-xs text-amber-900 shadow-sm">
-                        <span class="font-bold flex items-center gap-1 mb-1"><i class="fas fa-comment-dots text-amber-500"></i> Catatan Sekdin:</span>
-                        <p class="italic">"{{ $pengajuan->catatan_sekdin }}"</p>
+                        {{-- ====================== SEKDIN ====================== --}}
+                        <div class="py-5">
+
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+
+                                <div class="flex items-center gap-4">
+
+                                    <div class="relative flex items-center justify-center w-10 h-10">
+                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
+                                        <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                    </div>
+
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">
+                                            {{ !empty($pengajuan->ttd_sekdin) ? 'Tanda Tangan Sekretaris Dinas' : 'Menunggu Tanda Tangan Sekretaris Dinas' }}
+                                        </h4>
+
+                                        <p class="text-xs text-slate-500 mt-1">
+                                            Disetujui :
+                                            {{ $pengajuan->tgl_ttd_sekdin ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_sekdin)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="text-center mt-4 sm:mt-0">
+                                    <span class="text-[10px] font-bold uppercase text-slate-400">
+                                        Spesimen TTD
+                                    </span>
+
+                                    <div class="mt-2">
+                                        @if(!empty($pengajuan->ttd_sekdin))
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-24 object-contain mix-blend-multiply">
+                                        @else
+                                        <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            @if($pengajuan->catatan_sekdin)
+                            <div class="mt-4 ml-14 bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                <p class="text-xs font-bold text-slate-500 mb-1">
+                                    <i class="fas fa-comment-alt mr-1"></i>
+                                    Catatan Sekretaris Dinas
+                                </p>
+
+                                <p class="text-sm text-slate-700 leading-relaxed break-words">
+                                    {{ $pengajuan->catatan_sekdin }}
+                                </p>
+                            </div>
+                            @endif
+                        </div>
                     </div>
-                    @endif
 
                 </div>
 

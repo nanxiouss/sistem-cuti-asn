@@ -78,7 +78,7 @@
                     <table class="w-full text-left text-sm whitespace-nowrap border-collapse">
                         <thead class="bg-slate-50/70 text-slate-500 font-bold uppercase text-xs tracking-wider border-b border-slate-100">
                             <tr>
-                                <th class="px-6 py-4">Nama Pegawai / Pemohon</th>
+                                <th class="px-6 py-4">Nama Pegawai</th>
                                 <th class="px-6 py-4">Asal Bidang</th>
                                 <th class="px-6 py-4">Jenis Cuti</th>
                                 <th class="px-6 py-4">Tanggal Pelaksanaan</th>

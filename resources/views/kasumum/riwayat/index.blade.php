@@ -3,7 +3,7 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             {{-- Header Title --}}
             <div class="mb-8">
                 <h1 class="text-3xl font-extrabold text-slate-950 tracking-tight">Riwayat Berkas Pengajuan</h1>
@@ -13,7 +13,7 @@
             {{-- Form Filter Card --}}
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 mb-6">
                 <form action="{{ route('kasumum.riwayat.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                    
+
                     {{-- Filter Status --}}
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Status Berkas</label>
@@ -31,9 +31,9 @@
                         <select name="bulan" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-slate-900">
                             <option value="">Semua Bulan</option>
                             @foreach(range(1, 12) as $m)
-                                <option value="{{ $m }}" {{ request('bulan') == $m ? 'selected' : '' }}>
-                                    {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
-                                </option>
+                            <option value="{{ $m }}" {{ request('bulan') == $m ? 'selected' : '' }}>
+                                {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -44,7 +44,7 @@
                         <select name="tahun" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-slate-900">
                             <option value="">Semua Tahun</option>
                             @foreach($daftarTahun as $th)
-                                <option value="{{ $th }}" {{ request('tahun') == $th ? 'selected' : '' }}>{{ $th }}</option>
+                            <option value="{{ $th }}" {{ request('tahun') == $th ? 'selected' : '' }}>{{ $th }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -69,7 +69,7 @@
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-6 border-b border-slate-100 bg-slate-50/50">
                     <h3 class="font-bold text-slate-800 text-base flex items-center gap-2.5">
-                        <i class="fas fa-history text-slate-500 text-lg"></i> 
+                        <i class="fas fa-history text-slate-500 text-lg"></i>
                         Arsip Riwayat Proses <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-xs rounded-md font-extrabold">{{ $riwayatPengajuan->count() }}</span>
                     </h3>
                 </div>
@@ -78,7 +78,7 @@
                     <table class="w-full text-left text-sm whitespace-nowrap border-collapse">
                         <thead class="bg-slate-50/70 text-slate-500 font-bold uppercase text-xs tracking-wider border-b border-slate-100">
                             <tr>
-                                <th class="px-6 py-4">Nama Pegawai / Pemohon</th>
+                                <th class="px-6 py-4">Nama Pegawai</th>
                                 <th class="px-6 py-4">Asal Bidang</th>
                                 <th class="px-6 py-4">Jenis Cuti</th>
                                 <th class="px-6 py-4">Tanggal Pelaksanaan</th>
@@ -109,11 +109,11 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     @if($item->status == 'Disetujui')
-                                        <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-extrabold rounded-full">Disetujui (Final)</span>
+                                    <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-extrabold rounded-full">Disetujui (Final)</span>
                                     @elseif($item->status == 'Ditolak')
-                                        <span class="px-3 py-1 bg-rose-50 text-rose-700 border border-rose-200 text-xs font-extrabold rounded-full">Ditolak</span>
+                                    <span class="px-3 py-1 bg-rose-50 text-rose-700 border border-rose-200 text-xs font-extrabold rounded-full">Ditolak</span>
                                     @else
-                                        <span class="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 text-xs font-extrabold rounded-full">Diproses ({{ $item->status }})</span>
+                                    <span class="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 text-xs font-extrabold rounded-full">Diproses ({{ $item->status }})</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-center">

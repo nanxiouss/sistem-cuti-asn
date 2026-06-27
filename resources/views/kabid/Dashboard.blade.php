@@ -130,7 +130,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <a href="{{ route('kabid.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all shadow-lg transform hover:-translate-y-0.5">
-                                        <i class="fas fa-search text-lime-400"></i> Review Berkas
+                                        <i class="fas fa-search text-lime-400"></i> Review Permohonan
                                     </a>
                                 </td>
                             </tr>

@@ -25,7 +25,7 @@
     
                             <div class="flex items-center gap-4">
                                 <a href="{{ route('kasi.persetujuan.index') }}" class="px-6 py-3 bg-lime-500 hover:bg-lime-600 text-slate-900 font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(132,204,22,0.3)]">
-                                    Review Pengajuan
+                                    Review Permohonan
                                 </a>
                                 <a href="{{ route('kasi.persetujuan.index') }}?status=disetujui" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl transition-all border border-slate-700">
                                     Lihat Riwayat Cuti

@@ -16,13 +16,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             {{-- HERO BANNER PREMIUM ALA ADMIN --}}
             <div class="relative rounded-3xl overflow-hidden bg-slate-900 shadow-2xl shadow-slate-200/50 mb-10 -mt-2">
                 <div class="absolute inset-0">
                     <div class="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-indigo-500/20 mix-blend-overlay"></div>
-                    <img src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1600&q=80"
-                        class="w-full h-full object-cover opacity-10 mix-blend-luminosity" alt="Office bg">
+                    <img src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1600&q=80" class="w-full h-full object-cover opacity-10 mix-blend-luminosity" alt="Office bg">
                     <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/50"></div>
                 </div>
 
@@ -41,24 +40,23 @@
                         </h1>
 
                         <p class="text-slate-400 text-base md:text-lg max-w-lg leading-relaxed">
-                            Hari ini status kehadiran Bapak/Ibu tercatat sebagai 
+                            Hari ini status kehadiran Bapak/Ibu tercatat sebagai
                             @if($is_cuti)
-                                <span class="text-amber-400 font-extrabold underline decoration-wavy decoration-amber-400/50">Sedang Cuti</span>.
+                            <span class="text-amber-400 font-extrabold underline decoration-wavy decoration-amber-400/50">Sedang Cuti</span>.
                             @else
-                                <span class="text-sky-400 font-extrabold inline-flex items-center gap-1.5">
-                                    Hadir Kerja 
-                                    <span class="relative flex h-2 w-2">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
-                                    </span>
-                                </span>.
+                            <span class="text-sky-400 font-extrabold inline-flex items-center gap-1.5">
+                                Hadir Kerja
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                                </span>
+                            </span>.
                             @endif
                             Pantau pergerakan berkas dan berikan persetujuan akhir secara real-time.
                         </p>
 
                         <div class="flex flex-wrap gap-4 pt-2">
-                            <a href="{{ route('sekdin.persetujuan.index') }}"
-                                class="px-6 py-3 bg-sky-400 hover:bg-sky-500 text-slate-900 rounded-xl font-bold shadow-lg shadow-sky-400/20 transition-all duration-300 ease-out transform hover:-translate-y-1">
+                            <a href="{{ route('sekdin.persetujuan.index') }}" class="px-6 py-3 bg-sky-400 hover:bg-sky-500 text-slate-900 rounded-xl font-bold shadow-lg shadow-sky-400/20 transition-all duration-300 ease-out transform hover:-translate-y-1">
                                 Cek Antrean Berkas
                             </a>
                         </div>
@@ -150,7 +148,7 @@
 
             {{-- STRUKTUR DUA KOLOM: MEJA KERJA UTAMA & DETAIL SIDEBAR --}}
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
+
                 {{-- KOLOM KIRI: DAFTAR ANTRIAN MASUK --}}
                 <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
@@ -160,57 +158,56 @@
                         </div>
                         <a href="{{ route('sekdin.persetujuan.index') }}" class="text-sky-600 text-sm font-bold hover:text-sky-700 transition">Lihat Semua</a>
                     </div>
-                    
+
                     <div class="p-0">
                         @if(isset($pengajuanButuhAksi) && $pengajuanButuhAksi->count() > 0)
-                            <ul class="divide-y divide-slate-100">
-                                @foreach($pengajuanButuhAksi as $item)
-                                    <li class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-11 h-11 rounded-xl bg-slate-100 flex shrink-0 items-center justify-center text-slate-700 font-black shadow-inner border border-slate-200/40">
-                                                {{ strtoupper(substr($item->user->nama ?? 'P', 0, 2)) }}
-                                            </div>
-                                            <div>
-                                                <p class="text-sm font-bold text-slate-800 leading-snug">{{ $item->user->nama ?? '-' }}</p>
-                                                <p class="text-[11px] text-slate-400 mb-1">NIP. {{ $item->user->nip ?? '-' }}</p>
-                                                
-                                                <div class="flex flex-wrap items-center gap-2 mt-1">
-                                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100/30">
-                                                        <i class="fas fa-layer-group text-[9px] opacity-70"></i>
-                                                        {{ $item->user->pegawai->bidang->nama_bidang ?? 'Umum / Global' }}
-                                                    </span>
-                                                    <span class="text-xs text-slate-600 font-medium">
-                                                        Mengajukan <span class="text-emerald-600 font-bold">{{ $item->jenisCuti->nama ?? $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}</span>
-                                                    </span>
-                                                </div>
-                                                <p class="text-[11px] text-slate-400 font-medium mt-1">
-                                                    <i class="far fa-calendar-alt text-[10px]"></i> 
-                                                    {{ \Carbon\Carbon::parse($item->tgl_mulai)->translatedFormat('d M') }} - {{ \Carbon\Carbon::parse($item->tgl_selesai)->translatedFormat('d M Y') }} 
-                                                    <span class="text-indigo-600 font-bold">({{ $item->lama_cuti }} Hari)</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 pt-3 sm:pt-0">
-                                            <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">
-                                                Masuk: {{ $item->created_at ? $item->created_at->translatedFormat('d M Y') : '-' }}
+                        <ul class="divide-y divide-slate-100">
+                            @foreach($pengajuanButuhAksi as $item)
+                            <li class="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 transition">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-11 h-11 rounded-xl bg-slate-100 flex shrink-0 items-center justify-center text-slate-700 font-black shadow-inner border border-slate-200/40">
+                                        {{ strtoupper(substr($item->user->nama ?? 'P', 0, 2)) }}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-800 leading-snug">{{ $item->user->nama ?? '-' }}</p>
+                                        <p class="text-[11px] text-slate-400 mb-1">NIP. {{ $item->user->nip ?? '-' }}</p>
+
+                                        <div class="flex flex-wrap items-center gap-2 mt-1">
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100/30">
+                                                <i class="fas fa-layer-group text-[9px] opacity-70"></i>
+                                                {{ $item->user->pegawai->bidang->nama_bidang ?? 'Umum / Global' }}
                                             </span>
-                                            <a href="{{ route('sekdin.persetujuan.show', $item->id) }}" 
-                                               class="inline-flex items-center gap-1.5 px-4 py-2 bg-sky-400 hover:bg-sky-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
-                                                <i class="fas fa-file-signature text-[10px]"></i> Proses
-                                            </a>
+                                            <span class="text-xs text-slate-600 font-medium">
+                                                Mengajukan <span class="text-emerald-600 font-bold">{{ $item->jenisCuti->nama ?? $item->jenisCuti->nama_cuti ?? 'Cuti Tahunan' }}</span>
+                                            </span>
                                         </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <div class="py-16 text-center">
-                                <div class="w-16 h-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
-                                    <i class="fas fa-folder-open text-xl opacity-60"></i>
+                                        <p class="text-[11px] text-slate-400 font-medium mt-1">
+                                            <i class="far fa-calendar-alt text-[10px]"></i>
+                                            {{ \Carbon\Carbon::parse($item->tgl_mulai)->translatedFormat('d M') }} - {{ \Carbon\Carbon::parse($item->tgl_selesai)->translatedFormat('d M Y') }}
+                                            <span class="text-indigo-600 font-bold">({{ $item->lama_cuti }} Hari)</span>
+                                        </p>
+                                    </div>
                                 </div>
-                                <p class="text-slate-500 text-sm font-bold">Meja bersih! Belum ada berkas antrian baru dari Kasubbag Umum.</p>
-                                <p class="text-xs text-slate-400 mt-0.5">Semua berkas masuk telah selesai Anda proses.</p>
+
+                                <div class="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 pt-3 sm:pt-0">
+                                    <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">
+                                        Masuk: {{ $item->created_at ? $item->created_at->translatedFormat('d M Y') : '-' }}
+                                    </span>
+                                    <a href="{{ route('sekdin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-sky-400 hover:bg-sky-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
+                                        <i class="fas fa-file-signature text-[10px]"></i> Review Permohonan
+                                    </a>
+                                </div>
+                            </li>
+                            @endforeach
+                        </ul>
+                        @else
+                        <div class="py-16 text-center">
+                            <div class="w-16 h-16 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400">
+                                <i class="fas fa-folder-open text-xl opacity-60"></i>
                             </div>
+                            <p class="text-slate-500 text-sm font-bold">Meja bersih! Belum ada berkas antrian baru dari Kasubbag Umum.</p>
+                            <p class="text-xs text-slate-400 mt-0.5">Semua berkas masuk telah selesai Anda proses.</p>
+                        </div>
                         @endif
                     </div>
                 </div>
@@ -224,29 +221,29 @@
                     </div>
                     <div class="p-6">
                         @if(isset($cutiHariIni) && $cutiHariIni->count() > 0)
-                            <div class="space-y-4">
-                                @foreach($cutiHariIni as $cuti)
-                                    <div class="p-4 rounded-2xl border border-slate-100 bg-white shadow-xs flex items-start gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 text-xs">
-                                            <i class="fas fa-user-clock"></i>
-                                        </div>
-                                        <div class="overflow-hidden">
-                                            <h4 class="text-sm font-bold text-slate-800 truncate">{{ $cuti->user->nama ?? $cuti->user->name ?? 'Pegawai' }}</h4>
-                                            <p class="text-[11px] text-slate-400 truncate mb-1">{{ $cuti->user->pegawai->bidang->nama_bidang ?? 'Tanpa Bidang' }}</p>
-                                            <span class="inline-block px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600 font-medium">
-                                                s.d {{ $cuti->tgl_selesai ? \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('d M Y') : '-' }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                @endforeach
+                        <div class="space-y-4">
+                            @foreach($cutiHariIni as $cuti)
+                            <div class="p-4 rounded-2xl border border-slate-100 bg-white shadow-xs flex items-start gap-3">
+                                <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 text-xs">
+                                    <i class="fas fa-user-clock"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h4 class="text-sm font-bold text-slate-800 truncate">{{ $cuti->user->nama ?? $cuti->user->name ?? 'Pegawai' }}</h4>
+                                    <p class="text-[11px] text-slate-400 truncate mb-1">{{ $cuti->user->pegawai->bidang->nama_bidang ?? 'Tanpa Bidang' }}</p>
+                                    <span class="inline-block px-2 py-0.5 rounded text-[10px] bg-slate-100 text-slate-600 font-medium">
+                                        s.d {{ $cuti->tgl_selesai ? \Carbon\Carbon::parse($cuti->tgl_selesai)->translatedFormat('d M Y') : '-' }}
+                                    </span>
+                                </div>
                             </div>
+                            @endforeach
+                        </div>
                         @else
-                            <div class="py-12 text-center text-slate-400 text-sm italic">
-                                <i class="fas fa-user-check block text-3xl text-slate-200 mb-2"></i>
-                                Hari ini semua pegawai terdata hadir penuh di instansi.
-                            </div>
+                        <div class="py-12 text-center text-slate-400 text-sm italic">
+                            <i class="fas fa-user-check block text-3xl text-slate-200 mb-2"></i>
+                            Hari ini semua pegawai terdata hadir penuh di instansi.
+                        </div>
                         @endif
-                        
+
                         <div class="mt-6 pt-6 border-t border-slate-100 flex justify-between items-center text-sm">
                             <span class="text-slate-500 font-medium">Total Cuti Bulan Ini:</span>
                             <span class="px-3 py-1 rounded-full font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">

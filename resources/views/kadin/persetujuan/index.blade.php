@@ -3,7 +3,7 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             {{-- Header Title --}}
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div>
@@ -32,7 +32,7 @@
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
                     <h3 class="font-bold text-slate-800 text-base flex items-center gap-2.5">
-                        <i class="fas fa-folder-open text-amber-500 text-lg"></i> 
+                        <i class="fas fa-folder-open text-amber-500 text-lg"></i>
                         Antrean Berkas Masuk <span class="px-2 py-0.5 bg-slate-200 text-slate-700 text-xs rounded-md font-extrabold">{{ $pengajuan->count() }}</span>
                     </h3>
                 </div>
@@ -41,7 +41,7 @@
                     <table class="w-full text-left text-sm whitespace-nowrap border-collapse">
                         <thead class="bg-slate-50/70 text-slate-500 font-bold uppercase text-xs tracking-wider border-b border-slate-100">
                             <tr>
-                                <th class="px-6 py-4">Nama Pegawai / Pemohon</th>
+                                <th class="px-6 py-4">Nama Pegawai</th>
                                 <th class="px-6 py-4">Asal Bidang</th>
                                 <th class="px-6 py-4">Jenis Cuti</th>
                                 <th class="px-6 py-4">Tanggal Pelaksanaan</th>
