@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Kasi\DashboardController as KasiDashboardController;
 use App\Http\Controllers\Kasi\PersetujuanController as KasiPersetujuanController;
 use App\Http\Controllers\Kasi\RiwayatController as KasiRiwayatController;
+use App\Http\Controllers\Kasi\KalenderController as KasiKalenderController;
 
 use App\Http\Controllers\Kasumum\DashboardController as KasumumDashboardController;
 use App\Http\Controllers\Kasumum\PersetujuanController as KasumumPersetujuanController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Kasumum\RiwayatController as KasumumRiwayatController;
 use App\Http\Controllers\Kabid\DashboardController as KabidDashboardController;
 use App\Http\Controllers\Kabid\PersetujuanController as KabidPersetujuanController;
 use App\Http\Controllers\Kabid\RiwayatController as KabidRiwayatController;
+use App\Http\Controllers\Kabid\KalenderController as KabidKalenderController;
 
 use App\Http\Controllers\Sekdin\DashboardController as SekdinDashboardController;
 use App\Http\Controllers\Sekdin\PersetujuanController as SekdinPersetujuanController;
@@ -122,6 +124,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/persetujuan/{id}', [KasiPersetujuanController::class, 'update'])->name('persetujuan.update');
         Route::get('/riwayat', [KasiRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('/riwayat/{id}', [KasiRiwayatController::class, 'show'])->name('riwayat.show');
+        Route::get('/kalender', [KasiKalenderController::class, 'index'])->name('kalender.index');
     });
 
     // 5. Ruang Lingkup: KABID
@@ -132,6 +135,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/persetujuan/{id}', [KabidPersetujuanController::class, 'update'])->name('persetujuan.update');
         Route::get('/riwayat', [KabidRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('/riwayat/{id}', [KabidRiwayatController::class, 'show'])->name('riwayat.show');
+        Route::get('/kalender', [KabidKalenderController::class, 'index'])->name('kalender.index');
     });
 
     // Ruang Lingkup: KASUBBAG_UMUM

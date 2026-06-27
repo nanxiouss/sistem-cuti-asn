@@ -29,6 +29,9 @@
                 <a href="{{ route('kabid.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kabid.riwayat*') ? $activeClass : $inactiveClass }}">
                     Riwayat
                 </a>
+                <a href="{{ route('kabid.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('kabid.kalender*') ? $activeClass : $inactiveClass }}">
+                    Kalender
+                </a>
             </div>
 
             <div class="flex items-center gap-3 sm:gap-4">
