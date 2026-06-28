@@ -205,8 +205,10 @@
                     <p class="text-[10px] italic text-slate-700 underline mb-1">
                         Catatan Kasi {{ $pengajuan->bidang_kasi ?? ($pengajuan->atasan->pegawai->bidang->nama_bidang ?? '') }} :
                     </p>
-                    <div class="handwriting text-blue-800 text-[13px] leading-tight">
-                        {{ $pengajuan->catatan_kasi ?? 'Sebelum cuti selesaikan pekerjaan' }}
+                    <div class="handwriting text-blue-800 text-[13px] leading-relaxed text-left">
+                        <p class="m-0 whitespace-normal break-all">
+                            {{ $pengajuan->catatan_kasi ?? 'Sebelum cuti selesaikan pekerjaan oihrohqhroqrhqrhqu3rhuoqhrhquowrhq' }}
+                        </p>
                     </div>
                 </td>
                 <td class="border border-black px-2 py-1 align-top text-justify w-[35%] relative">
@@ -260,9 +262,11 @@
                 <td colspan="3" class="border border-black px-2 py-1 align-top relative">
                     <p class="text-[10px] italic text-slate-700 underline mb-1">Catatan Kasubbag. Umkep:</p>
                     <div class="flex items-center gap-4 mt-2">
-                        <div class="handwriting text-blue-800 text-[14px] ml-4 w-2/3">
-                            {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
-                        </div>
+                        <div class="handwriting text-blue-800 text-[14px] ml-4 w-2/3 text-left">
+    <p class="m-0 whitespace-normal break-words leading-relaxed">
+        {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
+    </p>
+</div>
                         @if($pengajuan->ttd_kasubbag)
                         <div class="my-2 -translate-x-16">
                             <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag Umum">
