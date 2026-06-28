@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PegawaiController as AdminPegawaiController;
 use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
 use App\Http\Controllers\Admin\PemberkasanController as AdminPemberkasanController;
+use App\Http\Controllers\Admin\KalenderController as AdminKalenderController;
 use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 
 use App\Http\Controllers\Kasi\DashboardController as KasiDashboardController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\Kasi\KalenderController as KasiKalenderController;
 use App\Http\Controllers\Kasumum\DashboardController as KasumumDashboardController;
 use App\Http\Controllers\Kasumum\PersetujuanController as KasumumPersetujuanController;
 use App\Http\Controllers\Kasumum\RiwayatController as KasumumRiwayatController;
+use App\Http\Controllers\Kasumum\KalenderController as KasumumKalenderController;
 
 use App\Http\Controllers\Kabid\DashboardController as KabidDashboardController;
 use App\Http\Controllers\Kabid\PersetujuanController as KabidPersetujuanController;
@@ -33,10 +35,12 @@ use App\Http\Controllers\Kabid\KalenderController as KabidKalenderController;
 use App\Http\Controllers\Sekdin\DashboardController as SekdinDashboardController;
 use App\Http\Controllers\Sekdin\PersetujuanController as SekdinPersetujuanController;
 use App\Http\Controllers\Sekdin\RiwayatController as SekdinRiwayatController;
+use App\Http\Controllers\Sekdin\KalenderController as SekdinKalenderController;
 
 use App\Http\Controllers\Kadin\DashboardController as KadinDashboardController;
 use App\Http\Controllers\Kadin\PersetujuanController as KadinPersetujuanController;
 use App\Http\Controllers\Kadin\RiwayatController as KadinRiwayatController;
+use App\Http\Controllers\Kadin\KalenderController as KadinKalenderController;
 
 // Halaman Depan / Landing Page
 Route::get('/', function () {
@@ -112,6 +116,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/pemberkasan/{id}', [AdminPemberkasanController::class, 'show'])->name('pemberkasan.show');
         Route::post('/pemberkasan/{id}/proses', [AdminPemberkasanController::class, 'prosesPemberkasan'])->name('pemberkasan.proses');
 
+        Route::get('/kalender', [AdminKalenderController::class, 'index'])->name('kalender.index');
+
         Route::get('/laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/excel', [AdminLaporanController::class, 'exportExcel'])->name('laporan.excel');
     });
@@ -146,6 +152,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/persetujuan/{id}', [KasumumPersetujuanController::class, 'update'])->name('persetujuan.update');
         Route::get('riwayat', [KasumumRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('riwayat/{id}', [KasumumRiwayatController::class, 'show'])->name('riwayat.show');
+        Route::get('/kalender', [KasumumKalenderController::class, 'index'])->name('kalender.index');
     });
 
     // 6. Ruang Lingkup: SEKDIN
@@ -156,6 +163,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/persetujuan/{id}', [SekdinPersetujuanController::class, 'update'])->name('persetujuan.update');
         Route::get('riwayat', [SekdinRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('riwayat/{id}', [SekdinRiwayatController::class, 'show'])->name('riwayat.show');
+        Route::get('/kalender', [SekdinKalenderController::class, 'index'])->name('kalender.index');
     });
 
     // 7. Ruang Lingkup: KADIN
@@ -166,6 +174,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/persetujuan/{id}', [KadinPersetujuanController::class, 'update'])->name('persetujuan.update');
         Route::get('riwayat', [KadinRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('riwayat/{id}', [KadinRiwayatController::class, 'show'])->name('riwayat.show');
+        Route::get('/kalender', [KadinKalenderController::class, 'index'])->name('kalender.index');
     });
 
     // 8. Manajemen Profil Pengguna Mandiri (Universal)

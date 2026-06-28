@@ -75,7 +75,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <a href="{{ route('sekdin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all shadow-sm">
-                                        Tinjau Berkas <i class="fas fa-chevron-right text-[10px] text-amber-400"></i>
+                                        Review Permohonan <i class="fas fa-chevron-right text-[10px] text-amber-400"></i>
                                     </a>
                                 </td>
                             </tr>

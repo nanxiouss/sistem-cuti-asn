@@ -6,41 +6,65 @@ use Illuminate\Console\Command;
 use App\Models\Pegawai;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class ResetCutiTahunanPegawai extends Command
 {
-    // Nama command untuk dijalankan (bisa juga via terminal: php artisan cuti:reset-tahunan)
     protected $signature = 'cuti:reset-tahunan';
-    protected $description = 'Reset sisa cuti tahunan pegawai berdasarkan aturan BKN (Maks carry over 12 hari + jatah baru 12 hari)';
+    protected $description = 'Reset sisa cuti tahunan (1 Januari), Cuti Besar (5 Tahunan), dan Melahirkan (Tahunan) berdasarkan masa kerja';
 
     public function handle()
     {
-        $this->info('Memulai proses reset cuti tahunan pegawai...');
-        Log::info('Proses cron job reset cuti tahunan dimulai.');
+        $this->info('Memulai proses pengecekan dan reset cuti pegawai...');
+        Log::info('Proses cron job reset cuti harian/tahunan dimulai.');
+
+        $today = Carbon::today();
 
         DB::beginTransaction();
         try {
             $pegawais = Pegawai::all();
 
             foreach ($pegawais as $pegawai) {
-                // Sisa cuti di akhir tahun berjalan
-                $sisa_akhir_tahun = $pegawai->sisa_cuti_tahunan ?? 0;
+                // Flag penanda apakah data pegawai ini diubah hari ini
+                $isUpdated = false; 
 
-                // Logika BKN (Sistem 1 Kolom): 
-                // Maksimal cuti yang bisa dibawa ke tahun depan (sebagai N-1 dan N-2) adalah 12 hari (6 + 6).
-                $carry_over = $sisa_akhir_tahun > 12 ? 12 : $sisa_akhir_tahun;
+                // 1. LOGIKA CUTI TAHUNAN (Hanya jalan setiap 1 Januari)
+                if ($today->format('m-d') === '01-01') {
+                    $sisa_akhir_tahun = $pegawai->sisa_cuti_tahunan ?? 0;
+                    $carry_over = $sisa_akhir_tahun > 12 ? 12 : $sisa_akhir_tahun;
+                    $jatah_baru = 12;
+                    
+                    $pegawai->sisa_cuti_tahunan = $carry_over + $jatah_baru;
+                    $isUpdated = true;
+                }
 
-                // Tambahkan jatah cuti baru (N) untuk tahun berjalan
-                $jatah_baru = 12;
+                // 2. LOGIKA CUTI BESAR & MELAHIRKAN (Berdasarkan Masa Kerja)
+                if ($pegawai->masa_kerja) {
+                    $tanggalMasuk = Carbon::parse($pegawai->masa_kerja);
 
-                // Total update ke database (Maksimal akan jadi 24 hari)
-                $pegawai->sisa_cuti_tahunan = $carry_over + $jatah_baru;
-                $pegawai->save();
+                    // Cek apakah HARI INI tepat jatuh pada bulan & tanggal anniversary masuk kerja
+                    if ($today->isSameMonth($tanggalMasuk) && $today->isSameDay($tanggalMasuk)) {
+                        
+                        // A. Reset Cuti Melahirkan (Diberikan 90 hari setiap tahun di tanggal anniversary)
+                        $pegawai->sisa_cuti_melahirkan = 90;
+                        $isUpdated = true;
+
+                        // B. Reset Cuti Besar (Diberikan 90 hari HANYA setiap kelipatan 5 tahun)
+                        $selisihTahun = $today->diffInYears($tanggalMasuk);
+                        if ($selisihTahun > 0 && $selisihTahun % 5 === 0) {
+                            $pegawai->sisa_cuti_besar = 90;
+                        }
+                    }
+                }
+
+                if ($isUpdated) {
+                    $pegawai->save();
+                }
             }
 
             DB::commit();
-            $this->info('Berhasil me-reset cuti seluruh pegawai!');
-            Log::info('Proses cron job reset cuti tahunan berhasil.');
+            $this->info('Berhasil mengecek dan me-reset cuti pegawai yang memenuhi syarat hari ini!');
+            Log::info('Proses cron job reset cuti berhasil diselesaikan.');
 
         } catch (\Exception $e) {
             DB::rollBack();

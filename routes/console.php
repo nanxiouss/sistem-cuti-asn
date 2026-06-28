@@ -8,4 +8,4 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('cuti:reset-tahunan')->yearlyOn(1, 1, '00:01');
+Schedule::command('cuti:reset-tahunan')->dailyAt('00:01');

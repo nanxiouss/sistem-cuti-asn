@@ -8,14 +8,14 @@
                     <img src="/images/logo.png" alt="Logo Sumsel DESDM" class="h-10 w-auto object-contain">
                     <div class="leading-tight border-l-2 border-slate-200 pl-4">
                         <span class="text-xl font-extrabold tracking-tighter text-slate-800 block">E-CUTI</span>
-                        <p class="text-[9px] font-bold text-rose-500 uppercase tracking-[0.2em]">PANEL Kepala Sub Bagian Umum dan Kepegawaian</p>
+                        <p class="text-[9px] font-bold text-rose-500 uppercase tracking-widest">PANEL KASUBBAG UMUM & KEPEGAWAIAN</p>
                     </div>
                 </a>
             </div>
 
             <div class="hidden md:flex items-center gap-1 bg-white/50 backdrop-blur-sm p-1 rounded-full border border-white/40 shadow-sm self-center">
                 @php
-                $navClass = "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group overflow-hidden";
+                $navClass = "px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group overflow-hidden";
                 $activeClass = "bg-slate-900 text-white shadow-md";
                 $inactiveClass = "text-slate-600 hover:text-lime-500 hover:bg-white";
                 @endphp
@@ -28,6 +28,9 @@
                 </a>
                 <a href="{{ route('kasumum.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.riwayat*') ? $activeClass : $inactiveClass }}">
                     Riwayat
+                </a>
+                <a href="{{ route('kasumum.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.kalender*') ? $activeClass : $inactiveClass }}">
+                    Kalender
                 </a>
             </div>
 

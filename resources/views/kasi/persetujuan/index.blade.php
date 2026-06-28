@@ -52,7 +52,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <a href="{{ route('kasi.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition-colors">
-                                        <i class="fas fa-search"></i> Proses
+                                        <i class="fas fa-search"></i> Review Permohonan
                                     </a>
                                 </td>
                             </tr>

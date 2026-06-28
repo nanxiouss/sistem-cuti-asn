@@ -58,7 +58,7 @@
                         </td>
                         <td class="px-6 py-4 text-center">
                             <a href="{{ route('admin.pengajuan.show', $p->id) }}" class="inline-flex items-center px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-full hover:bg-indigo-600 transition shadow-sm">
-                                Detail
+                                Review Permohonan
                             </a>
                         </td>
                     </tr>

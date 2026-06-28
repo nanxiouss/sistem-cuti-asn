@@ -31,6 +31,9 @@
                 <a href="{{ route('admin.pemberkasan.index') }}" class="{{ $navClass }} {{ request()->routeIs('admin.pemberkasan*') ? $activeClass : $inactiveClass }}">
                     Pemberkasan
                 </a>
+                <a href="{{ route('admin.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('admin.kalender*') ? $activeClass : $inactiveClass }}">
+                    Kalender
+                </a>
                 <a href="{{ route('admin.laporan.index') }}" class="{{ $navClass }} {{ request()->routeIs('admin.laporan*') ? $activeClass : $inactiveClass }}">
                     Laporan
                 </a>
