@@ -20,23 +20,29 @@
             {{-- HERO BANNER PREMIUM ALA ADMIN --}}
             <div class="relative rounded-3xl overflow-hidden bg-slate-900 shadow-2xl shadow-slate-200/50 mb-10 -mt-2">
                 <div class="absolute inset-0">
-                    <div class="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-indigo-500/20 mix-blend-overlay"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-lime-500/10 to-indigo-500/20 mix-blend-overlay"></div>
                     <img src="https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1600&q=80" class="w-full h-full object-cover opacity-10 mix-blend-luminosity" alt="Office bg">
                     <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/50"></div>
                 </div>
 
                 <div class="relative z-10 p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
                     <div class="lg:col-span-7 space-y-6">
-                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-sky-300 text-xs font-semibold backdrop-blur-md cursor-default">
-                            <span class="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)] animate-pulse"></span>
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-lime-500/10 border border-lime-400/20 text-lime-300 text-xs font-semibold backdrop-blur-md cursor-default">
+                            <span class="w-2 h-2 rounded-full bg-lime-400 shadow-[0_0_8px_rgba(56,189,248,0.8)] animate-pulse"></span>
                             {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
                         </div>
 
                         <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-300">{{ $sapaan ?? 'Selamat Datang' }},</span> <br>
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-300">
-                                {{ $user->nama ?? $user->name ?? 'Sekretaris Dinas' }}
-                            </span>
+                           <span class="text-transparent bg-clip-text bg-slate-50">{{ $sapaan ?? 'Selamat Datang' }},</span> <br>
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-lime-300">
+                                    {{ explode(' ', Auth::user()->nama)[0] }}
+                                </span>
+
+                                <span class="text-white opacity-80 font-light mx-2">-</span>
+
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 via-yellow-300 to-amber-300">
+                                    {{ Auth::user()->pegawai->jabatan ?? '' }}
+                                </span>
                         </h1>
 
                         <p class="text-slate-400 text-base md:text-lg max-w-lg leading-relaxed">
@@ -44,11 +50,11 @@
                             @if($is_cuti)
                             <span class="text-amber-400 font-extrabold underline decoration-wavy decoration-amber-400/50">Sedang Cuti</span>.
                             @else
-                            <span class="text-sky-400 font-extrabold inline-flex items-center gap-1.5">
+                            <span class="text-lime-400 font-extrabold inline-flex items-center gap-1.5">
                                 Hadir Kerja
                                 <span class="relative flex h-2 w-2">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-lime-500"></span>
                                 </span>
                             </span>.
                             @endif
@@ -56,7 +62,7 @@
                         </p>
 
                         <div class="flex flex-wrap gap-4 pt-2">
-                            <a href="{{ route('sekdin.persetujuan.index') }}" class="px-6 py-3 bg-sky-400 hover:bg-sky-500 text-slate-900 rounded-xl font-bold shadow-lg shadow-sky-400/20 transition-all duration-300 ease-out transform hover:-translate-y-1">
+                            <a href="{{ route('sekdin.persetujuan.index') }}" class="px-6 py-3 bg-lime-400 hover:bg-lime-500 text-slate-900 rounded-xl font-bold shadow-lg shadow-lime-400/20 transition-all duration-300 ease-out transform hover:-translate-y-1">
                                 Cek Antrean Berkas
                             </a>
                         </div>
@@ -64,26 +70,26 @@
 
                     {{-- SIDE PANEL INFO SISTEM / MEJA KERJA --}}
                     <div class="lg:col-span-5 relative hidden md:block">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-3xl blur opacity-10"></div>
+                        <div class="absolute -inset-1 bg-gradient-to-r from-lime-500 to-indigo-500 rounded-3xl blur opacity-10"></div>
                         <div class="relative bg-slate-800/60 backdrop-blur-xl border border-white/10 p-7 rounded-3xl text-white shadow-xl">
                             <div class="flex items-center justify-between mb-5 border-b border-white/10 pb-4">
                                 <h3 class="font-bold text-lg flex items-center gap-2">
-                                    <i class="fas fa-info-circle text-sky-400"></i> Meja Persetujuan
+                                    <i class="fas fa-info-circle text-lime-400"></i> Meja Persetujuan
                                 </h3>
-                                <span class="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-1 rounded md:uppercase tracking-wider font-bold border border-sky-500/20">
+                                <span class="text-[10px] bg-lime-500/20 text-lime-300 px-2 py-1 rounded md:uppercase tracking-wider font-bold border border-lime-500/20">
                                     SOP Sekdin
                                 </span>
                             </div>
                             <ul class="space-y-5">
                                 <li class="flex gap-4">
-                                    <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-sky-400 shrink-0">1</div>
+                                    <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-lime-400 shrink-0">1</div>
                                     <div>
                                         <span class="block text-sm font-semibold text-slate-200">Persetujuan Akhir</span>
                                         <p class="text-xs text-slate-400 leading-relaxed mt-1">Berikan keputusan (Setuju/Tolak) pada berkas cuti yang telah diverifikasi oleh Kasubbag Umum.</p>
                                     </div>
                                 </li>
                                 <li class="flex gap-4">
-                                    <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-sky-400 shrink-0">2</div>
+                                    <div class="mt-0.5 w-7 h-7 rounded-full bg-slate-700/50 border border-white/10 flex items-center justify-center text-xs font-bold text-lime-400 shrink-0">2</div>
                                     <div>
                                         <span class="block text-sm font-semibold text-slate-200">Monitoring Instansi</span>
                                         <p class="text-xs text-slate-400 leading-relaxed mt-1">Pantau jumlah pegawai yang sedang cuti secara global untuk memastikan pelayanan publik tetap optimal.</p>
@@ -156,7 +162,7 @@
                             <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
                             <h3 class="font-bold text-slate-800">Menunggu Tindakan (Meja Kerja Sekdin)</h3>
                         </div>
-                        <a href="{{ route('sekdin.persetujuan.index') }}" class="text-sky-600 text-sm font-bold hover:text-sky-700 transition">Lihat Semua</a>
+                        <a href="{{ route('sekdin.persetujuan.index') }}" class="text-lime-600 text-sm font-bold hover:text-lime-700 transition">Lihat Semua</a>
                     </div>
 
                     <div class="p-0">
@@ -193,7 +199,7 @@
                                     <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">
                                         Masuk: {{ $item->created_at ? $item->created_at->translatedFormat('d M Y') : '-' }}
                                     </span>
-                                    <a href="{{ route('sekdin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-sky-400 hover:bg-sky-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
+                                    <a href="{{ route('sekdin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-lime-400 hover:bg-lime-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
                                         <i class="fas fa-file-signature text-[10px]"></i> Review Permohonan
                                     </a>
                                 </div>

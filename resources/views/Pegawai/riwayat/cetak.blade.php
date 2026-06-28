@@ -17,7 +17,11 @@
     {{-- ========================================================================= --}}
     {{-- KANVAS PREVIEW FORMULIR BKN (MENYERUPAI KERTAS DOKUMEN ASLI) --}}
     {{-- ========================================================================= --}}
-    <div class="bg-white p-8 md:p-10 shadow-sm border border-slate-200 mx-auto print:shadow-none print:border-none print:p-0 font-sans text-black leading-snug max-w-[800px] antialiased text-[11px]">
+    <div id="print-area" class="bg-white p-8 md:p-10 shadow-sm border border-slate-200 mx-auto
+    print:shadow-none print:border-none print:p-0
+    font-sans text-black leading-snug
+    max-w-[800px] print:max-w-none
+    antialiased text-[11px]">
 
         <div class="flex items-center justify-center border-b-[3px] border-black pb-3 mb-4">
             <div class="w-20">
@@ -66,29 +70,29 @@
                 <td class="border border-black px-2 py-0.5">Masa Kerja</td>
                 <td class="border border-black px-2 py-0.5">
                     @if (!empty($pengajuan->user->pegawai->masa_kerja))
-                        @php
-                            $masaKerja = \Carbon\Carbon::parse($pengajuan->user->pegawai->masa_kerja);
-                            $diff = $masaKerja->diff(now());
-                
-                            $hasil = [];
-                
-                            if ($diff->y > 0) {
-                                $hasil[] = $diff->y . ' Tahun';
-                            }
-                
-                            if ($diff->m > 0) {
-                                $hasil[] = $diff->m . ' Bulan';
-                            }
-                
-                            // Jika masa kerja kurang dari 1 bulan
-                            if (empty($hasil)) {
-                                $hasil[] = '0 Bulan';
-                            }
-                        @endphp
-                
-                        {{ implode(' ', $hasil) }}
+                    @php
+                    $masaKerja = \Carbon\Carbon::parse($pengajuan->user->pegawai->masa_kerja);
+                    $diff = $masaKerja->diff(now());
+
+                    $hasil = [];
+
+                    if ($diff->y > 0) {
+                    $hasil[] = $diff->y . ' Tahun';
+                    }
+
+                    if ($diff->m > 0) {
+                    $hasil[] = $diff->m . ' Bulan';
+                    }
+
+                    // Jika masa kerja kurang dari 1 bulan
+                    if (empty($hasil)) {
+                    $hasil[] = '0 Bulan';
+                    }
+                    @endphp
+
+                    {{ implode(' ', $hasil) }}
                     @else
-                        -
+                    -
                     @endif
                 </td>
             </tr>
@@ -195,7 +199,7 @@
                     Telp: {{ $pengajuan->no_telepon }}
                 </td>
             </tr>
-            <tr class="h-24">
+            <tr class="h-20">
                 <td class="border border-black px-2 py-1 align-top text-justify w-[35%] relative">
                     <p class="text-[10px] italic text-slate-700 underline mb-1">
                         Catatan Kasi {{ $pengajuan->bidang_kasi ?? ($pengajuan->atasan->pegawai->bidang->nama_bidang ?? '') }} :
@@ -255,7 +259,7 @@
                     <p class="text-[10px] italic text-slate-700 underline mb-1">Catatan Kasubbag. Umkep:</p>
                     <div class="flex items-center gap-4 mt-2">
                         <div class="handwriting text-blue-800 text-[14px] ml-4 w-2/3">
-                            {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
+                            {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur wohrowhrq3ruq3ruihqo3urqou3hroiqhr' }}
                         </div>
                         @if($pengajuan->ttd_kasubbag)
                         <div class="place-items-end my-2 -translate-x-16">
@@ -300,12 +304,12 @@
                 <td class="border border-black px-2 py-0.5"></td>
                 <td class="border border-black px-2 py-0.5"></td>
             </tr>
-            <tr class="h-28">
+            <tr class="h-20">
                 <td colspan="3" class="border border-black px-2 py-1 align-top relative">
                     <p class="text-[10px] italic text-slate-700 underline mb-1">Catatan Sekretaris Dinas:</p>
                     <div class="flex items-center gap-4 mt-2">
                         <div class="handwriting text-blue-800 text-[14px] ml-4 w-2/3">
-                            {{ $pengajuan->catatan_sekdin ?? 'Disetujui untuk diterbitkan' }}
+                            {{ $pengajuan->catatan_sekdin ?? 'Disetujui untuk diterbitkan wiurhiqhruqh3ru9qgh3ruq3y7r87yq387ft  q38tb' }}
                         </div>
                         @if($pengajuan->ttd_sekdin)
                         <div class="my-2 -translate-x-16">
@@ -351,54 +355,96 @@
 
     {{-- CSS Kustom Khusus Mode Cetak (Print) & Font Tulisan Tangan --}}
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap');
 
-        .handwriting {
-            font-family: 'Kalam', cursive;
-        }
+.handwriting{
+    font-family:'Kalam',cursive;
+}
 
-        @media print {
-            body {
-                background: white;
-            }
+@page{
+    size: legal portrait;
+    margin:8mm;
+}
 
-            body * {
-                visibility: hidden;
-            }
+@media print{
 
-            .no-print {
-                display: none !important;
-            }
+    html,
+    body{
+        margin:0;
+        padding:0;
+        background:#fff;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+    }
 
-            .print\:shadow-none {
-                box-shadow: none !important;
-            }
+    body *{
+        visibility:hidden;
+    }
 
-            .print\:border-none {
-                border: none !important;
-            }
+    #print-area,
+    #print-area *{
+        visibility:visible;
+    }
 
-            .print\:p-0 {
-                padding: 0 !important;
-            }
+    #print-area{
+        position:absolute;
+        top:0;
+        left:0;
 
-            div.font-sans,
-            div.font-sans * {
-                visibility: visible;
-            }
+        width:100%;
+        max-width:none !important;
 
-            div.font-sans {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
+        margin:0;
+        padding:0;
 
-            table td.bg-slate-100,
-            table td.bg-slate-50 {
-                background-color: transparent !important;
-            }
-        }
+        box-shadow:none !important;
+        border:none !important;
+    }
 
-    </style>
+    .no-print{
+        display:none !important;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        page-break-inside:avoid;
+        break-inside:avoid;
+    }
+
+    tr,
+    td,
+    th{
+        page-break-inside:avoid;
+        break-inside:avoid;
+    }
+
+    img{
+        max-width:100%;
+        page-break-inside:avoid;
+    }
+
+    table td.bg-slate-100{
+        background:#f1f5f9 !important;
+    }
+
+    /* lebih kecil sedikit */
+    #print-area{
+        font-size:10px;
+        line-height:1.15;
+    }
+
+    h1{
+        font-size:13px !important;
+    }
+
+    h2{
+        font-size:15px !important;
+    }
+
+    h3{
+        font-size:11px !important;
+    }
+}
+</style>
 </x-layouts.pegawai.app>

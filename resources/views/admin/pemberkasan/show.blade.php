@@ -5,16 +5,14 @@
             <p class="text-slate-500 text-sm">Formulir BKN otomatis selesai di-generate. Rilis dokumen agar dapat
                 dicetak oleh pegawai.</p>
         </div>
-        <a href="{{ route('admin.pemberkasan.index') }}"
-            class="px-4 py-2 bg-white border border-slate-300 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition shadow-sm text-sm">
+        <a href="{{ route('admin.pemberkasan.index') }}" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition shadow-sm text-sm">
             &larr; Kembali
         </a>
     </div>
 
     {{-- Kondisi 1: JIKA STATUS BELUM SELESAI --}}
     @if($pengajuan->status !== 'Selesai')
-    <div
-        class="mb-6 p-6 bg-white rounded-2xl border border-amber-200 shadow-sm bg-gradient-to-r from-amber-50/40 to-transparent no-print">
+    <div class="mb-6 p-6 bg-white rounded-2xl border border-amber-200 shadow-sm bg-gradient-to-r from-amber-50/40 to-transparent no-print">
         <h3 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-2">
             Finalisasi & Rilis Dokumen
         </h3>
@@ -25,8 +23,7 @@
 
         <form action="{{ route('admin.pemberkasan.proses', $pengajuan->id) }}" method="POST">
             @csrf
-            <button type="submit"
-                class="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition text-sm flex items-center gap-2">
+            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition text-sm flex items-center gap-2">
                 Simpan & Rilis ke Pegawai
             </button>
         </form>
@@ -34,14 +31,12 @@
 
     {{-- Kondisi 2: JIKA STATUS SUDAH SELESAI --}}
     @else
-    <div
-        class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center justify-between no-print">
+    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center justify-between no-print">
         <div class="text-sm">
             <strong>Status Selesai:</strong> Surat cuti ini telah difinalisasi dan dirilis. Pegawai saat ini sudah dapat
             mencetak dokumen ini.
         </div>
-        <button onclick="window.print()"
-            class="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition flex items-center gap-1.5 shadow-md">
+        <button onclick="window.print()" class="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition flex items-center gap-1.5 shadow-md">
             Cetak Formulir Cuti
         </button>
     </div>
@@ -50,14 +45,12 @@
     {{-- ========================================================================= --}}
     {{-- KANVAS PREVIEW FORMULIR BKN (MENYERUPAI KERTAS DOKUMEN ASLI) --}}
     {{-- ========================================================================= --}}
-    <div
-        class="bg-white p-8 md:p-10 shadow-sm border border-slate-200 mx-auto print:shadow-none print:border-none print:p-0 font-sans text-black leading-snug max-w-[800px] antialiased text-[11px]">
+    <div class="bg-white p-8 md:p-10 shadow-sm border border-slate-200 mx-auto print:shadow-none print:border-none print:p-0 font-sans text-black leading-snug max-w-[800px] antialiased text-[11px]">
 
         <div class="flex items-center justify-center border-b-[3px] border-black pb-3 mb-4">
             <div class="w-20">
                 {{-- Ganti src ini dengan logo Pemprov Sumsel yang Anda miliki --}}
-                <img src="{{ asset('images/logosumsel.png') }}" alt="Logo Sumsel"
-                    class="w-16 h-auto opacity-80 mix-blend-multiply">
+                <img src="{{ asset('images/logosumsel.png') }}" alt="Logo Sumsel" class="w-16 h-auto opacity-80 mix-blend-multiply">
             </div>
             <div class="text-center flex-1 px-4">
                 <h1 class="text-[14px] font-bold tracking-wide uppercase">PEMERINTAH PROVINSI SUMATERA SELATAN</h1>
@@ -105,29 +98,29 @@
                 <td class="border border-black px-2 py-0.5">Masa Kerja</td>
                 <td class="border border-black px-2 py-0.5">
                     @if (!empty($pengajuan->user->pegawai->masa_kerja))
-                        @php
-                            $masaKerja = \Carbon\Carbon::parse($pengajuan->user->pegawai->masa_kerja);
-                            $diff = $masaKerja->diff(now());
-                
-                            $hasil = [];
-                
-                            if ($diff->y > 0) {
-                                $hasil[] = $diff->y . ' Tahun';
-                            }
-                
-                            if ($diff->m > 0) {
-                                $hasil[] = $diff->m . ' Bulan';
-                            }
-                
-                            // Jika masa kerja kurang dari 1 bulan
-                            if (empty($hasil)) {
-                                $hasil[] = '0 Bulan';
-                            }
-                        @endphp
-                
-                        {{ implode(' ', $hasil) }}
+                    @php
+                    $masaKerja = \Carbon\Carbon::parse($pengajuan->user->pegawai->masa_kerja);
+                    $diff = $masaKerja->diff(now());
+
+                    $hasil = [];
+
+                    if ($diff->y > 0) {
+                    $hasil[] = $diff->y . ' Tahun';
+                    }
+
+                    if ($diff->m > 0) {
+                    $hasil[] = $diff->m . ' Bulan';
+                    }
+
+                    // Jika masa kerja kurang dari 1 bulan
+                    if (empty($hasil)) {
+                    $hasil[] = '0 Bulan';
+                    }
+                    @endphp
+
+                    {{ implode(' ', $hasil) }}
                     @else
-                        -
+                    -
                     @endif
                 </td>
             </tr>
@@ -261,17 +254,21 @@
                         </p>
                     </div>
                 </td>
-                <td class="border border-black px-2 py-1 align-top text-justify w-[35%] relative">
+                <td class="border border-black px-2 py-1 align-top w-[35%] relative">
                     <p class="text-[10px] italic text-slate-700 underline mb-1">
                         Catatan Kabid {{ $pengajuan->bidang_kabid ?? ($kabid->pegawai->bidang->nama_bidang ?? '') }} :
                     </p>
-                    <div class="handwriting text-blue-800 text-[13px] leading-tight mt-2">
-                        {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
+
+                    {{-- Area catatan --}}
+                    <div class="handwriting text-blue-800 text-[13px] leading-relaxed text-left">
+                        <p class="m-0 whitespace-normal break-all">
+                            {{ $pengajuan->catatan_kabid ?? 'Disetujui semoga cepat sembuh' }}
+                        </p>
                     </div>
+
                     @if($pengajuan->ttd_kabid)
-                    <div class="flex flex-col items-end mt-1 mb-3 mr-4">
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}"
-                            class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kabid">
+                    <div class="flex flex-col items-end mt-2 mb-3 mr-4">
+                        <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kabid">
 
                         <p class="text-[10px] italic text-slate-700 underline mt-1">
                             {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kabid)) }}
@@ -279,12 +276,11 @@
                     </div>
                     @endif
                 </td>
-                <td class="border border-black px-2 py-1 align-top text-justify relative">
-                    <p class="text-left text-[10px] my-2 mx-2">Hormat saya,</p>
+                <td class="border border-black px-2 py-1 align-top w-[30%]">
+                    <p class="text-left text-[10px] my-2 mx-2 mt-6">Hormat saya,</p>
                     <div class="h-20 flex justify-normal my-2  mx-2 relative">
                         @if($pengajuan->ttd_pegawai)
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}"
-                            class="h-20 object-contain mix-blend-multiply" alt="TTD Pegawai">
+                        <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-20 object-contain mix-blend-multiply" alt="TTD Pegawai">
                         @else
                         <span class="text-[10px] text-slate-400 italic">[Belum TTD]</span>
                         @endif
@@ -319,14 +315,13 @@
                     <p class="text-[10px] italic text-slate-700 underline mb-1">Catatan Kasubbag. Umkep:</p>
                     <div class="flex items-center gap-4 mt-2">
                         <div class="handwriting text-blue-800 text-[14px] ml-4 w-2/3 text-left">
-    <p class="m-0 whitespace-normal break-words leading-relaxed">
-        {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
-    </p>
-</div>
+                            <p class="m-0 whitespace-normal break-words leading-relaxed">
+                                {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
+                            </p>
+                        </div>
                         @if($pengajuan->ttd_kasubbag)
                         <div class="my-2 -translate-x-3">
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}"
-                                class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag Umum">
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag Umum">
 
                             <p class="text-[10px] italic text-slate-700 underline mt-1 text-center">
                                 {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kasubbag_umum)) }}
@@ -339,8 +334,7 @@
                     <p class="text-left text-[10px] my-2 mx-2">Kasi {{ $pengajuan->jabatan_kasi ?? 'Kasi' }},</p>
                     <div class="h-20 flex justify-normal my-2  mx-2 relative">
                         @if($pengajuan->ttd_kasi)
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}"
-                            class="h-20 object-contain mix-blend-multiply" alt="TTD Kasi">
+                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" class="h-20 object-contain mix-blend-multiply" alt="TTD Kasi">
                         @else
                         <span class="text-[10px] text-slate-400 italic">[Belum TTD]</span>
                         @endif
@@ -380,8 +374,7 @@
                         </div>
                         @if($pengajuan->ttd_sekdin)
                         <div class="place-items-end -mt-0.5 my-2 -translate-x-3">
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}"
-                                class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Sekdin">
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Sekdin">
                             <p class="text-[10px] italic text-slate-700 underline my-1 mx-2">
                                 {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_sekdin)) }}
                             </p>
@@ -393,8 +386,7 @@
                     <p class="text-left mb-1 mx-2">Kepala Dinas,</p>
                     <div class="h-20 flex justify-normal my-2 mx-2 relative">
                         @if($pengajuan->ttd_kadin)
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_kadin) }}"
-                            class="h-20 object-contain mix-blend-multiply opacity-95" alt="TTD Kadin">
+                        <img src="{{ asset('storage/' . $pengajuan->ttd_kadin) }}" class="h-20 object-contain mix-blend-multiply opacity-95" alt="TTD Kadin">
                         @else
                         <span class="text-[10px] text-slate-400 italic">[Belum TTD Kadin]</span>
                         @endif
@@ -467,5 +459,6 @@
                 background-color: transparent !important;
             }
         }
+
     </style>
 </x-layouts.admin.app>

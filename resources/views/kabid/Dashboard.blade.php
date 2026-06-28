@@ -18,7 +18,16 @@
                         {{-- PERBAIKAN: Memanggil variabel sapaan dinamis waktu dan nama user yang aman --}}
                         <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-3">
                             {{ $sapaan }},<br>
-                            <span class="text-lime-400">{{ explode(' ', $user->nama ?? $user->name ?? '')[0] }}</span>
+                            <span class="text-transparent bg-clip-text bg-slate-50">{{ $sapaan ?? 'Selamat Datang' }},</span> <br>
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-lime-300">
+                                    {{ explode(' ', Auth::user()->nama)[0] }}
+                                </span>
+
+                                <span class="text-white opacity-80 font-light mx-2">-</span>
+
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 via-yellow-300 to-amber-300">
+                                    {{ Auth::user()->pegawai->jabatan ?? '' }}
+                                </span>
                         </h1>
 
                         <p class="text-slate-400 text-sm md:text-base max-w-lg mb-8 leading-relaxed">
