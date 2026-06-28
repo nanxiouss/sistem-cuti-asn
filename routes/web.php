@@ -134,6 +134,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pengajuan/store', [KasiPengajuanController::class, 'store'])->name('pengajuan.store');
         Route::get('/riwayat', [KasiRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('/riwayat/{id}', [KasiRiwayatController::class, 'show'])->name('riwayat.show');
+        Route::get('/riwayat/{id}/cetak', [KasiRiwayatController::class, 'cetak'])->name('riwayat.cetak');
         Route::get('/kalender', [KasiKalenderController::class, 'index'])->name('kalender.index');
     });
 
@@ -158,6 +159,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pengajuan/store', [KasumumPengajuanController::class, 'store'])->name('pengajuan.store');
         Route::get('riwayat', [KasumumRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('riwayat/{id}', [KasumumRiwayatController::class, 'show'])->name('riwayat.show');
+        Route::get('/riwayat/{id}/cetak', [KasumumRiwayatController::class, 'cetak'])->name('riwayat.cetak');
         Route::get('/kalender', [KasumumKalenderController::class, 'index'])->name('kalender.index');
     });
 

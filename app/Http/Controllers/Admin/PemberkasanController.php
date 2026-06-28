@@ -32,33 +32,43 @@ class PemberkasanController extends Controller
             $pengajuan->status == 'Selesai' &&
             !is_null($pengajuan->snapshot_sisa_n)
         ) {
-
             $sisa_n = $pengajuan->snapshot_sisa_n;
             $sisa_n1 = $pengajuan->snapshot_sisa_n1;
             $sisa_n2 = $pengajuan->snapshot_sisa_n2;
         } else {
-
             $sisa_total = $pengajuan->user->pegawai->sisa_cuti_tahunan ?? 0;
-
             $sisa_n = min($sisa_total, 12);
-
-            $sisa_n1 = max(
-                min($sisa_total - $sisa_n, 6),
-                0
-            );
-
-            $sisa_n2 = max(
-                $sisa_total - $sisa_n - $sisa_n1,
-                0
-            );
+            $sisa_n1 = max(min($sisa_total - $sisa_n, 6), 0);
+            $sisa_n2 = max($sisa_total - $sisa_n - $sisa_n1, 0);
         }
 
-        $kasi = $pengajuan->atasan;
+        // =========================================================================
+        // LOGIKA DINAMIS PENENTUAN STRUKTUR KOLOM TANDA TANGAN (KASI & KABID)
+        // =========================================================================
+        $kasi = null;
+        $kabid = null;
+        
+        $rolePemohon = $pengajuan->user->role ?? '';
 
-        $kabid = ($kasi && $kasi->pegawai)
-            ? $kasi->pegawai->atasan
-            : null;
+        if ($rolePemohon === 'kasubbag_umum' || $rolePemohon === 'kasubbag') {
+            // Jika Kasubbag Umum, dia tidak punya Kasi atau Kabid. Atasan langsungnya adalah Sekdin.
+            // Kolom Kasi & Kabid di view/PDF dibiarkan null (akan dihandle di tampilan Blade)
+            $kasi = null;
+            $kabid = null;
+        } 
+        elseif ($rolePemohon === 'kasi' || str_contains(strtolower($pengajuan->user->pegawai->jabatan ?? ''), 'kasi')) {
+            // Jika Kasi yang mengajukan, dia tidak butuh TTD Kasi lain. 
+            // Atasan pertamanya ($pengajuan->atasan) langsung masuk ke variabel $kabid.
+            $kasi = null;
+            $kabid = $pengajuan->atasan;
+        } 
+        else {
+            // Jika Pegawai Biasa (Alur Standar)
+            $kasi = $pengajuan->atasan;
+            $kabid = ($kasi && $kasi->pegawai) ? $kasi->pegawai->atasan : null;
+        }
 
+        // Ambil data Kepala Dinas untuk tanda tangan akhir
         $kadin = User::whereHas('pegawai', function ($query) {
             $query->where('jabatan', 'LIKE', '%Kepala Dinas%');
         })->first();
@@ -83,6 +93,7 @@ class PemberkasanController extends Controller
         if ($pengajuan->status === 'Selesai') {
             return redirect()->back()->with('error', 'Dokumen ini sudah dirilis sebelumnya.');
         }
+        
         try {
             DB::transaction(function () use ($pengajuan) {
                 if ($pengajuan->user && $pengajuan->user->pegawai) {
@@ -104,20 +115,17 @@ class PemberkasanController extends Controller
                             throw new \Exception("Saldo {$pengajuan->jenisCuti->nama} tidak mencukupi. Sisa saldo saat ini: {$pegawai->$kolomSisa} hari.");
                         }
 
-                        // 1. Selalu ambil saldo Cuti Tahunan, APAPUN jenis cuti yang sedang diajukan
+                        // 1. Ambil saldo Cuti Tahunan MURNI (SEBELUM DIPOTONG)
                         $sisaTahunanAktif = $pegawai->sisa_cuti_tahunan;
 
-                        // 2. Jika yang diajukan kebetulan adalah 'Cuti Tahunan', proyeksikan saldonya 
-                        if ($kolomSisa === 'sisa_cuti_tahunan') {
-                            $sisaTahunanAktif -= $lamaCuti;
-                        }
+                        // (Bagian pengurangan $sisaTahunanAktif -= $lamaCuti sudah DIHAPUS)
                         
-                        // 3. Masukkan ke rumus (menggunakan $sisaTahunanAktif)
+                        // 2. Masukkan ke rumus snapshot (menggunakan saldo murni)
                         $sisa_n = min($sisaTahunanAktif, 12);
                         $sisa_n1 = max(min($sisaTahunanAktif - $sisa_n, 6), 0);
                         $sisa_n2 = max($sisaTahunanAktif - $sisa_n - $sisa_n1, 0);
 
-                        // 4. Update tabel pengajuan
+                        // 3. Update tabel pengajuan (Simpan Snapshot Form V)
                         $pengajuan->update([
                             'snapshot_sisa_n'  => $sisa_n,
                             'snapshot_sisa_n1' => $sisa_n1,
@@ -125,13 +133,13 @@ class PemberkasanController extends Controller
                             'status'           => 'Selesai',
                         ]);
                         
-                        // 5. Potong kuota cuti di database sesuai jenis cuti yang diajukan
+                        // 4. Potong kuota cuti di database sesuai jenis cuti yang diajukan
                         if ($kolomSisa === 'sisa_cuti_besar') {
                             // ATURAN BARU: Kalau ngambil cuti besar (berapapun harinya), sisa kuota 5 tahunan langsung HANGUS
                             $pegawai->sisa_cuti_besar = 0;
                             $pegawai->save();
                         } else {
-                            // Cuti tahunan dan melahirkan dipotong normal sesuai lama cuti
+                            // Cuti tahunan dan melahirkan dipotong normal sesuai lama cuti di database
                             $pegawai->decrement($kolomSisa, $lamaCuti);
                         }
                     }
@@ -139,12 +147,10 @@ class PemberkasanController extends Controller
             });
 
             return redirect()->route('admin.pemberkasan.show', $id)
-
                 ->with('success', 'Dokumen berhasil disimpan & dirilis ke pegawai. Berkas formulir cuti sekarang siap dicetak.');
+                
         } catch (\Exception $e) {
-
             return redirect()->back()
-
                 ->with('error', 'Gagal memproses pemberkasan: ' . $e->getMessage());
         }
     }
