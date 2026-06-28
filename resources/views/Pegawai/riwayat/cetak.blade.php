@@ -65,10 +65,30 @@
                 <td class="border border-black px-2 py-0.5">{{ $pengajuan->user->pegawai->jabatan ?? '-' }}</td>
                 <td class="border border-black px-2 py-0.5">Masa Kerja</td>
                 <td class="border border-black px-2 py-0.5">
-                    @if(!empty($pengajuan->user->pegawai->masa_kerja))
-                    {{ floor(\Carbon\Carbon::parse($pengajuan->user->pegawai->masa_kerja)->diffInYears(\Carbon\Carbon::now())) }} Tahun
+                    @if (!empty($pengajuan->user->pegawai->masa_kerja))
+                        @php
+                            $masaKerja = \Carbon\Carbon::parse($pengajuan->user->pegawai->masa_kerja);
+                            $diff = $masaKerja->diff(now());
+                
+                            $hasil = [];
+                
+                            if ($diff->y > 0) {
+                                $hasil[] = $diff->y . ' Tahun';
+                            }
+                
+                            if ($diff->m > 0) {
+                                $hasil[] = $diff->m . ' Bulan';
+                            }
+                
+                            // Jika masa kerja kurang dari 1 bulan
+                            if (empty($hasil)) {
+                                $hasil[] = '0 Bulan';
+                            }
+                        @endphp
+                
+                        {{ implode(' ', $hasil) }}
                     @else
-                    -
+                        -
                     @endif
                 </td>
             </tr>
