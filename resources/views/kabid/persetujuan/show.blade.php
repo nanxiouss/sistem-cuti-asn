@@ -32,14 +32,13 @@
                 {{-- KONTEN SEBELAH KIRI (Ambil 2 Kolom) --}}
                 <div class="md:col-span-2 space-y-6">
 
-                    {{-- Informasi Pegawai (Ditambahkan Foto Profil) --}}
+                    {{-- Informasi Pegawai --}}
                     <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
                         <h3 class="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
                             <i class="fas fa-user-circle text-lime-500"></i> Informasi Pegawai
                         </h3>
 
                         <div class="flex items-center gap-5 mb-5 border-b border-slate-100 pb-5">
-                            {{-- Container Foto Profil --}}
                             <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0 border-2 border-white shadow-sm">
                                 @if($pengajuan->user->pegawai && $pengajuan->user->pegawai->foto_profil)
                                 <img src="{{ asset('storage/' . $pengajuan->user->pegawai->foto_profil) }}" alt="Foto Profil" class="w-full h-full object-cover">
@@ -48,14 +47,12 @@
                                 @endif
                             </div>
 
-                            {{-- Info Utama --}}
                             <div>
                                 <h4 class="text-lg font-bold text-slate-800">{{ $pengajuan->user->nama ?? '-' }}</h4>
                                 <p class="text-sm text-slate-500 font-medium">NIP. {{ $pengajuan->user->pegawai->nip ?? $pengajuan->user->nip ?? '-' }}</p>
                             </div>
                         </div>
 
-                        {{-- Info Tambahan Bidang & Jabatan --}}
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                             <div>
                                 <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1">Bidang</p>
@@ -129,7 +126,7 @@
                         @endif
                     </div>
 
-                    {{-- Komponen Tracking TTD Kasi & Pegawai --}}
+                    {{-- Tracking TTD Pengaju (Pegawai/Kasi) --}}
                     <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
                         <div class="flex items-center gap-4">
                             <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0 border-2 border-white shadow-sm">
@@ -141,46 +138,46 @@
                             </div>
                             <div>
                                 <h4 class="text-base font-bold text-slate-900 tracking-tight">
-                                    {{ !empty($pengajuan->ttd_pegawai) ? 'Tanda Tangan Pegawai Valid' : 'Menunggu Tanda Tangan Pegawai' }}
+                                    {{ !empty($pengajuan->ttd_pegawai) ? 'Tanda Tangan Pemohon Valid' : 'Menunggu Tanda Tangan Pemohon' }}
                                 </h4>
                                 <p class="text-xs text-slate-500 mt-0.5 font-medium">
                                     Diajukan pada: {{ $pengajuan->created_at ? \Carbon\Carbon::parse($pengajuan->created_at)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                </p>
                             </div>
                         </div>
 
                         <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Pegawai</span>
-
+                            <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest block mb-1">Spesimen TTD Pemohon</span>
                             <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
                                 @if(!empty($pengajuan->ttd_pegawai))
                                 <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" alt="Tanda Tangan Pegawai" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
                                 @else
-                                <span class="text-[10px] text-slate-400 italic mr-1">(Belum ada spesimen TTD Pegawai)</span>
+                                <span class="text-[10px] text-slate-400 italic mr-1">(Belum ada spesimen TTD)</span>
                                 @endif
                             </div>
                         </div>
                     </div>
 
+                    {{-- Tracking TTD Kasi (HANYA MUNCUL JIKA INI BERKAS PEGAWAI BIASA) --}}
+                    @if(!empty($pengajuan->ttd_kasi))
                     <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
                         <div class="flex items-center gap-4">
                             <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0 border-2 border-white shadow-sm">
-                                @if($pengajuan->atasan->pegawai && $pengajuan->atasan->pegawai->foto_profil)
+                                @if($pengajuan->atasan && $pengajuan->atasan->pegawai && $pengajuan->atasan->pegawai->foto_profil)
                                 <img src="{{ asset('storage/' . $pengajuan->atasan->pegawai->foto_profil) }}" alt="Foto Profil" class="w-full h-full object-cover">
                                 @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($pengajuan->atasan->nama ?? 'User') }}&background=E2E8F0&color=475569" alt="Default Profil" class="w-full h-full object-cover">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($pengajuan->atasan->nama ?? 'Atasan') }}&background=E2E8F0&color=475569" alt="Default Profil" class="w-full h-full object-cover">
                                 @endif
                             </div>
                             <div>
-                                <h4 class="text-base font-bold text-slate-900 tracking-tight">
-                                    {{ !empty($pengajuan->ttd_kasi) ? 'Tanda Tangan Kasi Valid' : 'Menunggu Tanda Tangan Kasi' }}
-                                </h4>
+                                <h4 class="text-base font-bold text-slate-900 tracking-tight">Tanda Tangan Kasi Valid</h4>
                                 <p class="text-xs text-slate-500 mt-0.5 font-medium">
                                     Disetujui pada: {{ $pengajuan->tgl_ttd_kasi ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasi)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
                                 </p>
                                 @if($pengajuan->catatan_kasi)
-                                <div class="text-xs text-slate-500 mt-3 font-medium flex">
+                                <div class="text-xs text-slate-500 mt-3 font-medium">
                                     <span class="block font-bold text-slate-400 mb-1"><i class="fas fa-comment-alt text-[10px]"></i> Catatan Kasi:</span>
-                                    <p class="" text-xs text-slate-500 mt-0.5 font-medium" style="overflow-wrap:anywhere; word-break:break-word;">
+                                    <p class="text-xs text-slate-500 mt-0.5 font-medium" style="overflow-wrap:anywhere; word-break:break-word;">
                                         {{ $pengajuan->catatan_kasi }}
                                     </p>
                                 </div>
@@ -189,17 +186,14 @@
                         </div>
 
                         <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Kasi</span>
-
+                            <span class="text-slate-400 text-[10px] font-extrabold uppercase tracking-widest block mb-1">Spesimen TTD Kasi</span>
                             <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
-                                @if(!empty($pengajuan->ttd_kasi))
                                 <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" alt="Tanda Tangan Kasi" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
-                                @else
-                                <span class="text-[10px] text-slate-400 italic mr-1">(Belum ada spesimen TTD Kasi)</span>
-                                @endif
                             </div>
                         </div>
                     </div>
+                    @endif
+
                 </div>
 
                 {{-- KONTEN SEBELAH KANAN (Panel Konfirmasi Aksi Kabid) --}}

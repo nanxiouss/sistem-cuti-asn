@@ -26,6 +26,9 @@
                 <a href="{{ route('kasi.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.persetujuan*') ? $activeClass : $inactiveClass }}">
                     Persetujuan Cuti
                 </a>
+                <a href="{{ route('kasi.pengajuan.create') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.pengajuan*') ? $activeClass : $inactiveClass }}">
+                    Pengajuan Cuti
+                </a>
                 <a href="{{ route('kasi.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.riwayat') ? $activeClass : $inactiveClass }}">
                     Riwayat
                 </a>

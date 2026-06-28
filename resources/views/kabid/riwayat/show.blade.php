@@ -139,12 +139,12 @@
                                 </h4>
                                 <p class="text-xs text-slate-500 mt-0.5 font-medium">
                                     Diajukan pada: {{ $pengajuan->created_at ? \Carbon\Carbon::parse($pengajuan->created_at)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                </p>
                             </div>
                         </div>
-
+                    
                         <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
                             <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Pegawai</span>
-
                             <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
                                 @if(!empty($pengajuan->ttd_pegawai))
                                 <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" alt="Tanda Tangan Pegawai" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
@@ -154,46 +154,50 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md">
-                        <div class="flex items-center gap-4">
-                            <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0 border-2 border-white shadow-sm">
-                                @if($pengajuan->atasan->pegawai && $pengajuan->atasan->pegawai->foto_profil)
-                                <img src="{{ asset('storage/' . $pengajuan->atasan->pegawai->foto_profil) }}" alt="Foto Profil" class="w-full h-full object-cover">
-                                @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($pengajuan->atasan->nama ?? 'User') }}&background=E2E8F0&color=475569" alt="Default Profil" class="w-full h-full object-cover">
-                                @endif
-                            </div>
-                            <div>
-                                <h4 class="text-base font-bold text-slate-900 tracking-tight">
-                                    {{ !empty($pengajuan->ttd_kasi) ? 'Tanda Tangan Kasi Valid' : 'Menunggu Tanda Tangan Kasi' }}
-                                </h4>
-                                <p class="text-xs text-slate-500 mt-0.5 font-medium">
-                                    Disetujui pada: {{ $pengajuan->tgl_ttd_kasi ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasi)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
-                                </p>
-                                @if($pengajuan->catatan_kasi)
-                                <div class="text-xs text-slate-500 mt-3 font-medium flex">
-                                    <span class="block font-bold text-slate-400 mb-1"><i class="fas fa-comment-alt text-[10px]"></i> Catatan Kasi:</span>
-                                    <p class="" text-xs text-slate-500 mt-0.5 font-medium" style="overflow-wrap:anywhere; word-break:break-word;">
-                                        {{ $pengajuan->catatan_kasi }}
-                                    </p>
+                    
+                    
+                    @if($pengajuan->user->role !== 'kasi') 
+                    
+                        <div class="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-sm transition-all hover:shadow-md mt-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-100 shrink-0 border-2 border-white shadow-sm">
+                                    @if($pengajuan->atasan->pegawai && $pengajuan->atasan->pegawai->foto_profil)
+                                    <img src="{{ asset('storage/' . $pengajuan->atasan->pegawai->foto_profil) }}" alt="Foto Profil" class="w-full h-full object-cover">
+                                    @else
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($pengajuan->atasan->nama ?? 'User') }}&background=E2E8F0&color=475569" alt="Default Profil" class="w-full h-full object-cover">
+                                    @endif
                                 </div>
-                                @endif
+                                <div>
+                                    <h4 class="text-base font-bold text-slate-900 tracking-tight">
+                                        {{ !empty($pengajuan->ttd_kasi) ? 'Tanda Tangan Kasi Valid' : 'Menunggu Tanda Tangan Kasi' }}
+                                    </h4>
+                                    <p class="text-xs text-slate-500 mt-0.5 font-medium">
+                                        Disetujui pada: {{ $pengajuan->tgl_ttd_kasi ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasi)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                    </p>
+                                    @if($pengajuan->catatan_kasi)
+                                    <div class="text-xs text-slate-500 mt-3 font-medium flex">
+                                        <span class="block font-bold text-slate-400 mb-1"><i class="fas fa-comment-alt text-[10px]"></i> Catatan Kasi:</span>
+                                        <p class="mx-1 text-xs text-slate-500 font-medium" style="overflow-wrap:anywhere; word-break:break-word;">
+                                            {{ $pengajuan->catatan_kasi }}
+                                        </p>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                    
+                            <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
+                                <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Kasi</span>
+                                <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
+                                    @if(!empty($pengajuan->ttd_kasi))
+                                    <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" alt="Tanda Tangan Kasi" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
+                                    @else
+                                    <span class="text-[10px] text-slate-400 italic mr-1">(Belum ada spesimen TTD Kasi)</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-
-                        <div class="text-left sm:text-right flex flex-col items-start sm:items-end w-full sm:w-auto">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block mb-1">Spesimen TTD Kasi</span>
-
-                            <div class="flex items-center gap-3 mt-1 relative justify-end w-full min-h-[50px]">
-                                @if(!empty($pengajuan->ttd_kasi))
-                                <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" alt="Tanda Tangan Kasi" class="h-25 object-contain mix-blend-multiply max-w-[120px]">
-                                @else
-                                <span class="text-[10px] text-slate-400 italic mr-1">(Belum ada spesimen TTD Kasi)</span>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
+                    
+                    @endif
                 </div>
 
                 {{-- KONTEN SEBELAH KANAN (Panel Tracking Status Terproses) --}}

@@ -8,7 +8,7 @@
                     <img src="/images/logo.png" alt="Logo Sumsel DESDM" class="h-10 w-auto object-contain">
                     <div class="leading-tight border-l-2 border-slate-200 pl-4">
                         <span class="text-xl font-extrabold tracking-tighter text-slate-800 block">E-CUTI</span>
-                        <p class="text-[9px] font-bold text-rose-500 uppercase tracking-widest">PANEL KASUBBAG UMUM & KEPEGAWAIAN</p>
+                        <p class="text-[9px] font-bold text-rose-500 tracking-widest">PANEL Kasubbag Umum & Kepegawaian</p>
                     </div>
                 </a>
             </div>
@@ -25,6 +25,9 @@
                 </a>
                 <a href="{{ route('kasumum.persetujuan.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.persetujuan*') ? $activeClass : $inactiveClass }}">
                     Persetujuan Cuti
+                </a>
+                <a href="{{ route('kasumum.pengajuan.create') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.pengajuan*') ? $activeClass : $inactiveClass }}">
+                    Pengajuan Cuti
                 </a>
                 <a href="{{ route('kasumum.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasumum.riwayat*') ? $activeClass : $inactiveClass }}">
                     Riwayat

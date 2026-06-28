@@ -19,11 +19,13 @@ use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 
 use App\Http\Controllers\Kasi\DashboardController as KasiDashboardController;
 use App\Http\Controllers\Kasi\PersetujuanController as KasiPersetujuanController;
+use App\Http\Controllers\Kasi\PengajuanController as KasiPengajuanController;
 use App\Http\Controllers\Kasi\RiwayatController as KasiRiwayatController;
 use App\Http\Controllers\Kasi\KalenderController as KasiKalenderController;
 
 use App\Http\Controllers\Kasumum\DashboardController as KasumumDashboardController;
 use App\Http\Controllers\Kasumum\PersetujuanController as KasumumPersetujuanController;
+use App\Http\Controllers\Kasumum\PengajuanController as KasumumPengajuanController;
 use App\Http\Controllers\Kasumum\RiwayatController as KasumumRiwayatController;
 use App\Http\Controllers\Kasumum\KalenderController as KasumumKalenderController;
 
@@ -128,6 +130,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/persetujuan', [KasiPersetujuanController::class, 'index'])->name('persetujuan.index');
         Route::get('/persetujuan/{id}', [KasiPersetujuanController::class, 'show'])->name('persetujuan.show');
         Route::put('/persetujuan/{id}', [KasiPersetujuanController::class, 'update'])->name('persetujuan.update');
+        Route::get('/pengajuan/create', [KasiPengajuanController::class, 'create'])->name('pengajuan.create');
+        Route::post('/pengajuan/store', [KasiPengajuanController::class, 'store'])->name('pengajuan.store');
         Route::get('/riwayat', [KasiRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('/riwayat/{id}', [KasiRiwayatController::class, 'show'])->name('riwayat.show');
         Route::get('/kalender', [KasiKalenderController::class, 'index'])->name('kalender.index');
@@ -150,6 +154,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/persetujuan', [KasumumPersetujuanController::class, 'index'])->name('persetujuan.index');
         Route::get('/persetujuan/{id}', [KasumumPersetujuanController::class, 'show'])->name('persetujuan.show');
         Route::put('/persetujuan/{id}', [KasumumPersetujuanController::class, 'update'])->name('persetujuan.update');
+        Route::get('/pengajuan/create', [KasumumPengajuanController::class, 'create'])->name('pengajuan.create');
+        Route::post('/pengajuan/store', [KasumumPengajuanController::class, 'store'])->name('pengajuan.store');
         Route::get('riwayat', [KasumumRiwayatController::class, 'index'])->name('riwayat.index');
         Route::get('riwayat/{id}', [KasumumRiwayatController::class, 'show'])->name('riwayat.show');
         Route::get('/kalender', [KasumumKalenderController::class, 'index'])->name('kalender.index');

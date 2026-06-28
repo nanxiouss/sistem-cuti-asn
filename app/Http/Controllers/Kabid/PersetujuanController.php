@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Kabid;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
-use App\Models\Bidang; // Panggil Model Bidang untuk pencarian parent_id
+use App\Models\Bidang; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,22 +16,28 @@ class PersetujuanController extends Controller
         $user = Auth::user();
         $bidangIdKabid = $user->pegawai->bidang_id ?? null;
 
-        // --- PERBAIKAN LOGIKA: Ambil ID Bidang Induk & Seluruh Seksi di bawahnya ---
+        // --- 1. Ambil ID Bidang Induk (Kabid) & Seluruh Seksi (Kasi/Staff) di bawahnya ---
         $daftarBidangBawahan = [];
         if ($bidangIdKabid) {
             $daftarBidangBawahan = Bidang::where('id', $bidangIdKabid)
                 ->orWhere('parent_id', $bidangIdKabid)
                 ->pluck('id')
-                ->toArray(); // Menghasilkan array ID kelompok bidang, misal: [5, 6, 7, 8]
+                ->toArray(); 
         }
 
+        // --- 2. Query Pengajuan yang Menunggu Kabid ---
         $pengajuan = Pengajuan::with(['user.pegawai.bidang', 'jenisCuti'])
             ->where('status', 'Menunggu Kabid')
-            ->when(!empty($daftarBidangBawahan), function ($query) use ($daftarBidangBawahan) {
-                $query->whereHas('user.pegawai', function ($q) use ($daftarBidangBawahan) {
-                    // Menggunakan whereIn agar mencakup semua staff dari sub-seksi pecahan
-                    $q->whereIn('bidang_id', $daftarBidangBawahan);
-                });
+            ->where(function ($query) use ($daftarBidangBawahan, $user) {
+                // Kondisi A: Tangkap pengajuan dari hirarki Bidang/Seksi yang sama
+                if (!empty($daftarBidangBawahan)) {
+                    $query->whereHas('user.pegawai', function ($q) use ($daftarBidangBawahan) {
+                        $q->whereIn('bidang_id', $daftarBidangBawahan);
+                    });
+                }
+                // Kondisi B: ATAU tangkap pengajuan yang 'id_atasan'-nya secara spesifik menunjuk ke Kabid ini 
+                // (Ini berguna untuk pengajuan langsung dari Kasi)
+                $query->orWhere('id_atasan', $user->id);
             })
             ->latest()
             ->get();
@@ -86,7 +92,7 @@ class PersetujuanController extends Controller
                     ->withInput();
             }
 
-            // 3. Update Status Alur Berjalan ke Kasubbag Umum
+            // 3. Update Status Alur Berjalan ke Kasubbag Umum (Sesuai alur targetmu)
             $pengajuan->status = 'Menunggu Kasubbag Umum'; 
             
             // 4. Salin foto TTD Kabid & Catat Waktu Riil Persetujuan
@@ -94,7 +100,9 @@ class PersetujuanController extends Controller
             $pengajuan->tgl_ttd_kabid = now();    
             $pengajuan->nama_kabid = Auth::user()->nama;
             $pengajuan->nip_kabid = Auth::user()->nip;
-            $pengajuan->jabatan_kabid = Auth::user()->pegawai->bidang->nama_bidang;
+            
+            // Perbaikan Jabatan (Sebaiknya ambil string jabatannya, bukan sekadar nama_bidang)
+            $pengajuan->jabatan_kabid = Auth::user()->pegawai->jabatan ?? 'Kepala Bidang ' . (Auth::user()->pegawai->bidang->nama_bidang ?? '');
 
             $pesan = 'Berkas pengajuan cuti berhasil disetujui, ditandatangani, dan diteruskan ke Kasubbag Umum!';
             
