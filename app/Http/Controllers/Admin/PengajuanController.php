@@ -28,16 +28,54 @@ class PengajuanController extends Controller
 
     public function teruskanKeKasi(Request $request, $id)
     {
-        $pengajuan = Pengajuan::findOrFail($id);
+        // Eager load relasi 'atasan' untuk membaca role-nya secara langsung
+        $pengajuan = Pengajuan::with('atasan')->findOrFail($id);
 
         // Hanya bisa meneruskan jika statusnya sedang mandek di Admin Kepegawaian
         if ($pengajuan->status === 'Menunggu Verifikasi Admin') {
+            
+            $atasan = $pengajuan->atasan; // Menuju ke objek User si atasan
+            
+            if (!$atasan) {
+                return redirect()->back()->withErrors(['error' => 'Gagal: Data Pejabat Penilai (Atasan) tidak ditemukan untuk berkas ini.']);
+            }
+
+            // Menentukan status alur berikutnya secara dinamis berdasarkan ROLE dari Atasan yang dituju
+            switch ($atasan->role) {
+                case 'kasi':
+                    $statusBaru = 'Menunggu Kasi';
+                    $pesanSukses = 'Berkas pegawai berhasil diverifikasi dan diteruskan ke Kepala Seksi (Kasi).';
+                    break;
+                    
+                case 'kabid':
+                    $statusBaru = 'Menunggu Kabid';
+                    $pesanSukses = 'Berkas berhasil diverifikasi dan diteruskan ke Kepala Bidang (Kabid).';
+                    break;
+                    
+                case 'sekdin':
+                    $statusBaru = 'Menunggu Sekdin';
+                    $pesanSukses = 'Berkas berhasil diverifikasi dan diteruskan ke Sekretaris Dinas (Sekdin).';
+                    break;
+                    
+                case 'kadin':
+                    $statusBaru = 'Menunggu Kadin';
+                    $pesanSukses = 'Berkas berhasil diverifikasi dan diteruskan langsung ke Kepala Dinas (Kadin).';
+                    break;
+                    
+                default:
+                    // Fallback aman jika role tidak spesifik
+                    $statusBaru = 'Menunggu Kasi';
+                    $pesanSukses = 'Berkas berhasil diverifikasi dan diteruskan ke tahapan selanjutnya.';
+                    break;
+            }
+
+            // Update status pengajuan berdasarkan hasil map role di atas
             $pengajuan->update([
-                'status' => 'Menunggu Kasi'
+                'status' => $statusBaru
             ]);
             
             return redirect()->route('admin.pengajuan.index')
-                             ->with('success', 'Berkas berhasil diverifikasi dan telah diteruskan ke Kasi.');
+                             ->with('success', $pesanSukses);
         }
 
         return redirect()->back()

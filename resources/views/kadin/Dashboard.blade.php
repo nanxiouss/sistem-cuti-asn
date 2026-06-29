@@ -196,10 +196,7 @@
                                 </div>
 
                                 <div class="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 pt-3 sm:pt-0">
-                                    <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">
-                                        Masuk: {{ $item->created_at ? $item->created_at->translatedFormat('d M Y') : '-' }}
-                                    </span>
-                                    <a href="{{ route('kadin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-lime-600 hover:bg-lime-700 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm shadow-lime-600/20">
+                                    <a href="{{ route('kadin.persetujuan.show', $item->id) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm shadow-indigo-600/20">
                                         <i class="fas fa-check-double text-[10px]"></i> Review Permohonan
                                     </a>
                                 </div>

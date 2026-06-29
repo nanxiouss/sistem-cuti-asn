@@ -117,62 +117,68 @@
                 
                 {{-- Tracker Alur Kerja Dinamis --}}
                 <div class="relative pl-6 space-y-6 before:absolute before:bottom-2 before:top-2 before:left-2.5 before:w-0.5 before:bg-slate-200">
-                    {{-- 1. Kasi / Kepala Seksi --}}
-                    @php
-                        $kasiActive = ($pengajuan->status === 'Menunggu Kasi');
-                        $kasiPassed = in_array($pengajuan->status, ['Menunggu Kabid', 'Menunggu Kasubbag Umum', 'Menunggu Sekdin', 'Menunggu Kadin', 'Menunggu Pemberkasan', 'Selesai']);
-                    @endphp
-                    <div class="relative flex items-start gap-4">
-                        <div class="absolute -left-[22px] flex items-center justify-center w-5 h-5 rounded-full border-2 {{ $kasiPassed ? 'bg-emerald-500 border-emerald-500 text-white' : ($kasiActive ? 'bg-white border-amber-500 ring-4 ring-white' : 'bg-white border-slate-300') }} z-10 shadow">
-                            @if($kasiPassed)
-                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-                            @elseif($kasiActive)
-                                <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                            @endif
-                        </div>
-                        <div class="flex-1 p-3 rounded-xl border {{ $kasiPassed ? 'border-emerald-100 bg-emerald-50/30' : ($kasiActive ? 'border-amber-200 bg-amber-50/50 shadow-sm ring-1 ring-amber-300' : 'border-slate-100 bg-slate-50/30') }}">
-                            <h4 class="font-bold {{ $kasiPassed ? 'text-emerald-800' : ($kasiActive ? 'text-amber-800' : 'text-slate-400') }} text-xs">Kasi / Kepala Seksi</h4>
-                            <p class="text-[10px] {{ $kasiActive ? 'text-amber-600' : 'text-slate-400' }} font-medium">Persetujuan Tingkat I</p>
-                        </div>
-                    </div>
-
-                    {{-- 2. Kabid / Kepala Bidang --}}
-                    @php
-                        $kabidActive = ($pengajuan->status === 'Menunggu Kabid');
-                        $kabidPassed = in_array($pengajuan->status, ['Menunggu Kasubbag Umum', 'Menunggu Sekdin', 'Menunggu Kadin', 'Menunggu Pemberkasan', 'Selesai']);
-                    @endphp
-                    <div class="relative flex items-start gap-4">
-                        <div class="absolute -left-[22px] flex items-center justify-center w-5 h-5 rounded-full border-2 {{ $kabidPassed ? 'bg-emerald-500 border-emerald-500 text-white' : ($kabidActive ? 'bg-white border-amber-500 ring-4 ring-white' : 'bg-white border-slate-300') }} z-10 shadow">
-                            @if($kabidPassed)
-                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-                            @elseif($kabidActive)
-                                <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                            @endif
-                        </div>
-                        <div class="flex-1 p-3 rounded-xl border {{ $kabidPassed ? 'border-emerald-100 bg-emerald-50/30' : ($kabidActive ? 'border-amber-200 bg-amber-50/50 shadow-sm ring-1 ring-amber-300' : 'border-slate-100 bg-slate-50/30') }}">
-                            <h4 class="font-bold {{ $kabidPassed ? 'text-emerald-800' : ($kabidActive ? 'text-amber-800' : 'text-slate-400') }} text-xs">Kabid / Kepala Bidang</h4>
-                            <p class="text-[10px] {{ $kabidActive ? 'text-amber-600' : 'text-slate-400' }} font-medium">Persetujuan Tingkat II</p>
-                        </div>
-                    </div>
                     
-                    {{-- 3. Kasubbag Umum --}}
-                    @php
-                        $kasumumActive = ($pengajuan->status === 'Menunggu Kasubbag Umum');
-                        $kasumumPassed = in_array($pengajuan->status, ['Menunggu Sekdin', 'Menunggu Kadin', 'Menunggu Pemberkasan', 'Selesai']);
-                    @endphp
-                    <div class="relative flex items-start gap-4">
-                        <div class="absolute -left-[22px] flex items-center justify-center w-5 h-5 rounded-full border-2 {{ $kasumumPassed ? 'bg-emerald-500 border-emerald-500 text-white' : ($kasumumActive ? 'bg-white border-amber-500 ring-4 ring-white' : 'bg-white border-slate-300') }} z-10 shadow">
-                            @if($kasumumPassed)
-                                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-                            @elseif($kasumumActive)
-                                <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                            @endif
+                    {{-- 1. Kasi / Kepala Seksi (Hanya untuk Pegawai) --}}
+                    @if(($pengajuan->user->role ?? '') === 'pegawai')
+                        @php
+                            $kasiActive = ($pengajuan->status === 'Menunggu Kasi');
+                            $kasiPassed = in_array($pengajuan->status, ['Menunggu Kabid', 'Menunggu Kasubbag Umum', 'Menunggu Sekdin', 'Menunggu Kadin', 'Menunggu Pemberkasan', 'Selesai']);
+                        @endphp
+                        <div class="relative flex items-start gap-4">
+                            <div class="absolute -left-[22px] flex items-center justify-center w-5 h-5 rounded-full border-2 {{ $kasiPassed ? 'bg-emerald-500 border-emerald-500 text-white' : ($kasiActive ? 'bg-white border-amber-500 ring-4 ring-white' : 'bg-white border-slate-300') }} z-10 shadow">
+                                @if($kasiPassed)
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                @elseif($kasiActive)
+                                    <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                                @endif
+                            </div>
+                            <div class="flex-1 p-3 rounded-xl border {{ $kasiPassed ? 'border-emerald-100 bg-emerald-50/30' : ($kasiActive ? 'border-amber-200 bg-amber-50/50 shadow-sm ring-1 ring-amber-300' : 'border-slate-100 bg-slate-50/30') }}">
+                                <h4 class="font-bold {{ $kasiPassed ? 'text-emerald-800' : ($kasiActive ? 'text-amber-800' : 'text-slate-400') }} text-xs">Kasi / Kepala Seksi</h4>
+                                <p class="text-[10px] {{ $kasiActive ? 'text-amber-600' : 'text-slate-400' }} font-medium">Persetujuan Tingkat I</p>
+                            </div>
                         </div>
-                        <div class="flex-1 p-3 rounded-xl border {{ $kasumumPassed ? 'border-emerald-100 bg-emerald-50/30' : ($kasumumActive ? 'border-amber-200 bg-amber-50/50 shadow-sm ring-1 ring-amber-300' : 'border-slate-100 bg-slate-50/30') }}">
-                            <h4 class="font-bold {{ $kasumumPassed ? 'text-emerald-800' : ($kasumumActive ? 'text-amber-800' : 'text-slate-400') }} text-xs">Kasubbag Umum</h4>
-                            <p class="text-[10px] {{ $kasumumActive ? 'text-amber-600' : 'text-slate-400' }} font-medium">Verifikasi Dokumen</p>
+                    @endif
+
+                    {{-- 2. Kabid & Kasubbag Umum (Di-skip jika pemohon adalah Kasubbag Umum) --}}
+                    @if(($pengajuan->user->role ?? '') !== 'kasubbag_umum')
+                        {{-- Kabid --}}
+                        @php
+                            $kabidActive = ($pengajuan->status === 'Menunggu Kabid');
+                            $kabidPassed = in_array($pengajuan->status, ['Menunggu Kasubbag Umum', 'Menunggu Sekdin', 'Menunggu Kadin', 'Menunggu Pemberkasan', 'Selesai']);
+                        @endphp
+                        <div class="relative flex items-start gap-4">
+                            <div class="absolute -left-[22px] flex items-center justify-center w-5 h-5 rounded-full border-2 {{ $kabidPassed ? 'bg-emerald-500 border-emerald-500 text-white' : ($kabidActive ? 'bg-white border-amber-500 ring-4 ring-white' : 'bg-white border-slate-300') }} z-10 shadow">
+                                @if($kabidPassed)
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                @elseif($kabidActive)
+                                    <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                                @endif
+                            </div>
+                            <div class="flex-1 p-3 rounded-xl border {{ $kabidPassed ? 'border-emerald-100 bg-emerald-50/30' : ($kabidActive ? 'border-amber-200 bg-amber-50/50 shadow-sm ring-1 ring-amber-300' : 'border-slate-100 bg-slate-50/30') }}">
+                                <h4 class="font-bold {{ $kabidPassed ? 'text-emerald-800' : ($kabidActive ? 'text-amber-800' : 'text-slate-400') }} text-xs">Kabid / Kepala Bidang</h4>
+                                <p class="text-[10px] {{ $kabidActive ? 'text-amber-600' : 'text-slate-400' }} font-medium">Persetujuan Tingkat II</p>
+                            </div>
                         </div>
-                    </div>
+                        
+                        {{-- Kasubbag Umum --}}
+                        @php
+                            $kasumumActive = ($pengajuan->status === 'Menunggu Kasubbag Umum');
+                            $kasumumPassed = in_array($pengajuan->status, ['Menunggu Sekdin', 'Menunggu Kadin', 'Menunggu Pemberkasan', 'Selesai']);
+                        @endphp
+                        <div class="relative flex items-start gap-4">
+                            <div class="absolute -left-[22px] flex items-center justify-center w-5 h-5 rounded-full border-2 {{ $kasumumPassed ? 'bg-emerald-500 border-emerald-500 text-white' : ($kasumumActive ? 'bg-white border-amber-500 ring-4 ring-white' : 'bg-white border-slate-300') }} z-10 shadow">
+                                @if($kasumumPassed)
+                                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                                @elseif($kasumumActive)
+                                    <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                                @endif
+                            </div>
+                            <div class="flex-1 p-3 rounded-xl border {{ $kasumumPassed ? 'border-emerald-100 bg-emerald-50/30' : ($kasumumActive ? 'border-amber-200 bg-amber-50/50 shadow-sm ring-1 ring-amber-300' : 'border-slate-100 bg-slate-50/30') }}">
+                                <h4 class="font-bold {{ $kasumumPassed ? 'text-emerald-800' : ($kasumumActive ? 'text-amber-800' : 'text-slate-400') }} text-xs">Kasubbag Umum</h4>
+                                <p class="text-[10px] {{ $kasumumActive ? 'text-amber-600' : 'text-slate-400' }} font-medium">Verifikasi Dokumen</p>
+                            </div>
+                        </div>
+                    @endif
 
                     {{-- 4. Sekretaris Dinas (Sekdin) --}}
                     @php
@@ -217,11 +223,20 @@
                 {{-- Bagian Tombol Aksi Kontekstual --}}
                 <div class="pt-6 border-t border-slate-100 mt-6">
                     @if($pengajuan->status === 'Menunggu Verifikasi Admin')
+                        @php
+                            // Tentukan teks dinamis tujuan lemparan berkas selanjutnya
+                            $nextStep = 'Kasi';
+                            if (($pengajuan->user->role ?? '') === 'kasi') {
+                                $nextStep = 'Kabid';
+                            } elseif (($pengajuan->user->role ?? '') === 'kasubbag_umum') {
+                                $nextStep = 'Sekdin';
+                            }
+                        @endphp
                         <form action="{{ route('admin.pengajuan.teruskan', $pengajuan->id) }}" method="POST">
                             @csrf
-                            <p class="text-xs text-slate-500 mb-3 italic">Pastikan seluruh data dan kesesuaian lampiran telah valid sebelum dilempar ke Kasi.</p>
+                            <p class="text-xs text-slate-500 mb-3 italic">Pastikan seluruh data dan kesesuaian lampiran telah valid sebelum dilempar ke {{ $nextStep }}.</p>
                             <button type="submit" class="w-full py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2 text-sm">
-                                <span>Verifikasi & Teruskan ke Kasi &rarr;</span>
+                                <span>Verifikasi & Teruskan ke {{ $nextStep }} &rarr;</span>
                             </button>
                         </form>
                     @elseif($pengajuan->status === 'Menunggu Pemberkasan')

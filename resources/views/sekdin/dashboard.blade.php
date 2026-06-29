@@ -33,16 +33,16 @@
                         </div>
 
                         <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-                           <span class="text-transparent bg-clip-text bg-slate-50">{{ $sapaan ?? 'Selamat Datang' }},</span> <br>
-                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-lime-300">
-                                    {{ explode(' ', Auth::user()->nama)[0] }}
-                                </span>
+                            <span class="text-transparent bg-clip-text bg-slate-50">{{ $sapaan ?? 'Selamat Datang' }},</span> <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-400 to-lime-300">
+                                {{ explode(' ', Auth::user()->nama)[0] }}
+                            </span>
 
-                                <span class="text-white opacity-80 font-light mx-2">-</span>
+                            <span class="text-white opacity-80 font-light mx-2">-</span>
 
-                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 via-yellow-300 to-amber-300">
-                                    {{ Auth::user()->pegawai->jabatan ?? '' }}
-                                </span>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 via-yellow-300 to-amber-300">
+                                {{ Auth::user()->pegawai->jabatan ?? '' }}
+                            </span>
                         </h1>
 
                         <p class="text-slate-400 text-base md:text-lg max-w-lg leading-relaxed">
@@ -196,10 +196,7 @@
                                 </div>
 
                                 <div class="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 pt-3 sm:pt-0">
-                                    <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">
-                                        Masuk: {{ $item->created_at ? $item->created_at->translatedFormat('d M Y') : '-' }}
-                                    </span>
-                                    <a href="{{ route('sekdin.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-lime-400 hover:bg-lime-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
+                                    <a href="{{ route('sekdin.persetujuan.show', $item->id) }}" class="inline-flex items-center px-4 py-2 bg-sky-400 hover:bg-sky-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
                                         <i class="fas fa-file-signature text-[10px]"></i> Review Permohonan
                                     </a>
                                 </div>

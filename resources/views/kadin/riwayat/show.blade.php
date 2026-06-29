@@ -137,24 +137,31 @@
                             </span>
                         </div>
 
-                        {{-- ====================== PEGAWAI ====================== --}}
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-5 border-b border-slate-200">
+                        {{-- ====================== PEGAWAI / PEMOHON (Selalu Tampil) ====================== --}}
+                        <div
+                            class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-5 border-b border-slate-200">
 
                             <div class="flex items-center gap-4">
 
                                 <div class="relative flex items-center justify-center w-10 h-10">
-                                    <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
-                                    <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                    <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50">
+                                    </div>
+                                    <div
+                                        class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500">
+                                    </div>
                                 </div>
 
                                 <div>
                                     <h4 class="font-bold text-slate-800">
-                                        {{ !empty($pengajuan->ttd_pegawai) ? 'Tanda Tangan Pegawai Valid' : 'Menunggu Tanda Tangan Pegawai' }}
+                                        {{ !empty($pengajuan->ttd_pegawai) ? 'Tanda Tangan Pegawai Valid' : 'Menunggu
+                                        Tanda Tangan Pegawai' }}
                                     </h4>
 
                                     <p class="text-xs text-slate-500 mt-1">
                                         Diajukan :
-                                        {{ $pengajuan->created_at ? \Carbon\Carbon::parse($pengajuan->created_at)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                        {{ $pengajuan->created_at ?
+                                        \Carbon\Carbon::parse($pengajuan->created_at)->translatedFormat('d M Y H:i') . '
+                                        WIB' : '-' }}
                                     </p>
                                 </div>
 
@@ -167,7 +174,8 @@
 
                                 <div class="mt-2">
                                     @if(!empty($pengajuan->ttd_pegawai))
-                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-24 object-contain mix-blend-multiply">
+                                    <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}"
+                                        class="h-24 object-contain mix-blend-multiply">
                                     @else
                                     <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
                                     @endif
@@ -176,6 +184,8 @@
 
                         </div>
 
+                        {{-- KONDISI 1: Hilangkan blok Kasi jika pemohon adalah Kasi ATAU Kasubbag Umum --}}
+                        @if(!in_array($pengajuan->user->role ?? '', ['kasi', 'kasubbag_umum']))
                         {{-- ====================== KASI ====================== --}}
                         <div class="py-5 border-b border-slate-200">
 
@@ -184,18 +194,24 @@
                                 <div class="flex items-center gap-4">
 
                                     <div class="relative flex items-center justify-center w-10 h-10">
-                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
-                                        <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50">
+                                        </div>
+                                        <div
+                                            class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500">
+                                        </div>
                                     </div>
 
                                     <div>
                                         <h4 class="font-bold text-slate-800">
-                                            {{ !empty($pengajuan->ttd_kasi) ? 'Tanda Tangan Kasi Valid' : 'Menunggu Tanda Tangan Kasi' }}
+                                            {{ !empty($pengajuan->ttd_kasi) ? 'Tanda Tangan Kasi Valid' : 'Menunggu
+                                            Tanda Tangan Kasi' }}
                                         </h4>
 
                                         <p class="text-xs text-slate-500 mt-1">
                                             Disetujui :
-                                            {{ $pengajuan->tgl_ttd_kasi ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasi)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                            {{ $pengajuan->tgl_ttd_kasi ?
+                                            \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasi)->translatedFormat('d M Y
+                                            H:i') . ' WIB' : '-' }}
                                         </p>
                                     </div>
 
@@ -208,7 +224,8 @@
 
                                     <div class="mt-2">
                                         @if(!empty($pengajuan->ttd_kasi))
-                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" class="h-24 object-contain mix-blend-multiply">
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}"
+                                            class="h-24 object-contain mix-blend-multiply">
                                         @else
                                         <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
                                         @endif
@@ -231,27 +248,36 @@
                             @endif
 
                         </div>
+                        @endif
 
+                        {{-- KONDISI 2: Hilangkan blok Kabid jika pemohon adalah Kasubbag Umum --}}
+                        @if(($pengajuan->user->role ?? '') !== 'kasubbag_umum')
                         {{-- ====================== KABID ====================== --}}
-                        <div class="py-5">
+                        <div class="py-5 border-b border-slate-200">
 
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
 
                                 <div class="flex items-center gap-4">
 
                                     <div class="relative flex items-center justify-center w-10 h-10">
-                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
-                                        <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50">
+                                        </div>
+                                        <div
+                                            class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500">
+                                        </div>
                                     </div>
 
                                     <div>
                                         <h4 class="font-bold text-slate-800">
-                                            {{ !empty($pengajuan->ttd_kabid) ? 'Tanda Tangan Kabid Valid' : 'Menunggu Tanda Tangan Kabid' }}
+                                            {{ !empty($pengajuan->ttd_kabid) ? 'Tanda Tangan Kabid Valid' : 'Menunggu
+                                            Tanda Tangan Kabid' }}
                                         </h4>
 
                                         <p class="text-xs text-slate-500 mt-1">
                                             Disetujui :
-                                            {{ $pengajuan->tgl_ttd_kabid ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kabid)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                            {{ $pengajuan->tgl_ttd_kabid ?
+                                            \Carbon\Carbon::parse($pengajuan->tgl_ttd_kabid)->translatedFormat('d M Y
+                                            H:i') . ' WIB' : '-' }}
                                         </p>
                                     </div>
 
@@ -264,7 +290,8 @@
 
                                     <div class="mt-2">
                                         @if(!empty($pengajuan->ttd_kabid))
-                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-24 object-contain mix-blend-multiply">
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}"
+                                            class="h-24 object-contain mix-blend-multiply">
                                         @else
                                         <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
                                         @endif
@@ -284,27 +311,36 @@
                             </div>
                             @endif
                         </div>
+                        @endif
 
-                        {{-- ====================== KASUBBAG UMUM & KEPEGAWAIN ====================== --}}
-                        <div class="py-5">
+                        {{-- ====================== KASUBBAG UMUM DAN KEPEGAWAIAN ====================== --}}
+                        @if(($pengajuan->user->role ?? '') !== 'kasubbag_umum')
+                        {{-- ====================== KASUBBAG UMUM DAN KEPEGAWAIAN ====================== --}}
+                        <div class="py-5 border-b border-slate-200">
 
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
 
                                 <div class="flex items-center gap-4">
 
                                     <div class="relative flex items-center justify-center w-10 h-10">
-                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50"></div>
-                                        <div class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500"></div>
+                                        <div class="absolute w-10 h-10 rounded-full bg-emerald-500 blur-md opacity-50">
+                                        </div>
+                                        <div
+                                            class="relative w-5 h-5 rounded-full bg-emerald-400 border-2 border-white shadow-lg shadow-emerald-500">
+                                        </div>
                                     </div>
 
                                     <div>
                                         <h4 class="font-bold text-slate-800">
-                                            {{ !empty($pengajuan->ttd_kasubbag) ? 'Tanda Tangan Kasubbag Umum & Kepegawaian Valid' : 'Menunggu Tanda Tangan Kasubbag Umum & Kepegawaian' }}
+                                            {{ !empty($pengajuan->ttd_kasubbag) ? 'Tanda Tangan Kasubbag Valid' :
+                                            'Menunggu Tanda Tangan Kasubbag Umum' }}
                                         </h4>
 
                                         <p class="text-xs text-slate-500 mt-1">
                                             Disetujui :
-                                            {{ $pengajuan->tgl_ttd_kasubbag_umum ? \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasubbag_umum)->translatedFormat('d M Y H:i') . ' WIB' : '-' }}
+                                            {{ $pengajuan->tgl_ttd_kasubbag_umum ?
+                                            \Carbon\Carbon::parse($pengajuan->tgl_ttd_kasubbag_umum)->translatedFormat('d
+                                            M Y H:i') . ' WIB' : '-' }}
                                         </p>
                                     </div>
 
@@ -317,13 +353,15 @@
 
                                     <div class="mt-2">
                                         @if(!empty($pengajuan->ttd_kasubbag))
-                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-24 object-contain mix-blend-multiply">
+                                        <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}"
+                                            class="h-24 object-contain mix-blend-multiply">
                                         @else
                                         <i class="fas fa-check-circle text-emerald-500 text-xl"></i>
                                         @endif
                                     </div>
                                 </div>
                             </div>
+
                             @if($pengajuan->catatan_kasubbag)
                             <div class="mt-4 ml-14 bg-slate-50 border border-slate-200 rounded-xl p-3">
                                 <p class="text-xs font-bold text-slate-500 mb-1">
@@ -337,6 +375,7 @@
                             </div>
                             @endif
                         </div>
+                        @endif
 
                         {{-- ====================== SEKDIN ====================== --}}
                         <div class="py-5">

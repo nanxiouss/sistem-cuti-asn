@@ -199,10 +199,7 @@
                                 </div>
 
                                 <div class="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-t-0 pt-3 sm:pt-0">
-                                    <span class="text-[11px] text-slate-400 font-medium whitespace-nowrap">
-                                        Masuk: {{ $item->created_at ? $item->created_at->translatedFormat('d M Y') : '-' }}
-                                    </span>
-                                    <a href="{{ route('kasumum.persetujuan.show', $item->id) }}" class="inline-flex items-center gap-1.5 px-3 py-2 bg-lime-400 hover:bg-lime-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
+                                    <a href="{{ route('kasumum.persetujuan.show', $item->id) }}" class="inline-flex items-center px-3 py-2 bg-lime-400 hover:bg-lime-500 text-slate-900 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm">
                                         Review Permohonan<i class="fas fa-chevron-right text-[10px]"></i>
                                     </a>
                                 </div>
