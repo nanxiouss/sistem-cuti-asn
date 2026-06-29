@@ -1,5 +1,13 @@
 <x-layouts.kasi.app>
     <x-slot name="header">
+
+        <div class="mb-6">
+            <a href="{{ route('kasumum.riwayat.index') }}"
+                class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+                &larr; Kembali ke Daftar Riwayat
+            </a>
+        </div>
+        
         <div class="flex items-center gap-3">
             <a href="{{ route('kasi.riwayat.index') }}" class="text-slate-400 hover:text-slate-600 transition-colors">
                 <i class="fas fa-arrow-left"></i>

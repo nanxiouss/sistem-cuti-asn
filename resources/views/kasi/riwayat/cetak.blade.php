@@ -1,53 +1,21 @@
-<x-layouts.admin.app>
+<x-layouts.kasi.app>
     <div class="mb-6 flex items-center justify-between no-print">
         <div>
-            <h2 class="text-2xl font-bold text-slate-800">Pemberkasan Surat Cuti</h2>
-            <p class="text-slate-500 text-sm">Formulir BKN otomatis selesai di-generate. Rilis dokumen agar dapat dicetak oleh pegawai.</p>
+            <h2 class="text-2xl font-bold text-slate-800">Cetak Formulir Cuti</h2>
+            <p class="text-slate-500 text-sm">Pratinjau formulir BKN Anda. Pastikan kertas pada printer diatur ke ukuran F4/Folio.</p>
         </div>
-        <a href="{{ route('admin.pemberkasan.index') }}" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition shadow-sm text-sm">
-            &larr; Kembali
-        </a>
-    </div>
-
-    {{-- Kondisi 1: JIKA STATUS BELUM SELESAI --}}
-    @if($pengajuan->status !== 'Selesai')
-    <div class="mb-6 p-6 bg-white rounded-2xl border border-amber-200 shadow-sm bg-gradient-to-r from-amber-50/40 to-transparent no-print">
-        <h3 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-2">
-            Finalisasi & Rilis Dokumen
-        </h3>
-        <p class="text-sm text-slate-600 mb-4">
-            Seluruh draf penilaian birokrasi dan tanda tangan kedinasan telah terisi otomatis di bawah. Klik tombol di bawah untuk merilis dokumen ini ke akun pegawai dan mengubah status menjadi <strong>Selesai</strong>.
-        </p>
-
-        <form action="{{ route('admin.pemberkasan.proses', $pengajuan->id) }}" method="POST">
-            @csrf
-            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition text-sm flex items-center gap-2">
-                Simpan & Rilis ke Pegawai
+        <div class="flex gap-2">
+            <button onclick="window.close()" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition shadow-sm text-sm">
+                Tutup
             </button>
-        </form>
-    </div>
-
-    {{-- Kondisi 2: JIKA STATUS SUDAH SELESAI --}}
-    @else
-    <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center justify-between no-print">
-        <div class="text-sm">
-            <strong>Status Selesai:</strong> Surat cuti ini telah difinalisasi dan dirilis. Pegawai saat ini sudah dapat mencetak dokumen ini.
+            <button onclick="window.print()" class="px-5 py-2 bg-slate-900 text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition flex items-center gap-1.5 shadow-md">
+                <i class="fas fa-print"></i> Print Sekarang (F4)
+            </button>
         </div>
-        <button onclick="window.print()" class="px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition flex items-center gap-1.5 shadow-md">
-            Cetak Formulir Cuti
-        </button>
     </div>
-    @endif
-
-    @php
-        // Identifikasi Role Pemohon
-        $rolePemohon = $pengajuan->user->role ?? '';
-        $isKasi = $rolePemohon === 'kasi' || str_contains(strtolower($pengajuan->user->pegawai->jabatan ?? ''), 'kasi');
-        $isKasubbag = $rolePemohon === 'kasubbag_umum' || $rolePemohon === 'kasubbag';
-    @endphp
 
     {{-- ========================================================================= --}}
-    {{-- KANVAS PREVIEW FORMULIR BKN (MENYERUPAI KERTAS DOKUMEN ASLI) --}}
+    {{-- KANVAS PREVIEW FORMULIR BKN (KHUSUS KASI SEBAGAI PEMOHON) --}}
     {{-- ========================================================================= --}}
     <div class="bg-white p-6 md:p-8 shadow-sm border border-slate-200 mx-auto print:shadow-none print:border-none print:p-0 font-sans text-black leading-snug max-w-[800px] antialiased text-[11px]">
 
@@ -80,13 +48,7 @@
 
         <div class="text-center mb-2">
             <h3 class="font-bold text-[11px] underline uppercase">FORMULIR PERMINTAAN DAN PEMBERIAN CUTI</h3>
-            @if($isKasi)
             <p class="text-[10px]">Nomor : 800.1.11.4 / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / DESDM / {{ \Carbon\Carbon::now()->year }}</p>
-            @elseif($isKasubbag)
-            <p class="text-[10px]">Nomor : 800.1.11.4 / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / DESDM / {{ \Carbon\Carbon::now()->year }}</p>
-            @else
-            <p class="text-[10px]">Nomor : 800.1.11.3 / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / DESDM / {{ \Carbon\Carbon::now()->year }}</p>
-            @endif
         </div>
 
         <table class="w-full border-collapse border border-black mb-1">
@@ -115,7 +77,7 @@
                         @endphp
                         {{ implode(' ', $hasil) }}
                     @else
-                    -
+                        -
                     @endif
                 </td>
             </tr>
@@ -220,46 +182,22 @@
                     Telp: {{ $pengajuan->no_telepon }}
                 </td>
             </tr>
-            {{-- Kurangi tinggi baris ini agar muat 1 halaman --}}
             <tr class="h-[65px]">
                 
-                @if($isKasubbag)
-                    <td colspan="2" class="border border-black px-1.5 py-0.5 align-top text-center w-[70%]">
-                        <span class="text-slate-400 italic block mt-6">-</span>
-                    </td>
-                @elseif($isKasi)
-                    <td colspan="2" class="border border-black px-1.5 py-0.5 align-top text-justify w-[70%] relative">
-                        <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kabid {{ $pengajuan->bidang_kabid ?? ($kabid->pegawai->bidang->nama_bidang ?? '') }} :</p>
-                        <div class="handwriting text-blue-800 text-[12px] leading-tight">
-                            {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
-                        </div>
-                    </td>
-                @else
-                    <td class="border border-black px-1.5 py-0.5 align-top text-justify w-[35%] relative">
-                        <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kasi {{ $pengajuan->bidang_kasi ?? ($pengajuan->atasan->pegawai->bidang->nama_bidang ?? '') }} :</p>
-                        <div class="handwriting text-blue-800 text-[12px] leading-tight">
-                            {{ $pengajuan->catatan_kasi ?? 'Sebelum cuti selesaikan pekerjaan' }}
-                        </div>
-                    </td>
-                    <td class="border border-black px-1.5 py-0.5 align-top text-justify w-[35%] relative">
-                        <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kabid {{ $pengajuan->bidang_kabid ?? ($kabid->pegawai->bidang->nama_bidang ?? '') }} :</p>
-                        <div class="handwriting text-blue-800 text-[12px] leading-tight mt-0.5">
-                            {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
-                        </div>
-                        @if($pengajuan->ttd_kabid)
-                        <div class="flex flex-col items-end mr-2">
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-12 object-contain mix-blend-multiply opacity-90" alt="TTD Kabid">
-                            <p class="text-[8px] italic text-slate-700 underline">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kabid)) }}</p>
-                        </div>
-                        @endif
-                    </td>
-                @endif
+                {{-- KIRI: CATATAN KABID --}}
+                <td colspan="2" class="border border-black px-1.5 py-0.5 align-top text-justify w-[70%] relative">
+                    <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kabid {{ $pengajuan->bidang_kabid ?? ($kabid->pegawai->bidang->nama_bidang ?? '') }} :</p>
+                    <div class="handwriting text-blue-800 text-[12px] leading-tight">
+                        {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
+                    </div>
+                </td>
                 
+                {{-- KANAN: TANDA TANGAN PEMOHON (KASI) --}}
                 <td class="border border-black px-1.5 py-0.5 align-top text-justify relative w-[30%]">
                     <p class="text-left text-[9px] my-1 mx-1">Hormat saya,</p>
                     <div class="h-14 flex justify-normal my-1 mx-1 relative">
                         @if($pengajuan->ttd_pegawai)
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-14 object-contain mix-blend-multiply" alt="TTD Pegawai">
+                        <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-14 object-contain mix-blend-multiply" alt="TTD Kasi/Pegawai">
                         @else
                         <span class="text-[9px] text-slate-400 italic">[Belum TTD]</span>
                         @endif
@@ -286,61 +224,32 @@
                 <td class="border border-black px-1.5 py-0.5"></td>
                 <td class="border border-black px-1.5 py-0.5"></td>
             </tr>
-            {{-- Kurangi tinggi baris ini --}}
             <tr class="h-[70px]">
                 <td colspan="3" class="border border-black px-1.5 py-0.5 align-top relative">
-                    @if($isKasubbag)
-                        <span class="text-slate-400 italic mt-6 flex justify-center">-</span>
-                    @else
-                        <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kasubbag. Umkep:</p>
-                        <div class="flex items-center gap-2 mt-1">
-                            <div class="handwriting text-blue-800 text-[12px] ml-2 w-2/3">
-                                {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
-                            </div>
-                            @if($pengajuan->ttd_kasubbag)
-                            <div class="my-1 -translate-x-2">
-                                <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag">
-                                <p class="text-[8px] italic text-slate-700 underline mt-0.5 text-center">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kasubbag_umum)) }}</p>
-                            </div>
-                            @endif
+                    <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kasubbag. Umkep:</p>
+                    <div class="flex items-center gap-2 mt-1">
+                        <div class="handwriting text-blue-800 text-[12px] ml-2 w-2/3">
+                            {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
                         </div>
-                    @endif
+                        @if($pengajuan->ttd_kasubbag)
+                        <div class="my-1 -translate-x-2">
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag">
+                            <p class="text-[8px] italic text-slate-700 underline mt-0.5 text-center">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kasubbag_umum)) }}</p>
+                        </div>
+                        @endif
+                    </div>
                 </td>
                 <td class="border border-black px-1.5 py-0.5 align-top text-justify relative">
-                    @if($isKasubbag)
-                        <p class="text-left text-[9px] my-1 mx-1">Sekretaris Dinas,</p>
-                        <div class="h-14 flex justify-normal my-1 mx-1 relative">
-                            @if($pengajuan->ttd_sekdin)
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-14 object-contain mix-blend-multiply" alt="TTD Sekdin">
-                            @else
-                            <span class="text-[9px] text-slate-400 italic">[Belum TTD]</span>
-                            @endif
-                        </div>
-                        <p class="font-bold underline uppercase mx-1 text-[10px]">{{ $pengajuan->nama_sekdin ?? '.......................' }}</p>
-                        <p class="text-[9px] flex justify-normal mx-1">NIP. {{ $pengajuan->nip_kadin ?? ($kadin->nip ?? '-') }}</p>
-                    @elseif($isKasi)
-                        <p class="text-left text-[9px] my-1 mx-1">Kabid {{ $pengajuan->jabatan_kabid ?? 'Kabid' }},</p>
-                        <div class="h-14 flex justify-normal my-1 mx-1 relative">
-                            @if($pengajuan->ttd_kabid)
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-14 object-contain mix-blend-multiply" alt="TTD Kabid">
-                            @else
-                            <span class="text-[9px] text-slate-400 italic">[Belum TTD]</span>
-                            @endif
-                        </div>
-                        <p class="font-bold underline uppercase mx-1 text-[10px]">{{ $pengajuan->nama_kabid ?? ($kabid->nama ?? ($pengajuan->atasan->nama ?? '-')) }}</p>
-                        <p class="text-[9px] mx-1">NIP. {{ $pengajuan->nip_kabid ?? ($kabid->nip ?? ($pengajuan->atasan->nip ?? '-')) }}</p>
-                    @else
-                        <p class="text-left text-[9px] my-1 mx-1">Kasi {{ $pengajuan->jabatan_kasi ?? 'Kasi' }},</p>
-                        <div class="h-14 flex justify-normal my-1 mx-1 relative">
-                            @if($pengajuan->ttd_kasi)
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_kasi) }}" class="h-14 object-contain mix-blend-multiply" alt="TTD Kasi">
-                            @else
-                            <span class="text-[9px] text-slate-400 italic">[Belum TTD]</span>
-                            @endif
-                        </div>
-                        <p class="font-bold underline uppercase mx-1 text-[10px]">{{ $pengajuan->nama_kasi ?? ($pengajuan->atasan->nama ?? '-') }}</p>
-                        <p class="text-[9px] mx-1">NIP. {{ $pengajuan->nip_kasi ?? ($pengajuan->atasan->nip ?? '-') }}</p>
-                    @endif
+                    <p class="text-left text-[9px] my-1 mx-1">{{ $pengajuan->jabatan_kabid ?? 'Kabid' }},</p>
+                    <div class="h-14 flex justify-normal my-1 mx-1 relative">
+                        @if($pengajuan->ttd_kabid)
+                        <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-14 object-contain mix-blend-multiply" alt="TTD Kabid">
+                        @else
+                        <span class="text-[9px] text-slate-400 italic">[Belum TTD]</span>
+                        @endif
+                    </div>
+                    <p class="font-bold underline uppercase mx-1 text-[10px]">{{ $pengajuan->nama_kabid ?? ($kabid->nama ?? '.......................') }}</p>
+                    <p class="text-[9px] mx-1">NIP. {{ $pengajuan->nip_kabid ?? ($kabid->nip ?? '.......................') }}</p>
                 </td>
             </tr>
         </table>
@@ -361,27 +270,20 @@
                 <td class="border border-black px-1.5 py-0.5"></td>
                 <td class="border border-black px-1.5 py-0.5"></td>
             </tr>
-            {{-- Kurangi tinggi baris ini --}}
             <tr class="h-[75px]">
                 <td colspan="3" class="border border-black px-1.5 py-0.5 align-top relative">
-                    
-                    {{-- SEKARANG CATATAN SEKRETARIS DINAS TAMPIL UNTUK SEMUA ROLE TERMASUK KASUBBAG --}}
                     <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Sekretaris Dinas:</p>
                     <div class="flex items-center gap-2 mt-1">
                         <div class="handwriting text-blue-800 text-[12px] ml-2 w-2/3">
                             {{ $pengajuan->catatan_sekdin ?? 'Disetujui untuk diterbitkan' }}
                         </div>
-                        @if($isKasubbag)
-                        @else
                         @if($pengajuan->ttd_sekdin)
                         <div class="place-items-end my-1 -translate-x-2">
                             <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Sekdin">
                             <p class="text-[8px] italic text-slate-700 underline my-0.5 mx-1">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_sekdin)) }}</p>
                         </div>
                         @endif
-                        @endif
                     </div>
-
                 </td>
                 <td class="border border-black px-1.5 py-0.5 align-top justify-normal relative">
                     <p class="text-left mb-1 mx-1 text-[9px]">Kepala Dinas,</p>
@@ -450,6 +352,7 @@
 
             div.font-sans, div.font-sans * {
                 visibility: visible;
+                color: #000 !important;
             }
 
             div.font-sans {
@@ -463,7 +366,10 @@
             table td.bg-slate-50 {
                 background-color: transparent !important;
             }
+            
+            table, th, td {
+                border-color: #000 !important;
+            }
         }
-
     </style>
-</x-layouts.admin.app>
+</x-layouts.kasi.app>

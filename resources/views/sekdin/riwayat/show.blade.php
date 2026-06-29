@@ -4,6 +4,13 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
+            <div class="mb-6">
+                <a href="{{ route('sekdin.riwayat.index') }}"
+                    class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+                    &larr; Kembali ke Daftar Riwayat
+                </a>
+            </div>
+
             {{-- Tombol Kembali & Judul Manual --}}
             <div class="flex items-center gap-3 mb-8">
                 <div>
