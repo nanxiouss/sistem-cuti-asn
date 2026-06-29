@@ -253,9 +253,9 @@
                 <td class="border border-black px-1.5 py-0.5"></td>
             </tr>
             <tr class="h-[75px]">
-                <td colspan="3" class="border border-black px-1.5 py-0.5 align-top relative">
+                <td colspan="3" class="border border-black px-2 py-1 align-top relative">
                     <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Sekretaris Dinas:</p>
-                    <div class="flex items-center gap-2 mt-1">
+                    <div class="place-items-end my-2 -translate-x-14">
                         <div class="handwriting text-blue-800 text-[12px] ml-2 w-2/3">
                             {{ $pengajuan->catatan_sekdin ?? 'Disetujui untuk diterbitkan' }}
                         </div>

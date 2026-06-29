@@ -228,12 +228,6 @@
                         <span class="text-slate-400 italic block mt-6">-</span>
                     </td>
                 @elseif($isKasi)
-                    <td colspan="2" class="border border-black px-1.5 py-0.5 align-top text-justify w-[70%] relative">
-                        <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kabid {{ $pengajuan->bidang_kabid ?? ($kabid->pegawai->bidang->nama_bidang ?? '') }} :</p>
-                        <div class="handwriting text-blue-800 text-[12px] leading-tight">
-                            {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
-                        </div>
-                    </td>
                 @else
                     <td class="border border-black px-1.5 py-0.5 align-top text-justify w-[35%] relative">
                         <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kasi {{ $pengajuan->bidang_kasi ?? ($pengajuan->atasan->pegawai->bidang->nama_bidang ?? '') }} :</p>
@@ -241,15 +235,15 @@
                             {{ $pengajuan->catatan_kasi ?? 'Sebelum cuti selesaikan pekerjaan' }}
                         </div>
                     </td>
-                    <td class="border border-black px-1.5 py-0.5 align-top text-justify w-[35%] relative">
-                        <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kabid {{ $pengajuan->bidang_kabid ?? ($kabid->pegawai->bidang->nama_bidang ?? '') }} :</p>
-                        <div class="handwriting text-blue-800 text-[12px] leading-tight mt-0.5">
+                    <td class="border border-black px-2 py-1 align-top text-justify w-[35%] relative">
+                        <p class="text-[9px] italic text-slate-700 underline mb-1">Catatan Kabid {{ $pengajuan->bidang_kabid ?? ($kabid->pegawai->bidang->nama_bidang ?? '') }} :</p>
+                        <div class="handwriting text-blue-800 text-[12px] leading-tight mt-1">
                             {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
                         </div>
                         @if($pengajuan->ttd_kabid)
-                        <div class="flex flex-col items-end mr-2">
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-12 object-contain mix-blend-multiply opacity-90" alt="TTD Kabid">
-                            <p class="text-[8px] italic text-slate-700 underline">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kabid)) }}</p>
+                        <div class="flex flex-col items-center justify-center mt-1 mb-3">
+                            <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Kabid">
+                            <p class="text-[8px] italic text-slate-700 underline my-1 mx-3">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kabid)) }}</p>
                         </div>
                         @endif
                     </td>
@@ -257,7 +251,7 @@
                 
                 <td class="border border-black px-1.5 py-0.5 align-top text-justify relative w-[30%]">
                     <p class="text-left text-[9px] my-1 mx-1">Hormat saya,</p>
-                    <div class="h-14 flex justify-normal my-1 mx-1 relative">
+                    <div class="h-14 flex justify-normal mt-6 mb-2  mx-2 relative">
                         @if($pengajuan->ttd_pegawai)
                         <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-14 object-contain mix-blend-multiply" alt="TTD Pegawai">
                         @else
@@ -288,17 +282,17 @@
             </tr>
             {{-- Kurangi tinggi baris ini --}}
             <tr class="h-[70px]">
-                <td colspan="3" class="border border-black px-1.5 py-0.5 align-top relative">
+                <td colspan="3" class="border border-black px-2 py-1 align-top relative">
                     @if($isKasubbag)
                         <span class="text-slate-400 italic mt-6 flex justify-center">-</span>
                     @else
-                        <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kasubbag. Umkep:</p>
-                        <div class="flex items-center gap-2 mt-1">
-                            <div class="handwriting text-blue-800 text-[12px] ml-2 w-2/3">
+                        <p class="text-[9px] italic text-slate-700 underline mb-1">Catatan Kasubbag. Umkep:</p>
+                        <div class="flex items-center gap-4 mt-2">
+                            <div class="handwriting text-blue-800 text-[12px] ml-4 w-2/3">
                                 {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
                             </div>
                             @if($pengajuan->ttd_kasubbag)
-                            <div class="my-1 -translate-x-2">
+                            <div class="place-items-end my-2 -translate-x-14">
                                 <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag">
                                 <p class="text-[8px] italic text-slate-700 underline mt-0.5 text-center">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kasubbag_umum)) }}</p>
                             </div>
@@ -366,7 +360,7 @@
                 <td colspan="3" class="border border-black px-1.5 py-0.5 align-top relative">
                     
                     {{-- SEKARANG CATATAN SEKRETARIS DINAS TAMPIL UNTUK SEMUA ROLE TERMASUK KASUBBAG --}}
-                    <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Sekretaris Dinas:</p>
+                    <p class="text-[9px] italic text-slate-700 underline mb-1">Catatan Sekretaris Dinas:</p>
                     <div class="flex items-center gap-2 mt-1">
                         <div class="handwriting text-blue-800 text-[12px] ml-2 w-2/3">
                             {{ $pengajuan->catatan_sekdin ?? 'Disetujui untuk diterbitkan' }}
@@ -374,7 +368,7 @@
                         @if($isKasubbag)
                         @else
                         @if($pengajuan->ttd_sekdin)
-                        <div class="place-items-end my-1 -translate-x-2">
+                        <div class="lace-items-end my-2 -translate-x-10">
                             <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Sekdin">
                             <p class="text-[8px] italic text-slate-700 underline my-0.5 mx-1">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_sekdin)) }}</p>
                         </div>

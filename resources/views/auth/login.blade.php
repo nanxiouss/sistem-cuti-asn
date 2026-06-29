@@ -115,10 +115,6 @@
                     <div class="flex justify-between items-center ml-1">
                         <label for="password"
                             class="text-xs font-bold text-slate-600 uppercase tracking-wider">Password</label>
-                        @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}"
-                            class="text-xs font-bold text-[#97C93E] hover:underline">Lupa Password?</a>
-                        @endif
                     </div>
                     <div class="relative group">
                         <input type="password" name="password" id="password" required placeholder="Masukkan kata sandi"

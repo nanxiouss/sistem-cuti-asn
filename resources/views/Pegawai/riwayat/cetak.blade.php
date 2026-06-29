@@ -223,9 +223,9 @@
                     </div>
                     @endif
                 </td>
-                <td class="border border-black px-2 py-1 align-top w-[30%] text-center">
+                <td class="border border-black px-1.5 py-0.5 align-top text-justify relative w-[30%">
                     <p class="text-left mb-1 mx-2">Hormat saya,</p>
-                    <div class="h-20 flex justify-normal mt-6 mb-2  mx-2 relative">
+                    <div class="h-20 flex justify-normal mt-6 mb-2 mx-2 relative">
                         @if($pengajuan->ttd_pegawai)
                         <img src="{{ asset('storage/' . $pengajuan->ttd_pegawai) }}" class="h-20 object-contain mix-blend-multiply" alt="TTD Pegawai">
                         @else
