@@ -29,10 +29,10 @@
                 <a href="{{ route('kasi.pengajuan.create') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.pengajuan*') ? $activeClass : $inactiveClass }}">
                     Pengajuan Cuti
                 </a>
-                <a href="{{ route('kasi.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.riwayat') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('kasi.riwayat.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.riwayat*') ? $activeClass : $inactiveClass }}">
                     Riwayat
                 </a>
-                <a href="{{ route('kasi.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.kalender') ? $activeClass : $inactiveClass }}">
+                <a href="{{ route('kasi.kalender.index') }}" class="{{ $navClass }} {{ request()->routeIs('kasi.kalender*') ? $activeClass : $inactiveClass }}">
                     Kalender
                 </a>
             </div>

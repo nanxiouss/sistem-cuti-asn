@@ -228,6 +228,12 @@
                         <span class="text-slate-400 italic block mt-6">-</span>
                     </td>
                 @elseif($isKasi)
+                <td colspan="2" class="border border-black px-2 py-1 align-top text-justify w-[35%] relative">
+                    <p class="text-[9px] italic text-slate-700 underline mb-1">Catatan Kabid {{ $pengajuan->bidang_kabid ?? ($kabid->pegawai->bidang->nama_bidang ?? '') }} :</p>
+                    <div class="handwriting text-blue-800 text-[12px] leading-tight mt-1">
+                        {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
+                    </div>
+                </td>
                 @else
                     <td class="border border-black px-1.5 py-0.5 align-top text-justify w-[35%] relative">
                         <p class="text-[9px] italic text-slate-700 underline mb-0.5">Catatan Kasi {{ $pengajuan->bidang_kasi ?? ($pengajuan->atasan->pegawai->bidang->nama_bidang ?? '') }} :</p>
