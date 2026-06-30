@@ -102,6 +102,7 @@ class PemberkasanController extends Controller
                     $lamaCuti = $pengajuan->lama_cuti;
                     $kolomSisa = null;
 
+                    // 1. Tentukan kolom sisa HANYA untuk cuti yang memotong kuota
                     if (str_contains($jenisCutiNama, 'tahunan') || $pengajuan->jenis_cuti_id == 1) {
                         $kolomSisa = 'sisa_cuti_tahunan';
                     } elseif (str_contains($jenisCutiNama, 'besar') || $pengajuan->jenis_cuti_id == 2) {
@@ -110,36 +111,39 @@ class PemberkasanController extends Controller
                         $kolomSisa = 'sisa_cuti_melahirkan';
                     }
 
+                    // 2. Validasi saldo HANYA jika jenis cutinya punya kuota (Tahunan, Besar, Melahirkan)
                     if ($kolomSisa) {
                         if ($pegawai->$kolomSisa < $lamaCuti) {
                             throw new \Exception("Saldo {$pengajuan->jenisCuti->nama} tidak mencukupi. Sisa saldo saat ini: {$pegawai->$kolomSisa} hari.");
                         }
+                    }
 
-                        // 1. Ambil saldo Cuti Tahunan MURNI (SEBELUM DIPOTONG)
-                        $sisaTahunanAktif = $pegawai->sisa_cuti_tahunan;
+                    // 3. Snapshot Form (Sisa Cuti Tahunan Murni)
+                    // Biasanya di form cuti BKN, sisa cuti tahunan selalu ditampilkan di form 
+                    // meskipun yang diajukan adalah cuti sakit/alasan penting.
+                    $sisaTahunanAktif = $pegawai->sisa_cuti_tahunan;
+                    
+                    $sisa_n = min($sisaTahunanAktif, 12);
+                    $sisa_n1 = max(min($sisaTahunanAktif - $sisa_n, 6), 0);
+                    $sisa_n2 = max($sisaTahunanAktif - $sisa_n - $sisa_n1, 0);
 
-                        // (Bagian pengurangan $sisaTahunanAktif -= $lamaCuti sudah DIHAPUS)
+                    // 4. Update tabel pengajuan untuk SEMUA JENIS CUTI
+                    // Status akan berubah jadi selesai untuk semua (termasuk cuti sakit dkk)
+                    $pengajuan->update([
+                        'snapshot_sisa_n'  => $sisa_n,
+                        'snapshot_sisa_n1' => $sisa_n1,
+                        'snapshot_sisa_n2' => $sisa_n2,
+                        'status'           => 'Selesai',
+                    ]);
                         
-                        // 2. Masukkan ke rumus snapshot (menggunakan saldo murni)
-                        $sisa_n = min($sisaTahunanAktif, 12);
-                        $sisa_n1 = max(min($sisaTahunanAktif - $sisa_n, 6), 0);
-                        $sisa_n2 = max($sisaTahunanAktif - $sisa_n - $sisa_n1, 0);
-
-                        // 3. Update tabel pengajuan (Simpan Snapshot Form V)
-                        $pengajuan->update([
-                            'snapshot_sisa_n'  => $sisa_n,
-                            'snapshot_sisa_n1' => $sisa_n1,
-                            'snapshot_sisa_n2' => $sisa_n2,
-                            'status'           => 'Selesai',
-                        ]);
-                        
-                        // 4. Potong kuota cuti di database sesuai jenis cuti yang diajukan
+                    // 5. Potong kuota di database HANYA jika jenis cutinya punya kuota
+                    if ($kolomSisa) {
                         if ($kolomSisa === 'sisa_cuti_besar') {
-                            // ATURAN BARU: Kalau ngambil cuti besar (berapapun harinya), sisa kuota 5 tahunan langsung HANGUS
+                            // ATURAN BARU: Kalau ngambil cuti besar, sisa kuota langsung HANGUS
                             $pegawai->sisa_cuti_besar = 0;
                             $pegawai->save();
                         } else {
-                            // Cuti tahunan dan melahirkan dipotong normal sesuai lama cuti di database
+                            // Cuti tahunan dan melahirkan dipotong normal
                             $pegawai->decrement($kolomSisa, $lamaCuti);
                         }
                     }
