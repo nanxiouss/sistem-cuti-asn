@@ -27,14 +27,13 @@ class LaporanController extends Controller
             }
         }
 
-        // Filter Berdasarkan Bulan Pelaksanaan
-        if ($request->filled('bulan')) {
-            $query->whereMonth('tgl_mulai', $request->bulan);
-        }
-
-        // Filter Berdasarkan Tahun Pelaksanaan
-        if ($request->filled('tahun')) {
-            $query->whereYear('tgl_mulai', $request->tahun);
+        // REVISI: Filter Berdasarkan Rentang Tanggal Kalender (Dari Tanggal s.d Sampai Tanggal)
+        if ($request->filled('tgl_awal') && $request->filled('tgl_akhir')) {
+            $query->whereBetween('tgl_mulai', [$request->tgl_awal, $request->tgl_akhir]);
+        } elseif ($request->filled('tgl_awal')) {
+            $query->where('tgl_mulai', '>=', $request->tgl_awal);
+        } elseif ($request->filled('tgl_akhir')) {
+            $query->where('tgl_mulai', '<=', $request->tgl_akhir);
         }
 
         return $query->orderBy('created_at', 'desc');
@@ -45,13 +44,7 @@ class LaporanController extends Controller
     {
         $laporan = $this->getFilteredData($request)->get();
 
-        // Mengambil daftar tahun dinamis
-        $daftarTahun = Pengajuan::selectRaw('YEAR(tgl_mulai) as tahun')
-            ->distinct()
-            ->orderBy('tahun', 'desc')
-            ->pluck('tahun');
-
-        return view('admin.laporan.index', compact('laporan', 'daftarTahun'));
+        return view('admin.laporan.index', compact('laporan'));
     }
 
     // FUNGSI EXPORT KE EXCEL
@@ -61,7 +54,7 @@ class LaporanController extends Controller
         $namaFile = 'Laporan_Cuti_Pegawai_' . date('Ymd_His') . '.xls';
 
         // Mengembalikan view sebagai file download berformat Excel (.xls)
-        return response((string) view('admin.laporan.excel', compact('laporan')))
+        return response(view('admin.laporan.excel', compact('laporan')))
             ->header('Content-Type', 'application/vnd.ms-excel')
             ->header('Content-Disposition', 'attachment; filename="' . $namaFile . '"');
     }
