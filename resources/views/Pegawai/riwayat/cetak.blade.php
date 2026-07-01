@@ -151,7 +151,7 @@
                 <td colspan="5" class="border border-black px-2 py-0.5 bg-slate-100 font-bold">V. CATATAN CUTI ***</td>
             </tr>
             <tr>
-                <td colspan="3" class="border border-black px-2 py-0.5 w-[45%]">1. CUTI TAHUNAN</td>
+                <td colspan="3" class="border border-black px-2 py-0.5 w-[45%]">1. CUTI TAHUNAN {{ $pengajuan->jenis_cuti_id == 1 ? '√' : '' }}</td>
                 <td class="border border-black px-2 py-0.5 w-[45%]">2. CUTI BESAR</td>
                 <td class="border border-black px-2 py-0.5 text-center w-[10%] font-bold">{{ $pengajuan->jenis_cuti_id == 2 ? '√' : '' }}</td>
             </tr>
@@ -181,7 +181,11 @@
             <tr class="text-center">
                 <td class="border border-black px-1 py-0.5">N</td>
                 <td class="border border-black px-1 py-0.5">{{ $sisa_n > 0 ? $sisa_n : '-' }}</td>
-                <td class="border border-black px-1 py-0.5"></td>
+                <td class="border border-black px-1 py-0.5">
+                    @if($pengajuan->jenis_cuti_id == 1 && $sisa_n > 0)
+                    Sisa {{ $sisa_n - $pengajuan->lama_cuti }} Hari.
+                    @endif
+                </td>
                 <td class="border border-black px-2 py-0.5 text-left">6. CUTI DILUAR TANGGUNGAN NEGARA</td>
                 <td class="border border-black px-2 py-0.5 font-bold">{{ $pengajuan->jenis_cuti_id == 6 ? '√' : '' }}</td>
             </tr>
@@ -214,14 +218,6 @@
                     <div class="handwriting text-blue-800 text-[13px] leading-tight mt-2">
                         {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
                     </div>
-                    @if($pengajuan->ttd_kabid)
-                    <div class="flex flex-col items-center justify-center mt-1 mb-3">
-                        <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kabid">
-                        <p class="text-[10px] italic text-slate-700 underline my-1 mx-3">
-                            {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kabid)) }}
-                        </p>
-                    </div>
-                    @endif
                 </td>
                 <td class="border border-black px-1.5 py-0.5 align-top text-justify relative w-[30%">
                     <p class="text-left mb-1 mx-2">Hormat saya,</p>
@@ -249,10 +245,10 @@
                 <td class="border border-black px-2 py-0.5 w-[25%]">TIDAK DISETUJUI ****</td>
             </tr>
             <tr class="text-center font-bold">
-                <td class="border border-black px-2 py-0.5">√</td>
-                <td class="border border-black px-2 py-0.5"></td>
-                <td class="border border-black px-2 py-0.5"></td>
-                <td class="border border-black px-2 py-0.5"></td>
+                <td class="border border-black px-2 py-1.5"></td>
+                <td class="border border-black px-2 py-1.5"></td>
+                <td class="border border-black px-2 py-1.5"></td>
+                <td class="border border-black px-2 py-1.5"></td>
             </tr>
             <tr class="h-24">
                 <td colspan="3" class="border border-black px-2 py-1 align-top relative">
@@ -261,14 +257,6 @@
                         <div class="handwriting text-blue-800 text-[14px] ml-4 w-2/3">
                             {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur wohrowhrq3ruq3ruihqo3urqou3hroiqhr' }}
                         </div>
-                        @if($pengajuan->ttd_kasubbag)
-                        <div class="place-items-end my-2 -translate-x-16">
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag Umum">
-                            <p class="text-[10px] italic text-slate-700 underline my-1 mx-2">
-                                {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kasubbag_umum)) }}
-                            </p>
-                        </div>
-                        @endif
                     </div>
                 </td>
                 <td class="border border-black px-2 py-1 align-top text-justify relative">
@@ -299,10 +287,10 @@
                 <td class="border border-black px-2 py-0.5 w-[25%]">TIDAK DISETUJUI ****</td>
             </tr>
             <tr class="text-center font-bold">
-                <td class="border border-black px-2 py-0.5">√</td>
-                <td class="border border-black px-2 py-0.5"></td>
-                <td class="border border-black px-2 py-0.5"></td>
-                <td class="border border-black px-2 py-0.5"></td>
+                <td class="border border-black px-2 py-1.5"></td>
+                <td class="border border-black px-2 py-1.5"></td>
+                <td class="border border-black px-2 py-1.5"></td>
+                <td class="border border-black px-2 py-1.5"></td>
             </tr>
             <tr class="h-20">
                 <td colspan="3" class="border border-black px-2 py-1 align-top relative">
@@ -311,14 +299,6 @@
                         <div class="handwriting text-blue-800 text-[14px] ml-4 w-2/3">
                             {{ $pengajuan->catatan_sekdin ?? 'Disetujui untuk diterbitkan wiurhiqhruqh3ru9qgh3ruq3y7r87yq387ft  q38tb' }}
                         </div>
-                        @if($pengajuan->ttd_sekdin)
-                        <div class="my-2 -translate-x-16">
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-20 object-contain mix-blend-multiply opacity-90" alt="TTD Sekdin">
-                            <p class="text-[10px] italic text-slate-700 underline mt-1 mx-2">
-                                {{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_sekdin)) }}
-                            </p>
-                        </div>
-                        @endif
                     </div>
                 </td>
                 <td class="border border-black px-2 py-1 align-top justify-normal relative">

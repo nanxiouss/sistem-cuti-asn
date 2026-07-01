@@ -202,7 +202,11 @@
             <tr class="text-center">
                 <td class="border border-black px-1 py-0.5">N</td>
                 <td class="border border-black px-1 py-0.5">{{ $sisa_n > 0 ? $sisa_n : '-' }}</td>
-                <td class="border border-black px-1 py-0.5"></td>
+                <td class="border border-black px-1 py-0.5">
+                    @if($pengajuan->jenis_cuti_id == 1 && $sisa_n > 0)
+                    Sisa {{ $sisa_n - $pengajuan->lama_cuti }} Hari.
+                    @endif
+                </td>
                 <td class="border border-black px-1.5 py-0.5 text-left">6. CUTI DILUAR TANGGUNGAN NEGARA</td>
                 <td class="border border-black px-1.5 py-0.5 font-bold">{{ $pengajuan->jenis_cuti_id == 6 ? '√' : '' }}</td>
             </tr>
@@ -245,12 +249,6 @@
                         <div class="handwriting text-blue-800 text-[12px] leading-tight mt-1">
                             {{ $pengajuan->catatan_kabid ?? 'Disetujui' }}
                         </div>
-                        @if($pengajuan->ttd_kabid)
-                        <div class="flex flex-col items-center justify-center mt-1 mb-3">
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_kabid) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Kabid">
-                            <p class="text-[8px] italic text-slate-700 underline my-1 mx-3">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kabid)) }}</p>
-                        </div>
-                        @endif
                     </td>
                 @endif
                 
@@ -295,12 +293,6 @@
                             <div class="handwriting text-blue-800 text-[12px] ml-4 w-2/3">
                                 {{ $pengajuan->catatan_kasubbag ?? 'ACC proses sesuai prosedur' }}
                             </div>
-                            @if($pengajuan->ttd_kasubbag)
-                            <div class="place-items-end my-2 -translate-x-14">
-                                <img src="{{ asset('storage/' . $pengajuan->ttd_kasubbag) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Kasubbag">
-                                <p class="text-[8px] italic text-slate-700 underline mt-0.5 text-center">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_kasubbag_umum)) }}</p>
-                            </div>
-                            @endif
                         </div>
                     @endif
                 </td>
@@ -359,11 +351,8 @@
                 <td class="border border-black px-1.5 py-1.5"></td>
                 <td class="border border-black px-1.5 py-1.5"></td>
             </tr>
-            {{-- Kurangi tinggi baris ini --}}
             <tr class="h-[75px]">
                 <td colspan="3" class="border border-black px-1.5 py-0.5 align-top relative">
-                    
-                    {{-- SEKARANG CATATAN SEKRETARIS DINAS TAMPIL UNTUK SEMUA ROLE TERMASUK KASUBBAG --}}
                     <p class="text-[9px] italic text-slate-700 underline mb-1">Catatan Sekretaris Dinas:</p>
                     <div class="flex items-center gap-2 mt-1">
                         <div class="handwriting text-blue-800 text-[12px] ml-2 w-2/3">
@@ -371,12 +360,6 @@
                         </div>
                         @if($isKasubbag)
                         @else
-                        @if($pengajuan->ttd_sekdin)
-                        <div class="lace-items-end my-2 -translate-x-10">
-                            <img src="{{ asset('storage/' . $pengajuan->ttd_sekdin) }}" class="h-14 object-contain mix-blend-multiply opacity-90" alt="TTD Sekdin">
-                            <p class="text-[8px] italic text-slate-700 underline my-0.5 mx-1">{{ date('Y-m-d', strtotime($pengajuan->tgl_ttd_sekdin)) }}</p>
-                        </div>
-                        @endif
                         @endif
                     </div>
 
