@@ -174,7 +174,7 @@
                 <td colspan="5" class="border border-black px-1.5 py-0.5 bg-slate-100 font-bold">V. CATATAN CUTI ***</td>
             </tr>
             <tr>
-                <td colspan="3" class="border border-black px-1.5 py-0.5 w-[45%]">1. CUTI TAHUNAN</td>
+                <td colspan="3" class="border border-black px-1.5 py-0.5 w-[45%]">1. CUTI TAHUNAN {{ $pengajuan->jenis_cuti_id == 1 ? '√' : '' }}</td>
                 <td class="border border-black px-1.5 py-0.5 w-[45%]">2. CUTI BESAR</td>
                 <td class="border border-black px-1.5 py-0.5 text-center w-[10%] font-bold">{{ $pengajuan->jenis_cuti_id == 2 ? '√' : '' }}</td>
             </tr>
@@ -220,7 +220,6 @@
                     Telp: {{ $pengajuan->no_telepon }}
                 </td>
             </tr>
-            {{-- Kurangi tinggi baris ini agar muat 1 halaman --}}
             <tr class="h-[65px]">
                 
                 @if($isKasubbag)
@@ -281,12 +280,11 @@
                 <td class="border border-black px-1.5 py-0.5 w-[25%]">TIDAK DISETUJUI ****</td>
             </tr>
             <tr class="text-center font-bold">
-                <td class="border border-black px-1.5 py-0.5">√</td>
-                <td class="border border-black px-1.5 py-0.5"></td>
-                <td class="border border-black px-1.5 py-0.5"></td>
-                <td class="border border-black px-1.5 py-0.5"></td>
+                <td class="border border-black px-1.5 py-1.5"></td>
+                <td class="border border-black px-1.5 py-1.5"></td>
+                <td class="border border-black px-1.5 py-1.5"></td>
+                <td class="border border-black px-1.5 py-1.5"></td>
             </tr>
-            {{-- Kurangi tinggi baris ini --}}
             <tr class="h-[70px]">
                 <td colspan="3" class="border border-black px-2 py-1 align-top relative">
                     @if($isKasubbag)
@@ -356,10 +354,10 @@
                 <td class="border border-black px-1.5 py-0.5 w-[25%]">TIDAK DISETUJUI ****</td>
             </tr>
             <tr class="text-center font-bold">
-                <td class="border border-black px-1.5 py-0.5">√</td>
-                <td class="border border-black px-1.5 py-0.5"></td>
-                <td class="border border-black px-1.5 py-0.5"></td>
-                <td class="border border-black px-1.5 py-0.5"></td>
+                <td class="border border-black px-1.5 py-1.5"></td>
+                <td class="border border-black px-1.5 py-1.5"></td>
+                <td class="border border-black px-1.5 py-1.5"></td>
+                <td class="border border-black px-1.5 py-1.5"></td>
             </tr>
             {{-- Kurangi tinggi baris ini --}}
             <tr class="h-[75px]">
