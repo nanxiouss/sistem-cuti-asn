@@ -45,6 +45,7 @@
         }
     </style>
 
+<div class="max-w-5xl mx-auto px-4 sm:px-6">
     <div class="mb-8">
         <a href="{{ route('admin.pegawai.index') }}"
             class="text-sm font-semibold text-slate-500 hover:text-indigo-600 transition inline-flex items-center gap-2 mb-2 group">
